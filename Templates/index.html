@@ -1,0 +1,944 @@
+{% extends "layout.html" %}{% block style %}
+
+<style>
+    .boll1,
+    .boll1,
+    .boll3 {
+        margin: 0 15px;
+    }
+    
+    * {
+        box-sizing: border-box;
+    }
+    
+    .mainbd {
+        padding: 40px;
+        font-size: 14px;
+        background: #f6f9fc;
+        font-family: "Open Sans", sans-serif;
+        color: #525f7f;
+    }
+    
+    h2.taglineh2 {
+        margin: 5%;
+        text-align: center;
+        font-size: 2rem;
+        font-weight: 100;
+    }
+    
+    .timeline {
+        display: flex;
+        flex-direction: column;
+        margin: 20px auto;
+        position: relative;
+    }
+    
+    .timeline__event {
+        margin-bottom: 20px;
+        position: relative;
+        display: flex;
+        margin: 20px 0;
+        border-radius: 6px;
+        align-self: center;
+        width: 50vw;
+    }
+    
+    .timeline__event:nth-child(2n+1) {
+        flex-direction: row-reverse;
+    }
+    
+    .timeline__event:nth-child(2n+1) .timeline__event__date {
+        border-radius: 0 6px 6px 0;
+    }
+    
+    .timeline__event:nth-child(2n+1) .timeline__event__content {
+        border-radius: 6px 0 0 6px;
+    }
+    
+    .timeline__event:nth-child(2n+1) .timeline__event__icon:before {
+        content: "";
+        width: 2px;
+        height: 100%;
+        background: #f6a4ec;
+        position: absolute;
+        top: 0%;
+        left: 50%;
+        right: auto;
+        z-index: -1;
+        transform: translateX(-50%);
+        -webkit-animation: fillTop 2s forwards 4s ease-in-out;
+        animation: fillTop 2s forwards 4s ease-in-out;
+    }
+    
+    .timeline__event:nth-child(2n+1) .timeline__event__icon:after {
+        content: "";
+        width: 100%;
+        height: 2px;
+        background: #f6a4ec;
+        position: absolute;
+        right: 0;
+        z-index: -1;
+        top: 50%;
+        left: auto;
+        transform: translateY(-50%);
+        -webkit-animation: fillLeft 2s forwards 4s ease-in-out;
+        animation: fillLeft 2s forwards 4s ease-in-out;
+    }
+    
+    .timeline__event__title {
+        font-size: 1.2rem;
+        line-height: 1.4;
+        text-transform: uppercase;
+        font-weight: 600;
+        color: #9251ac;
+        letter-spacing: 1.5px;
+    }
+    
+    .timeline__event__content {
+        padding: 20px;
+        box-shadow: 0 30px 60px -12px rgba(50, 50, 93, 0.25), 0 18px 36px -18px rgba(0, 0, 0, 0.3), 0 -12px 36px -8px rgba(0, 0, 0, 0.025);
+        background: #fff;
+        width: calc(40vw - 84px);
+        border-radius: 0 6px 6px 0;
+    }
+    
+    .timeline__event__date {
+        color: #f6a4ec;
+        font-size: 1.5rem;
+        font-weight: 600;
+        background: #9251ac;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        white-space: nowrap;
+        padding: 0 20px;
+        border-radius: 6px 0 0 6px;
+    }
+    
+    .timeline__event__icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #9251ac;
+        padding: 20px;
+        align-self: center;
+        margin: 0 20px;
+        background: #f6a4ec;
+        border-radius: 100%;
+        width: 40px;
+        box-shadow: 0 30px 60px -12px rgba(50, 50, 93, 0.25), 0 18px 36px -18px rgba(0, 0, 0, 0.3), 0 -12px 36px -8px rgba(0, 0, 0, 0.025);
+        padding: 40px;
+        height: 40px;
+        position: relative;
+    }
+    
+    .timeline__event__icon i {
+        font-size: 32px;
+    }
+    
+    .timeline__event__icon:before {
+        content: "";
+        width: 2px;
+        height: 100%;
+        background: #f6a4ec;
+        position: absolute;
+        top: 0%;
+        z-index: -1;
+        left: 50%;
+        transform: translateX(-50%);
+        -webkit-animation: fillTop 2s forwards 4s ease-in-out;
+        animation: fillTop 2s forwards 4s ease-in-out;
+    }
+    
+    .timeline__event__icon:after {
+        content: "";
+        width: 100%;
+        height: 2px;
+        background: #f6a4ec;
+        position: absolute;
+        left: 0%;
+        z-index: -1;
+        top: 50%;
+        transform: translateY(-50%);
+        -webkit-animation: fillLeftOdd 2s forwards 4s ease-in-out;
+        animation: fillLeftOdd 2s forwards 4s ease-in-out;
+    }
+    
+    .timeline__event__description {
+        flex-basis: 60%;
+    }
+    
+    .timeline__event--type2:after {
+        background: #555ac0;
+    }
+    
+    .timeline__event--type2 .timeline__event__date {
+        color: #87bbfe;
+        background: #555ac0;
+    }
+    
+    .timeline__event--type2:nth-child(2n+1) .timeline__event__icon:before,
+    .timeline__event--type2:nth-child(2n+1) .timeline__event__icon:after {
+        background: #87bbfe;
+    }
+    
+    .timeline__event--type2 .timeline__event__icon {
+        background: #87bbfe;
+        color: #555ac0;
+    }
+    
+    .timeline__event--type2 .timeline__event__icon:before,
+    .timeline__event--type2 .timeline__event__icon:after {
+        background: #87bbfe;
+    }
+    
+    .timeline__event--type2 .timeline__event__title {
+        color: #555ac0;
+    }
+    
+    .timeline__event--type3:after {
+        background: #24b47e;
+    }
+    
+    .timeline__event--type3 .timeline__event__date {
+        color: #aff1b6;
+        background-color: #24b47e;
+    }
+    
+    .timeline__event--type3:nth-child(2n+1) .timeline__event__icon:before,
+    .timeline__event--type3:nth-child(2n+1) .timeline__event__icon:after {
+        background: #aff1b6;
+    }
+    
+    .timeline__event--type3 .timeline__event__icon {
+        background: #aff1b6;
+        color: #24b47e;
+    }
+    
+    .timeline__event--type3 .timeline__event__icon:before,
+    .timeline__event--type3 .timeline__event__icon:after {
+        background: #aff1b6;
+    }
+    
+    .timeline__event--type3 .timeline__event__title {
+        color: #24b47e;
+    }
+    
+    .timeline__event:last-child .timeline__event__icon:before {
+        content: none;
+    }
+    
+    @media (max-width: 786px) {
+        .timeline__event {
+            flex-direction: column;
+            align-self: center;
+            width: 100%;
+        }
+        .timeline__event__content {
+            width: 100%;
+        }
+        .timeline__event__icon {
+            border-radius: 6px 6px 0 0;
+            width: 100%;
+            margin: 0;
+            box-shadow: none;
+        }
+        .timeline__event__icon:before,
+        .timeline__event__icon:after {
+            display: none;
+        }
+        .timeline__event__date {
+            border-radius: 0;
+            padding: 20px;
+        }
+        .timeline__event:nth-child(2n+1) {
+            flex-direction: column;
+            align-self: center;
+        }
+        .timeline__event:nth-child(2n+1) .timeline__event__date {
+            border-radius: 0;
+            padding: 20px;
+        }
+        .timeline__event:nth-child(2n+1) .timeline__event__icon {
+            border-radius: 6px 6px 0 0;
+            margin: 0;
+        }
+    }
+    
+    @-webkit-keyframes fillLeft {
+        100% {
+            right: 100%;
+        }
+    }
+    
+    @keyframes fillLeft {
+        100% {
+            right: 100%;
+        }
+    }
+    
+    @-webkit-keyframes fillTop {
+        100% {
+            top: 100%;
+        }
+    }
+    
+    @keyframes fillTop {
+        100% {
+            top: 100%;
+        }
+    }
+    
+    @-webkit-keyframes fillLeftOdd {
+        100% {
+            left: 100%;
+        }
+    }
+    
+    @keyframes fillLeftOdd {
+        100% {
+            left: 100%;
+        }
+    }
+    /* button */
+    /*Neon Button*/
+    
+    .secbd {
+        margin: 50px auto;
+        box-sizing: border-box;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-family: 'Raleway', sans-serif;
+        font-weight: bold;
+    }
+    
+    .gb {
+        position: relative;
+        display: inline-block;
+        padding: 25px 30px;
+        color: #03e9f4;
+        text-decoration: none;
+        text-transform: uppercase;
+        transition: 0.5s;
+        letter-spacing: 4px;
+        overflow: hidden;
+        margin-right: 50px;
+    }
+    
+    .gb:hover {
+        background: #03e9f4;
+        color: #050801;
+        box-shadow: 0 0 5px #03e9f4, 0 0 25px #03e9f4, 0 0 50px #03e9f4, 0 0 200px #03e9f4;
+        -webkit-box-reflect: below 1px linear-gradient(transparent, #0005);
+    }
+    
+    .gb:nth-child(1) {
+        filter: hue-rotate(270deg);
+    }
+    
+    .gb:nth-child(2) {
+        filter: hue-rotate(110deg);
+    }
+    
+    .gb span {
+        position: absolute;
+        display: block;
+    }
+    
+    .gb span:nth-child(1) {
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        background: linear-gradient(90deg, transparent, #03e9f4);
+        animation: animate1 1s linear infinite;
+    }
+    
+    @keyframes animate1 {
+        0% {
+            left: -100%;
+        }
+        50%,
+        100% {
+            left: 100%;
+        }
+    }
+    
+    .gb span:nth-child(2) {
+        top: -100%;
+        right: 0;
+        width: 2px;
+        height: 100%;
+        background: linear-gradient(180deg, transparent, #03e9f4);
+        animation: animate2 1s linear infinite;
+        animation-delay: 0.25s;
+    }
+    
+    @keyframes animate2 {
+        0% {
+            top: -100%;
+        }
+        50%,
+        100% {
+            top: 100%;
+        }
+    }
+    
+    .gb span:nth-child(3) {
+        bottom: 0;
+        right: 0;
+        width: 100%;
+        height: 2px;
+        background: linear-gradient(270deg, transparent, #03e9f4);
+        animation: animate3 1s linear infinite;
+        animation-delay: 0.50s;
+    }
+    
+    @keyframes animate3 {
+        0% {
+            right: -100%;
+        }
+        50%,
+        100% {
+            right: 100%;
+        }
+    }
+    
+    .gb span:nth-child(4) {
+        bottom: -100%;
+        left: 0;
+        width: 2px;
+        height: 100%;
+        background: linear-gradient(360deg, transparent, #03e9f4);
+        animation: animate4 1s linear infinite;
+        animation-delay: 0.75s;
+    }
+    
+    @keyframes animate4 {
+        0% {
+            bottom: -100%;
+        }
+        50%,
+        100% {
+            bottom: 100%;
+        }
+    }
+    /*Neon Button*/
+    /* carousel*/
+    
+    .cor .carousel {
+        margin: 50px auto;
+        padding: 0 70px;
+    }
+    
+    .cor .carousel .carousel-item {
+        min-height: 330px;
+        text-align: center;
+        overflow: hidden;
+    }
+    
+    .img-box {
+        height: 160px;
+        width: 100%;
+        position: relative;
+    }
+    
+    img {
+        max-width: 100%;
+        max-height: 100%;
+        display: inline-block;
+        position: absolute;
+        bottom: 0;
+        margin: 0 auto;
+        left: 0;
+        right: 0;
+    }
+    
+    h4 {
+        font-size: 18px;
+        margin: 10px 0;
+    }
+    
+    .btn {
+        color: #333;
+        border-radius: 0;
+        font-size: 11px;
+        text-transform: uppercase;
+        font-weight: bold;
+        background: none;
+        border: 1px solid #ccc;
+        padding: 5px 10px;
+        margin-top: 5px;
+        line-height: 16px;
+    }
+    
+    .btn:hover,
+    .btn:focus {
+        color: #fff;
+        background: #000;
+        border-color: #000;
+        box-shadow: none;
+    }
+    
+    .btn i {
+        font-size: 14px;
+        font-weight: bold;
+        margin-left: 5px;
+    }
+    
+    .thumb-wrapper {
+        text-align: center;
+    }
+    
+    .thumb-content {
+        padding: 0px;
+    }
+    
+    .cor .carousel-control-prev,
+    .cor .carousel-control-next {
+        height: 100px;
+        width: 40px;
+        background: none;
+        margin: auto 0;
+        background: rgba(0, 0, 0, 0.2);
+    }
+    
+    .cor .carousel-control-prev i,
+    .cor .carousel-control-next i {
+        font-size: 30px;
+        position: absolute;
+        top: 50%;
+        display: inline-block;
+        margin: -16px 0 0 0;
+        z-index: 5;
+        left: 0;
+        right: 0;
+        color: rgba(0, 0, 0, 0.8);
+        text-shadow: none;
+        font-weight: bold;
+    }
+    
+    .cor .carousel-control-prev i {
+        margin-left: -3px;
+    }
+    
+    .cor .carousel-control-next i {
+        margin-right: -3px;
+    }
+    
+    .item-price {
+        font-size: 13px;
+        padding: 2px 0;
+    }
+    
+    .item-price strike {
+        color: #999;
+        margin-right: 5px;
+    }
+    
+    .item-price span {
+        color: #86bd57;
+        font-size: 110%;
+    }
+    
+    .carousel-indicators {
+        bottom: -50px;
+    }
+    
+    .star-rating {
+        display: flex;
+    }
+    
+    .star-rating li {
+        float: auto;
+        text-align: center;
+        display: inline;
+        padding: 0;
+    }
+    
+    .star-rating i {
+        align-items: center;
+        align-self: center;
+        margin: 0 auto;
+        font-size: 14px;
+        color: #ffc000;
+    }
+    
+    ul.list-inline {
+        margin: 25px auto;
+    }
+    /* carousel*/
+</style>
+
+{% endblock %}{% block main %}
+
+<div class="zoom">
+    <section>
+        <div class="mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8">
+            <div class="swiper-container !overflow-hidden">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide">
+                        <!-- <div class="row">
+                            <div class="col-sm-3"> -->
+                        <div class="thumb-wrapper">
+                            <div class="img-box">
+                                <img src="/static/assets/samplePosts/sp1010.png" class="img-fluid" alt="">
+                            </div>
+                            <div class="thumb-content">
+                                <h4>Apple iPad</h4>
+                                <p class="item-price"><strike>$400.00</strike> <span>$369.00</span></p>
+                                <div class="star-rating">
+                                    <ul class="list-inline">
+                                        <li class="list-inline-item"><i class="fa fa-star"></i></li>
+                                        <li class="list-inline-item"><i class="fa fa-star"></i></li>
+                                        <li class="list-inline-item"><i class="fa fa-star"></i></li>
+                                        <li class="list-inline-item"><i class="fa fa-star"></i></li>
+                                        <li class="list-inline-item"><i class="fa fa-star-o"></i></li>
+                                    </ul>
+                                </div>
+                                <a href="#" class="btn btn-primary">Add to Cart</a>
+                            </div>
+                            <!-- </div>
+                            </div> -->
+
+                        </div>
+                    </div>
+
+                    <div class="swiper-slide">
+                        <!-- <div class="row">
+                            <div class="col-sm-3"> -->
+                        <div class="thumb-wrapper">
+                            <div class="img-box">
+                                <img src="/static/assets/samplePosts/sp1010.png" class="img-fluid" alt="">
+                            </div>
+                            <div class="thumb-content">
+                                <h4>Apple iPad</h4>
+                                <p class="item-price"><strike>$400.00</strike> <span>$369.00</span></p>
+                                <div class="star-rating">
+                                    <ul class="list-inline">
+                                        <li class="list-inline-item"><i class="fa fa-star"></i></li>
+                                        <li class="list-inline-item"><i class="fa fa-star"></i></li>
+                                        <li class="list-inline-item"><i class="fa fa-star"></i></li>
+                                        <li class="list-inline-item"><i class="fa fa-star"></i></li>
+                                        <li class="list-inline-item"><i class="fa fa-star-o"></i></li>
+                                    </ul>
+                                </div>
+                                <a href="#" class="btn btn-primary">Add to Cart</a>
+                            </div>
+                            <!-- </div>
+                            </div> -->
+
+                        </div>
+                    </div>
+                    <div class="swiper-slide">
+                        <!-- <div class="row">
+                            <div class="col-sm-3"> -->
+                        <div class="thumb-wrapper">
+                            <div class="img-box">
+                                <img src="/static/assets/samplePosts/sp1010.png" class="img-fluid" alt="">
+                            </div>
+                            <div class="thumb-content">
+                                <h4>Apple iPad</h4>
+                                <p class="item-price"><strike>$400.00</strike> <span>$369.00</span></p>
+                                <div class="star-rating">
+                                    <ul class="list-inline">
+                                        <li class="list-inline-item"><i class="fa fa-star"></i></li>
+                                        <li class="list-inline-item"><i class="fa fa-star"></i></li>
+                                        <li class="list-inline-item"><i class="fa fa-star"></i></li>
+                                        <li class="list-inline-item"><i class="fa fa-star"></i></li>
+                                        <li class="list-inline-item"><i class="fa fa-star-o"></i></li>
+                                    </ul>
+                                </div>
+                                <a href="#" class="btn btn-primary">Add to Cart</a>
+                            </div>
+                            <!-- </div>
+                            </div> -->
+
+                        </div>
+                    </div>
+                    <div class="swiper-slide">
+                        <!-- <div class="row">
+                            <div class="col-sm-3"> -->
+                        <div class="thumb-wrapper">
+                            <div class="img-box">
+                                <img src="/static/assets/samplePosts/sp1010.png" class="img-fluid" alt="">
+                            </div>
+                            <div class="thumb-content">
+                                <h4>Apple iPad</h4>
+                                <p class="item-price"><strike>$400.00</strike> <span>$369.00</span></p>
+                                <div class="star-rating">
+                                    <ul class="list-inline">
+                                        <li class="list-inline-item"><i class="fa fa-star"></i></li>
+                                        <li class="list-inline-item"><i class="fa fa-star"></i></li>
+                                        <li class="list-inline-item"><i class="fa fa-star"></i></li>
+                                        <li class="list-inline-item"><i class="fa fa-star"></i></li>
+                                        <li class="list-inline-item"><i class="fa fa-star-o"></i></li>
+                                    </ul>
+                                </div>
+                                <a href="#" class="btn btn-primary">Add to Cart</a>
+                            </div>
+                            <!-- </div>
+                            </div> -->
+
+                        </div>
+                    </div>
+                    <div class="swiper-slide">
+
+                        <div class="thumb-wrapper">
+                            <div class="img-box">
+                                <img src="/static/assets/samplePosts/sp1010.png" class="img-fluid" alt="">
+                            </div>
+                            <div class="thumb-content">
+                                <h4>Apple iPad</h4>
+                                <p class="item-price"><strike>$400.00</strike> <span>$369.00</span></p>
+                                <div class="star-rating">
+                                    <ul class="list-inline">
+                                        <li class="list-inline-item"><i class="fa fa-star"></i></li>
+                                        <li class="list-inline-item"><i class="fa fa-star"></i></li>
+                                        <li class="list-inline-item"><i class="fa fa-star"></i></li>
+                                        <li class="list-inline-item"><i class="fa fa-star"></i></li>
+                                        <li class="list-inline-item"><i class="fa fa-star-o"></i></li>
+                                    </ul>
+                                </div>
+                                <a href="#" class="btn btn-primary">Add to Cart</a>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+                </div>
+                <div class="swiper-pagination !relative !bottom-0 mt-12"></div>
+            </div>
+        </div>
+    </section>
+    <!-- <iframe src="/slide" style="height:450px; width: 100% ; border: none;"></iframe> -->
+
+</div>
+<div class="zoom1" id="zoom1" style="margin:0 ;padding:0;">
+    <div class="mainbd">
+        <h2 class="taglineh2">A clean timeline design, with animated links</h2>
+        <div class="timeline">
+            <div class="timeline__event  animated fadeInUp delay-3s timeline__event--type1">
+                <div class="timeline__event__icon ">
+                    <i class="lni-cake"></i>
+
+                </div>
+                <div class="timeline__event__date">
+                    20-08-2019
+                </div>
+                <div class="timeline__event__content ">
+                    <div class="timeline__event__title">
+                        Birthday
+                    </div>
+                    <div class="timeline__event__description">
+                        <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Vel, nam! Nam eveniet ut aliquam ab asperiores, accusamus iure veniam corporis incidunt reprehenderit accusantium id aut architecto harum quidem dolorem in!</p>
+                    </div>
+                </div>
+            </div>
+            <div class="timeline__event animated fadeInUp delay-2s timeline__event--type2">
+                <div class="timeline__event__icon">
+                    <i class="lni-burger"></i>
+
+                </div>
+                <div class="timeline__event__date">
+                    20-08-2019
+                </div>
+                <div class="timeline__event__content">
+                    <div class="timeline__event__title">
+                        Lunch
+                    </div>
+                    <div class="timeline__event__description">
+                        <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Vel, nam! Nam eveniet ut aliquam ab asperiores, accusamus iure veniam corporis incidunt reprehenderit accusantium id aut architecto harum quidem dolorem in!</p>
+                    </div>
+                </div>
+            </div>
+            <div class="timeline__event animated fadeInUp delay-1s timeline__event--type3">
+                <div class="timeline__event__icon">
+                    <i class="lni-slim"></i>
+
+                </div>
+                <div class="timeline__event__date">
+                    20-08-2019
+                </div>
+                <div class="timeline__event__content">
+                    <div class="timeline__event__title">
+                        Exercise
+                    </div>
+                    <div class="timeline__event__description">
+                        <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Vel, nam! Nam eveniet ut aliquam ab asperiores, accusamus iure veniam corporis incidunt reprehenderit accusantium id aut architecto harum quidem dolorem in!</p>
+                    </div>
+
+                </div>
+            </div>
+            <div class="timeline__event animated fadeInUp timeline__event--type1">
+                <div class="timeline__event__icon">
+                    <i class="lni-cake"></i>
+
+                </div>
+                <div class="timeline__event__date">
+                    20-08-2019
+                </div>
+                <div class="timeline__event__content">
+                    <div class="timeline__event__title">
+                        Birthday
+                    </div>
+                    <div class="timeline__event__description">
+                        <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Vel, nam! Nam eveniet ut aliquam ab asperiores, accusamus iure veniam corporis incidunt reprehenderit accusantium id aut architecto harum quidem dolorem in!</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="secbd" style="text-align:center ;">
+            <a class="gb" href="/cards">
+                <span class="gbspan"></span>
+                <span class="gbspan"></span>
+                <span class="gbspan"></span>
+                <span class="gbspan"></span> Click to Get Started
+            </a>
+        </div>
+    </div>
+
+
+
+    <!-- <iframe src="/cards" style="height:1275px; width: 100% ; border: none;"></iframe> -->
+
+
+</div>
+<div class="zoom2">
+
+    <section>
+        <div class="mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8">
+            <div class="swiper-container !overflow-hidden">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide">
+                        <blockquote class="bg-gray-100 p-8">
+                            <div class="flex items-center">
+                                <img alt="Dog" src="https://images.unsplash.com/photo-1508280756091-9bdd7ef1f463?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1832&q=80" class="h-16 w-16 rounded-full object-cover" />
+
+                                <div class="ml-4 text-sm">
+                                    <p class="font-medium">Bark Dagleish</p>
+                                    <p class="mt-1">Head of Barketing</p>
+                                </div>
+                            </div>
+
+                            <p class="relative mt-4 text-gray-500">
+                                <span class="text-xl">&ldquo;</span> Lorem ipsum dolor sit amet consectetur adipisicing elit. Magni assumenda officiis sit amet itaque eveniet accusantium corporis tempora, soluta perspiciatis rerum, ratione animi nemo
+                                inventore repellat, commodi in esse quisquam.
+
+                                <span class="text-xl">&rdquo;</span>
+                            </p>
+                        </blockquote>
+                    </div>
+
+                    <div class="swiper-slide">
+                        <blockquote class="bg-gray-100 p-8">
+                            <div class="flex items-center">
+                                <img alt="Dog" src="https://images.unsplash.com/photo-1508280756091-9bdd7ef1f463?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1832&q=80" class="h-16 w-16 rounded-full object-cover" />
+
+                                <div class="ml-4 text-sm">
+                                    <p class="font-medium">Bark Dagleish</p>
+                                    <p class="mt-1">Head of Barketing</p>
+                                </div>
+                            </div>
+
+                            <p class="relative mt-4 text-gray-500">
+                                <span class="text-xl">&ldquo;</span> Lorem ipsum dolor sit amet consectetur adipisicing elit. Magni assumenda officiis sit amet itaque eveniet accusantium corporis tempora, soluta perspiciatis rerum, ratione animi nemo
+                                inventore repellat, commodi in esse quisquam.
+
+                                <span class="text-xl">&rdquo;</span>
+                            </p>
+                        </blockquote>
+                    </div>
+
+                    <div class="swiper-slide">
+                        <blockquote class="bg-gray-100 p-8">
+                            <div class="flex items-center">
+                                <img alt="Dog" src="https://images.unsplash.com/photo-1508280756091-9bdd7ef1f463?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1832&q=80" class="h-16 w-16 rounded-full object-cover" />
+
+                                <div class="ml-4 text-sm">
+                                    <p class="font-medium">Bark Dagleish</p>
+                                    <p class="mt-1">Head of Barketing</p>
+                                </div>
+                            </div>
+
+                            <p class="relative mt-4 text-gray-500">
+                                <span class="text-xl">&ldquo;</span> Lorem ipsum dolor sit amet consectetur adipisicing elit. Magni assumenda officiis sit amet itaque eveniet accusantium corporis tempora, soluta perspiciatis rerum, ratione animi nemo
+                                inventore repellat, commodi in esse quisquam.
+
+                                <span class="text-xl">&rdquo;</span>
+                            </p>
+                        </blockquote>
+                    </div>
+
+                    <div class="swiper-slide">
+                        <blockquote class="bg-gray-100 p-8">
+                            <div class="flex items-center">
+                                <img alt="Dog" src="https://images.unsplash.com/photo-1508280756091-9bdd7ef1f463?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1832&q=80" class="h-16 w-16 rounded-full object-cover" />
+
+                                <div class="ml-4 text-sm">
+                                    <p class="font-medium">Bark Dagleish</p>
+                                    <p class="mt-1">Head of Barketing</p>
+                                </div>
+                            </div>
+
+                            <p class="relative mt-4 text-gray-500">
+                                <span class="text-xl">&ldquo;</span> Lorem ipsum dolor sit amet consectetur adipisicing elit. Magni assumenda officiis sit amet itaque eveniet accusantium corporis tempora, soluta perspiciatis rerum, ratione animi nemo
+                                inventore repellat, commodi in esse quisquam.
+
+                                <span class="text-xl">&rdquo;</span>
+                            </p>
+                        </blockquote>
+                    </div>
+                </div>
+
+                <div class="swiper-pagination !relative !bottom-0 mt-12"></div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            new Swiper('.swiper-container', {
+                loop: true,
+                slidesPerView: 1,
+                spaceBetween: 8,
+                autoplay: {
+                    delay: 8000,
+                },
+                pagination: {
+                    el: '.swiper-pagination',
+                    clickable: true,
+                },
+                breakpoints: {
+                    640: {
+                        slidesPerView: 1.5,
+                    },
+                    1024: {
+                        slidesPerView: 3,
+                    },
+                },
+            })
+        })
+    </script>
+
+    <!-- <iframe src="/feedbackhome" style="height:435px; width: 100% ; border: none;"></iframe> -->
+</div>
+
+
+<!-- <div class="zoom">
+        <iframe src="slide" style="height:450px; width: 100% ; border: none;"></iframe>
+
+        <div class="zoom1">
+            <iframe src="cards" class="cardscroll" style="height:600px; width: 100% ; border: none;"></iframe>
+
+            <div class="zoom2">
+                <iframe src="feedbackhome" style="height:435px; width: 100% ; border: none;"></iframe>
+            </div>
+
+
+        </div>
+    </div> -->
+{% endblock %}

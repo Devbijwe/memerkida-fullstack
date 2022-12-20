@@ -1,0 +1,374 @@
+ {% extends "layout.html" %}{% block style %}
+<link rel="stylesheet" href="{{url_for('static',filename='css/card2.css')}}"> {% endblock %}{% block main %}
+<div class="content-wrapper">
+    {% for key in data0 %}
+    <div class="news-card">
+        <a href="/queDisplay/{{key.postId}}=view" class="news-card__card-link">
+            <div class="card1">
+            </div>
+        </a>
+        <a href="/queDisplay/{{loop.index}}=view">
+            <img src="/static/assets/samplePosts/{{key.que}}" alt="" class="news-card__image" style="height: 100%">
+            <!-- <div class="news-card__text-wrapper">
+                <h2 class="news-card__title">Amazing First Title</h2>
+                <div class="news-card__post-date">Jan 29, 2018</div>
+                <div class="news-card__details-wrapper">
+                    <p class="news-card__excerpt">Lorem ipsum dolor sit amet consectetur adipisicing elit. Est pariatur nemo tempore repellat? Ullam sed officia iure architecto deserunt distinctio, pariatur&hellip;</p>
+                    <a href="#" class="news-card__read-more">Read more <i class="fas fa-long-arrow-alt-right"></i></a>
+                </div>
+            </div> -->
+        </a>
+    </div>
+    {% endfor %}
+    <!-- <div class="news-card">
+        <a href="#" class="news-card__card-link"></a>
+        <img src="/static/meme_temples/2.png" alt="" class="news-card__image" style=" height: 80%;">
+        <div class="news-card__text-wrapper">
+            <h2 class="news-card__title">Amazing Second Title that is Quite Long</h2>
+            <div class="news-card__post-date">Jan 29, 2018</div>
+            <div class="news-card__details-wrapper">
+                <p class="news-card__excerpt">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ullam obcaecati ex natus nulla rem sequi laborum quod fugit&hellip;</p>
+                <a href="#" class="news-card__read-more">Read more <i class="fas fa-long-arrow-alt-right"></i></a>
+            </div>
+        </div>
+    </div>
+
+    <div class="news-card">
+        <a href="#" class="news-card__card-link"></a>
+        <img src="/static/meme_temples/3.png" alt="" class="news-card__image">
+        <div class="news-card__text-wrapper">
+            <h2 class="news-card__title">Amazing Title</h2>
+            <div class="news-card__post-date">Jan 29, 2018</div>
+            <div class="news-card__details-wrapper">
+                <p class="news-card__excerpt">Lorem ipsum dolor sit amet consectetur adipisicing elit. Officiis beatae&hellip;</p>
+                <a href="#" class="news-card__read-more">Read more <i class="fas fa-long-arrow-alt-right"></i></a>
+            </div>
+        </div>
+    </div>
+
+    <div class="news-card">
+        <a href="#" class="news-card__card-link"></a>
+        <img src="/static/meme_temples/4.png" alt="" class="news-card__image">
+        <div class="news-card__text-wrapper">
+            <h2 class="news-card__title">Amazing Forth Title that is Quite Long</h2>
+            <div class="news-card__post-date">Jan 29, 2018</div>
+            <div class="news-card__details-wrapper">
+                <p class="news-card__excerpt">Lorem ipsum dolor sit amet!</p>
+                <a href="#" class="news-card__read-more">Read more <i class="fas fa-long-arrow-alt-right"></i></a>
+            </div>
+        </div>
+    </div>
+
+    <div class="news-card">
+        <a href="#" class="news-card__card-link"></a>
+        <img src="/static/meme_temples/5.png" alt="" class="news-card__image">
+        <div class="news-card__text-wrapper">
+            <h2 class="news-card__title">Amazing Fifth Title</h2>
+            <div class="news-card__post-date">Jan 29, 2018</div>
+            <div class="news-card__details-wrapper">
+                <p class="news-card__excerpt">Lorem ipsum dolor sit amet consectetur adipisicing elit. Est pariatur nemo tempore repellat? Ullam sed officia iure architecto deserunt distinctio&hellip;</p>
+                <a href="#" class="news-card__read-more">Read more <i class="fas fa-long-arrow-alt-right"></i></a>
+            </div>
+        </div>
+    </div>
+
+    <div class="news-card">
+        <a href="#" class="news-card__card-link"></a>
+        <img src="/static/meme_temples/6.png" alt="" class="news-card__image">
+        <div class="news-card__text-wrapper">
+            <h2 class="news-card__title">Amazing 6<sup>th</sup> Title</h2>
+            <div class="news-card__post-date">Jan 29, 2018</div>
+            <div class="news-card__details-wrapper">
+                <p class="news-card__excerpt">Lorem ipsum dolor sit amet consectetur adipisicing elit. Est pariatur nemo tempore repellat? Ullam sed officia.</p>
+                <a href="#" class="news-card__read-more">Read more <i class="fas fa-long-arrow-alt-right"></i></a>
+            </div>
+        </div>
+    </div>
+    <div class="news-card">
+        <a href="#" class="news-card__card-link"></a>
+        <img src="/static/meme_temples/7.png" alt="" class="news-card__image">
+        <div class="news-card__text-wrapper">
+            <h2 class="news-card__title">Amazing First Title</h2>
+            <div class="news-card__post-date">Jan 29, 2018</div>
+            <div class="news-card__details-wrapper">
+                <p class="news-card__excerpt">Lorem ipsum dolor sit amet consectetur adipisicing elit. Est pariatur nemo tempore repellat? Ullam sed officia iure architecto deserunt distinctio, pariatur&hellip;</p>
+                <a href="#" class="news-card__read-more">Read more <i class="fas fa-long-arrow-alt-right"></i></a>
+            </div>
+        </div>
+    </div>
+
+    <div class="news-card">
+        <a href="#" class="news-card__card-link"></a>
+        <img src="/static/meme_temples/8.png" alt="" class="news-card__image">
+        <div class="news-card__text-wrapper">
+            <h2 class="news-card__title">Amazing Second Title that is Quite Long</h2>
+            <div class="news-card__post-date">Jan 29, 2018</div>
+            <div class="news-card__details-wrapper">
+                <p class="news-card__excerpt">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ullam obcaecati ex natus nulla rem sequi laborum quod fugit&hellip;</p>
+                <a href="#" class="news-card__read-more">Read more <i class="fas fa-long-arrow-alt-right"></i></a>
+            </div>
+        </div>
+    </div>
+
+    <div class="news-card">
+        <a href="#" class="news-card__card-link"></a>
+        <img src="/static/meme_temples/9.png" alt="" class="news-card__image">
+        <div class="news-card__text-wrapper">
+            <h2 class="news-card__title">Amazing Title</h2>
+            <div class="news-card__post-date">Jan 29, 2018</div>
+            <div class="news-card__details-wrapper">
+                <p class="news-card__excerpt">Lorem ipsum dolor sit amet consectetur adipisicing elit. Officiis beatae&hellip;</p>
+                <a href="#" class="news-card__read-more">Read more <i class="fas fa-long-arrow-alt-right"></i></a>
+            </div>
+        </div>
+    </div>
+
+    <div class="news-card">
+        <a href="#" class="news-card__card-link"></a>
+        <img src="/static/meme_temples/10.png" alt="" class="news-card__image">
+        <div class="news-card__text-wrapper">
+            <h2 class="news-card__title">Amazing Forth Title that is Quite Long</h2>
+            <div class="news-card__post-date">Jan 29, 2018</div>
+            <div class="news-card__details-wrapper">
+                <p class="news-card__excerpt">Lorem ipsum dolor sit amet!</p>
+                <a href="#" class="news-card__read-more">Read more <i class="fas fa-long-arrow-alt-right"></i></a>
+            </div>
+        </div>
+    </div>
+    <div class="news-card">
+        <a href="#" class="news-card__card-link"></a>
+        <img src="/static/meme_temples/11.png" alt="" class="news-card__image">
+        <div class="news-card__text-wrapper">
+            <h2 class="news-card__title">Amazing First Title</h2>
+            <div class="news-card__post-date">Jan 29, 2018</div>
+            <div class="news-card__details-wrapper">
+                <p class="news-card__excerpt">Lorem ipsum dolor sit amet consectetur adipisicing elit. Est pariatur nemo tempore repellat? Ullam sed officia iure architecto deserunt distinctio, pariatur&hellip;</p>
+                <a href="#" class="news-card__read-more">Read more <i class="fas fa-long-arrow-alt-right"></i></a>
+            </div>
+        </div>
+    </div>
+
+    <div class="news-card">
+        <a href="#" class="news-card__card-link"></a>
+        <img src="/static/meme_temples/12.png" alt="" class="news-card__image">
+        <div class="news-card__text-wrapper">
+            <h2 class="news-card__title">Amazing Second Title that is Quite Long</h2>
+            <div class="news-card__post-date">Jan 29, 2018</div>
+            <div class="news-card__details-wrapper">
+                <p class="news-card__excerpt">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ullam obcaecati ex natus nulla rem sequi laborum quod fugit&hellip;</p>
+                <a href="#" class="news-card__read-more">Read more <i class="fas fa-long-arrow-alt-right"></i></a>
+            </div>
+        </div>
+    </div>
+
+    <div class="news-card">
+        <a href="#" class="news-card__card-link"></a>
+        <img src="/static/meme_temples/13.png" alt="" class="news-card__image">
+        <div class="news-card__text-wrapper">
+            <h2 class="news-card__title">Amazing Second Title that is Quite Long</h2>
+            <div class="news-card__post-date">Jan 29, 2018</div>
+            <div class="news-card__details-wrapper">
+                <p class="news-card__excerpt">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ullam obcaecati ex natus nulla rem sequi laborum quod fugit&hellip;</p>
+                <a href="#" class="news-card__read-more">Read more <i class="fas fa-long-arrow-alt-right"></i></a>
+            </div>
+        </div>
+    </div>
+
+    <div class="news-card">
+        <a href="#" class="news-card__card-link"></a>
+        <img src="/static/meme_temples/14.png" alt="" class="news-card__image">
+        <div class="news-card__text-wrapper">
+            <h2 class="news-card__title">Amazing Second Title that is Quite Long</h2>
+            <div class="news-card__post-date">Jan 29, 2018</div>
+            <div class="news-card__details-wrapper">
+                <p class="news-card__excerpt">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ullam obcaecati ex natus nulla rem sequi laborum quod fugit&hellip;</p>
+                <a href="#" class="news-card__read-more">Read more <i class="fas fa-long-arrow-alt-right"></i></a>
+            </div>
+        </div>
+    </div>
+    <div class="news-card">
+        <a href="#" class="news-card__card-link"></a>
+        <img src="/static/meme_temples/15.png" alt="" class="news-card__image">
+        <div class="news-card__text-wrapper">
+            <h2 class="news-card__title">Amazing Second Title that is Quite Long</h2>
+            <div class="news-card__post-date">Jan 29, 2018</div>
+            <div class="news-card__details-wrapper">
+                <p class="news-card__excerpt">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ullam obcaecati ex natus nulla rem sequi laborum quod fugit&hellip;</p>
+                <a href="#" class="news-card__read-more">Read more <i class="fas fa-long-arrow-alt-right"></i></a>
+            </div>
+        </div>
+    </div>
+    <div class="news-card">
+        <a href="#" class="news-card__card-link"></a>
+        <img src="/static/meme_temples/16.png" alt="" class="news-card__image">
+        <div class="news-card__text-wrapper">
+            <h2 class="news-card__title">Amazing Second Title that is Quite Long</h2>
+            <div class="news-card__post-date">Jan 29, 2018</div>
+            <div class="news-card__details-wrapper">
+                <p class="news-card__excerpt">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ullam obcaecati ex natus nulla rem sequi laborum quod fugit&hellip;</p>
+                <a href="#" class="news-card__read-more">Read more <i class="fas fa-long-arrow-alt-right"></i></a>
+            </div>
+        </div>
+    </div>
+    <div class="news-card">
+        <a href="#" class="news-card__card-link"></a>
+        <img src="/static/meme_temples/17.jpg" alt="" class="news-card__image">
+        <div class="news-card__text-wrapper">
+            <h2 class="news-card__title">Amazing Second Title that is Quite Long</h2>
+            <div class="news-card__post-date">Jan 29, 2018</div>
+            <div class="news-card__details-wrapper">
+                <p class="news-card__excerpt">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ullam obcaecati ex natus nulla rem sequi laborum quod fugit&hellip;</p>
+                <a href="#" class="news-card__read-more">Read more <i class="fas fa-long-arrow-alt-right"></i></a>
+            </div>
+        </div>
+    </div>
+    <div class="news-card">
+        <a href="#" class="news-card__card-link"></a>
+        <img src="/static/meme_temples/18.jpg" alt="" class="news-card__image">
+        <div class="news-card__text-wrapper">
+            <h2 class="news-card__title">Amazing Second Title that is Quite Long</h2>
+            <div class="news-card__post-date">Jan 29, 2018</div>
+            <div class="news-card__details-wrapper">
+                <p class="news-card__excerpt">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ullam obcaecati ex natus nulla rem sequi laborum quod fugit&hellip;</p>
+                <a href="#" class="news-card__read-more">Read more <i class="fas fa-long-arrow-alt-right"></i></a>
+            </div>
+        </div>
+    </div>
+    <div class="news-card">
+        <a href="#" class="news-card__card-link"></a>
+        <img src="/static/meme_temples/19.jpg" alt="" class="news-card__image">
+        <div class="news-card__text-wrapper">
+            <h2 class="news-card__title">Amazing Second Title that is Quite Long</h2>
+            <div class="news-card__post-date">Jan 29, 2018</div>
+            <div class="news-card__details-wrapper">
+                <p class="news-card__excerpt">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ullam obcaecati ex natus nulla rem sequi laborum quod fugit&hellip;</p>
+                <a href="#" class="news-card__read-more">Read more <i class="fas fa-long-arrow-alt-right"></i></a>
+            </div>
+        </div>
+    </div>
+    <div class="news-card">
+        <a href="#" class="news-card__card-link"></a>
+        <img src="/static/meme_temples/20.png" alt="" class="news-card__image">
+        <div class="news-card__text-wrapper">
+            <h2 class="news-card__title">Amazing Second Title that is Quite Long</h2>
+            <div class="news-card__post-date">Jan 29, 2018</div>
+            <div class="news-card__details-wrapper">
+                <p class="news-card__excerpt">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ullam obcaecati ex natus nulla rem sequi laborum quod fugit&hellip;</p>
+                <a href="#" class="news-card__read-more">Read more <i class="fas fa-long-arrow-alt-right"></i></a>
+            </div>
+        </div>
+    </div>
+    <div class="news-card">
+        <a href="#" class="news-card__card-link"></a>
+        <img src="/static/meme_temples/21.png" alt="" class="news-card__image">
+        <div class="news-card__text-wrapper">
+            <h2 class="news-card__title">Amazing Second Title that is Quite Long</h2>
+            <div class="news-card__post-date">Jan 29, 2018</div>
+            <div class="news-card__details-wrapper">
+                <p class="news-card__excerpt">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ullam obcaecati ex natus nulla rem sequi laborum quod fugit&hellip;</p>
+                <a href="#" class="news-card__read-more">Read more <i class="fas fa-long-arrow-alt-right"></i></a>
+            </div>
+        </div>
+    </div>
+    <div class="news-card">
+        <a href="#" class="news-card__card-link"></a>
+        <img src="/static/meme_temples/22.png" alt="" class="news-card__image">
+        <div class="news-card__text-wrapper">
+            <h2 class="news-card__title">Amazing Second Title that is Quite Long</h2>
+            <div class="news-card__post-date">Jan 29, 2018</div>
+            <div class="news-card__details-wrapper">
+                <p class="news-card__excerpt">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ullam obcaecati ex natus nulla rem sequi laborum quod fugit&hellip;</p>
+                <a href="#" class="news-card__read-more">Read more <i class="fas fa-long-arrow-alt-right"></i></a>
+            </div>
+        </div>
+    </div>
+    <div class="news-card">
+        <a href="#" class="news-card__card-link"></a>
+        <img src="/static/meme_temples/23.png" alt="" class="news-card__image">
+        <div class="news-card__text-wrapper">
+            <h2 class="news-card__title">Amazing Second Title that is Quite Long</h2>
+            <div class="news-card__post-date">Jan 29, 2018</div>
+            <div class="news-card__details-wrapper">
+                <p class="news-card__excerpt">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ullam obcaecati ex natus nulla rem sequi laborum quod fugit&hellip;</p>
+                <a href="#" class="news-card__read-more">Read more <i class="fas fa-long-arrow-alt-right"></i></a>
+            </div>
+        </div>
+    </div>
+    <div class="news-card">
+        <a href="#" class="news-card__card-link"></a>
+        <img src="/static/meme_temples/24.png" alt="" class="news-card__image">
+        <div class="news-card__text-wrapper">
+            <h2 class="news-card__title">Amazing Second Title that is Quite Long</h2>
+            <div class="news-card__post-date">Jan 29, 2018</div>
+            <div class="news-card__details-wrapper">
+                <p class="news-card__excerpt">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ullam obcaecati ex natus nulla rem sequi laborum quod fugit&hellip;</p>
+                <a href="#" class="news-card__read-more">Read more <i class="fas fa-long-arrow-alt-right"></i></a>
+            </div>
+        </div>
+    </div>
+    <div class="news-card">
+        <a href="#" class="news-card__card-link"></a>
+        <img src="/static/meme_temples/25.png" alt="" class="news-card__image">
+        <div class="news-card__text-wrapper">
+            <h2 class="news-card__title">Amazing Second Title that is Quite Long</h2>
+            <div class="news-card__post-date">Jan 29, 2018</div>
+            <div class="news-card__details-wrapper">
+                <p class="news-card__excerpt">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ullam obcaecati ex natus nulla rem sequi laborum quod fugit&hellip;</p>
+                <a href="#" class="news-card__read-more">Read more <i class="fas fa-long-arrow-alt-right"></i></a>
+            </div>
+        </div>
+    </div>
+    <div class="news-card">
+        <a href="#" class="news-card__card-link"></a>
+        <img src="/static/meme_temples/26.jpg" alt="" class="news-card__image">
+        <div class="news-card__text-wrapper">
+            <h2 class="news-card__title">Amazing Second Title that is Quite Long</h2>
+            <div class="news-card__post-date">Jan 29, 2018</div>
+            <div class="news-card__details-wrapper">
+                <p class="news-card__excerpt">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ullam obcaecati ex natus nulla rem sequi laborum quod fugit&hellip;</p>
+                <a href="#" class="news-card__read-more">Read more <i class="fas fa-long-arrow-alt-right"></i></a>
+            </div>
+        </div>
+    </div>
+    <div class="news-card">
+        <a href="#" class="news-card__card-link"></a>
+        <img src="/static/meme_temples/27.jpg" alt="" class="news-card__image">
+        <div class="news-card__text-wrapper">
+            <h2 class="news-card__title">Amazing Second Title that is Quite Long</h2>
+            <div class="news-card__post-date">Jan 29, 2018</div>
+            <div class="news-card__details-wrapper">
+                <p class="news-card__excerpt">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ullam obcaecati ex natus nulla rem sequi laborum quod fugit&hellip;</p>
+                <a href="#" class="news-card__read-more">Read more <i class="fas fa-long-arrow-alt-right"></i></a>
+            </div>
+        </div>
+    </div>
+    <div class="news-card">
+        <a href="#" class="news-card__card-link"></a>
+        <img src="/static/meme_temples/28.jpg" alt="" class="news-card__image">
+        <div class="news-card__text-wrapper">
+            <h2 class="news-card__title">Amazing Second Title that is Quite Long</h2>
+            <div class="news-card__post-date">Jan 29, 2018</div>
+            <div class="news-card__details-wrapper">
+                <p class="news-card__excerpt">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ullam obcaecati ex natus nulla rem sequi laborum quod fugit&hellip;</p>
+                <a href="#" class="news-card__read-more">Read more <i class="fas fa-long-arrow-alt-right"></i></a>
+            </div>
+        </div>
+    </div>
+    <div class="news-card">
+        <a href="#" class="news-card__card-link"></a>
+        <img src="/static/meme_temples/29.png" alt="" class="news-card__image">
+        <div class="news-card__text-wrapper">
+            <h2 class="news-card__title">Amazing Second Title that is Quite Long</h2>
+            <div class="news-card__post-date">Jan 29, 2018</div>
+            <div class="news-card__details-wrapper">
+                <p class="news-card__excerpt">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ullam obcaecati ex natus nulla rem sequi laborum quod fugit&hellip;</p>
+                <a href="#" class="news-card__read-more">Read more <i class="fas fa-long-arrow-alt-right"></i></a>
+            </div>
+        </div> 
+    </div>-->
+
+
+
+
+
+</div>{% endblock %}

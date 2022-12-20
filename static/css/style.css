@@ -1,0 +1,449 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@500&display=swap');
+* {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    font-family: 'Quicksand', sans-serif;
+    /* font-family: 'Roboto', sans-serif; */
+}
+
+body {
+    line-height: 1.4;
+}
+
+.main-wrapper img {
+    width: 100%;
+    display: block;
+}
+
+.main-wrapper a {
+    color: #000;
+    text-decoration: none;
+}
+
+.main-wrapper ul li {
+    list-style-type: none;
+}
+
+.navbar {
+    background: #fff;
+    padding: 0 1rem;
+    position: sticky;
+    top: 0;
+    left: 0;
+    width: 100%;
+    max-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    z-index: 10;
+}
+
+.brand-and-icon {
+    display: inline-flex;
+    justify-content: space-between;
+    padding: 1rem 0;
+    border-bottom: 1px solid #ddd;
+}
+
+.navbar-brand {
+    font-size: 1.8rem;
+    letter-spacing: 1px;
+    font-weight: 700;
+}
+
+.navbar-toggler {
+    display: block;
+    border: none;
+    background: transparent;
+    font-size: 1.8rem;
+    cursor: pointer;
+    padding: 0.2rem 0.5rem;
+    transition: all 0.4s ease;
+    border: 2px solid #000;
+    border-radius: 4px;
+}
+
+.navbar-toggler:hover {
+    opacity: 0.7;
+}
+
+.navbar-collapse {
+    overflow-y: scroll;
+    display: none;
+}
+
+.navbar-nav>li>a {
+    text-transform: uppercase;
+    font-size: 1.1rem;
+    font-weight: 700;
+    display: block;
+    padding: 0.6rem 0;
+    margin: 0.2rem 0;
+    border-bottom: 1px solid #ddd;
+    border-radius: 1px;
+    position: relative;
+    transition: all 0.4s ease;
+}
+
+.drop-icon {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.navbar-nav>li>a:hover {
+    opacity: 0.7;
+}
+
+.sub-menu h4 {
+    text-transform: capitalize;
+    font-size: 1rem;
+    padding: 0.5rem 0;
+}
+
+.sub-menu ul li {
+    text-transform: capitalize;
+    padding: 0.2rem 0;
+    margin: 0.2rem 0;
+    font-size: 0.95rem;
+}
+
+.sub-menu ul li a {
+    opacity: 0.8;
+    transition: all 0.5s ease;
+}
+
+.sub-menu ul li a:hover {
+    padding-left: 14px;
+    opacity: 0.9;
+}
+
+.sub-menu {
+    display: none;
+}
+
+.sub-menu-item {
+    padding-left: 1.2rem;
+}
+
+.sub-menu-item:nth-child(3) {
+    background: #ddd;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+}
+
+.sub-menu-item:nth-child(3) h2 {
+    text-transform: capitalize;
+    margin: 1.5rem 0;
+}
+
+.sub-menu-item:nth-child(3) .btn {
+    border: 1px solid #000;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    padding: 0.6rem 1rem;
+    cursor: pointer;
+    background: #000;
+    color: #fff;
+    transition: all 0.5s ease;
+}
+
+.sub-menu-item:nth-child(3) .btn:hover {
+    background: transparent;
+    color: #000;
+}
+
+.sub-menu-item:nth-child(4) {
+    width: 50%;
+    margin: 0 auto;
+    padding: 2rem 0;
+}
+
+
+/* header */
+
+.header {
+    background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(images/banner-bg.jpg) center/cover no-repeat;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.header h2 {
+    margin: 1rem;
+    font-size: 3rem;
+    font-weight: 900;
+    color: #fff;
+    letter-spacing: 2px;
+}
+
+.header p {
+    margin: 1rem auto;
+    color: #fff;
+    width: 60%;
+    opacity: 0.8;
+    font-weight: 300;
+    font-size: 1.2rem;
+    text-align: center;
+}
+
+.header button {
+    margin: 1rem;
+    font-size: 1rem;
+    text-transform: uppercase;
+    background: #000;
+    color: #fff;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    transition: all 0.5s ease;
+    cursor: pointer;
+}
+
+.header button:hover {
+    background: #fff;
+    color: #000;
+}
+
+
+/* Media Queries */
+
+@media screen and (min-width: 992px) {
+    .navbar {
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: center;
+        border-bottom: 1px solid #ddd;
+        padding: 0 5rem;
+        position: relative;
+    }
+    .navbar-toggler {
+        display: none;
+    }
+    .brand-and-icon {
+        flex: 0 0 200px;
+        border-bottom: none;
+        padding: 0;
+    }
+    .navbar-collapse {
+        display: block!important;
+        overflow-y: hidden;
+        flex: 1 0 auto;
+    }
+    .navbar-nav {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .navbar-nav>li>a {
+        border-bottom: none;
+        margin: 0 0.4rem;
+        padding: 1.7rem 1.8rem 1.7rem 0.8rem;
+        font-size: 0.8rem;
+    }
+    .sub-menu h4 {
+        text-transform: capitalize;
+        font-size: 1rem;
+        padding: 0.5rem 0;
+    }
+    .sub-menu ul li {
+        text-transform: capitalize;
+        padding: 5px;
+        margin: 5px;
+        font-size: 0.95rem;
+    }
+    .sub-menu ul li a {
+        padding-left: 20px;
+        opacity: 0.8;
+        transition: all 0.5s ease;
+    }
+    .sub-menu ul li a:hover {
+        padding-left: 14px;
+        opacity: 0.9;
+    }
+    .sub-menu {
+        position: absolute;
+        left: 68%;
+        width: 200px;
+        top: 100%;
+        background: #f8f8f8;
+    }
+    .navbar-nav>li:hover .sub-menu {
+        display: grid!important;
+        grid-template-columns: repeat(1, 1fr);
+        padding: 0 5rem;
+    }
+    .navbar-nav>li {
+        border-bottom: 2px solid transparent;
+        transition: border-bottom 0.4s ease;
+    }
+    .navbar-nav>li:hover {
+        border-bottom-color: #000;
+    }
+    .sub-menu-item {
+        padding-left: 0;
+    }
+    .sub-menu-item:nth-child(3) {
+        padding-left: 2rem;
+        padding-right: 2rem;
+    }
+    /* header */
+    .header {
+        height: calc(100vh - 75px);
+    }
+    .header h2 {
+        font-size: 6rem;
+    }
+    .header p {
+        width: 40%;
+    }
+}
+
+
+/* slinding  slot css started */
+
+
+/* cards */
+
+
+/* 
+.zoom1 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    min-height: 100vh;
+    background: #d4d4e7;
+}
+
+#cont1 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    max-width: 1200px;
+    margin: 40px 0;
+}
+
+#cont1 .card {
+    position: relative;
+    min-width: 320px;
+    height: 440px;
+    box-shadow: inset 5px 5px 5px rgba(0, 0, 0, 0.2), inset -5px -5px 15px rgba(255, 255, 255, 0.1), 5px 5px 15px rgba(0, 0, 0, 0.3), -5px -5px 15px rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    margin: 30px;
+    transition: 0.5s;
+}
+
+#cont1 .card:nth-child(1) .box .content a {
+    background: #2196f3;
+}
+
+#cont1 .card:nth-child(2) .box .content a {
+    background: #e91e63;
+}
+
+#cont1 .card:nth-child(3) .box .content a {
+    background: #23c186;
+}
+
+#cont1 .card .box {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    right: 20px;
+    bottom: 20px;
+    border-radius: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    transition: 0.5s;
+}
+
+#cont1 .card .box:hover {
+    transform: translateY(-50px);
+}
+
+#cont1 .card .box:before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 50%;
+    height: 100%;
+}
+
+#cont1 .boll1 .card {
+    background-image: url("/static/img/customTshirt1.jpg");
+    background-size: cover;
+}
+
+#cont1 .boll2 .card {
+    background-image: url("/static/img/customTshirt2.jpg");
+    background-size: cover;
+}
+
+#cont1 .boll3 .card {
+    background-image: url("/static/img/customTshirt3.jpg");
+    background-size: cover;
+}
+
+#cont1 .card .box .content {
+    padding: 20px;
+    text-align: center;
+}
+
+#cont1 .card .box .content h2 {
+    position: absolute;
+    top: -10px;
+    right: 30px;
+    font-size: 8rem;
+    color: rgba(255, 255, 255, 0.1);
+}
+
+#cont1 .card .box .content h3 {
+    font-size: 1.8rem;
+    color: #fff;
+    z-index: 1;
+    transition: 0.5s;
+    margin-bottom: 15px;
+}
+
+#cont1 .card .box .content p {
+    font-size: 1rem;
+    font-weight: 300;
+    color: rgba(255, 255, 255, 0.9);
+    z-index: 1;
+    transition: 0.5s;
+}
+
+#cont1 .card .box .content a {
+    position: relative;
+    display: inline-block;
+    padding: 8px 20px;
+    background: black;
+    border-radius: 5px;
+    text-decoration: none;
+    color: white;
+    margin-top: 200px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    transition: 0.5s;
+}
+
+#cont1 .card .box .content a:hover {
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.6);
+    background: #fff;
+    color: #000;
+}
+ */
+
+
+/* cards */

@@ -1,0 +1,23 @@
+{
+    "params": {
+        "local_server": "True",
+        "local_url": "mysql://root:@localhost/memerkidas",
+        "prod_url": "mysql://username:password@localhost/memerkidas",
+        "mainTitle": "memerkida",
+        "author": "memer-kida",
+        "copyright": "memer-kida.dev",
+        "favTitle": "memer-kida",
+        "brandName": "memer-kida",
+        "tw_url": "https://twitter.com/_memer_kida",
+        "fb_url": "https://www.facebook.com",
+        "ig_url": "https://www.instagram.com",
+        "gh_url": "https://github.com/Devbijwe",
+        "gmail_user": "memerkida9@gmail.com",
+        "gmail_pswd": "lyjmgtiewkytgwyo",
+        "admin_username": "Admin",
+        "admin_password": "Admin@123",
+        "editImg": "\\Memer-Kida\\static\\editImg",
+        "samplePostImgUpload": "\\Memer-Kida\\static\\assets\\samplePosts",
+        "ImgAnswers": "\\Memer-Kida\\static\\assets\\ImgAnswers"
+    }
+}

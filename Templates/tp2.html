@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Image Editor With Download</title>
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&display=swap" rel="stylesheet" />
+    <!-- Cropper CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+    <!-- Stylesheet -->
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+            font-family: "Poppins", sans-serif;
+        }
+        
+        .wrapper {
+            width: 90%;
+            position: absolute;
+            transform: translate(-50%, -50%);
+            top: 50%;
+            left: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .editor-container,
+        .preview-container {
+            display: block;
+            position: relative;
+            width: 100%;
+            background-color: #ffffff;
+            padding: 2em 1em;
+            box-shadow: 0 1.25em 4em rgba(8, 6, 75, 0.15);
+            border-radius: 0.5em;
+        }
+        
+        .editor-container {
+            margin: 0 0.6em 0 0;
+        }
+        
+        .preview-container {
+            display: grid;
+            place-items: center;
+        }
+        
+        input[type="file"] {
+            display: none;
+        }
+        
+        label {
+            display: block;
+            background-color: #025bee;
+            color: #ffffff;
+            width: 12em;
+            font-size: 1.1em;
+            text-align: center;
+            padding: 1em 0;
+            border-radius: 0.3em;
+            margin: auto;
+            cursor: pointer;
+        }
+        
+        .image-container {
+            margin-bottom: 1em;
+        }
+        
+        img {
+            max-width: 100%;
+        }
+        
+        button,
+        a {
+            border: none;
+            outline: none;
+            place-items: center;
+            cursor: pointer;
+        }
+        
+        .options-btn {
+            margin-top: 1em;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .options-btn button {
+            background-color: #dceafe;
+            color: #025bee;
+            border-radius: 0.3em;
+            font-size: 0.8em;
+            height: 3.2em;
+            width: 3.2em;
+        }
+        
+        .options-btn button img {
+            width: 1.1em;
+        }
+        
+        .action-btns {
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            margin-top: 1em;
+        }
+        
+        #preview,
+        #download {
+            background-color: #025bee;
+            font-size: 1em;
+            padding: 0.8em 1em;
+            color: #ffffff;
+            border-radius: 0.3em;
+            text-decoration: none;
+        }
+        
+        .hide {
+            display: none;
+        }
+        
+        @media screen and (max-width: 1200px) {
+            .wrapper {
+                flex-direction: column;
+                position: absolute;
+                transform: translateX(-50%);
+                left: 50%;
+                top: 1em;
+            }
+            img {
+                display: block;
+                width: 60%;
+                margin: 0 auto;
+            }
+            .editor-container {
+                margin: 0 0 0.6em 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrapper">
+        <div class="editor-container">
+            <div class="image-container">
+                <img id="image" />
+            </div>
+            <input type="file" id="file" accept="image/*" />
+            <label for="file">Open A Photo</label>
+            <div class="options-btn hide">
+                <button id="rotate-left">
+            <img src="rotate-left.png" />
+          </button>
+                <button id="rotate-right">
+            <img src="rotate-right.png" />
+          </button>
+                <button id="scale-X-button">
+            <img src="flip-hori.png" />
+          </button>
+                <button id="scale-Y-button">
+            <img src="flip-ver.png" />
+          </button>
+                <button class="aspect-ratio-btns">16:9</button>
+                <button class="aspect-ratio-btns">4:3</button>
+                <button class="aspect-ratio-btns">1:1</button>
+                <button class="aspect-ratio-btns">2:3</button>
+                <button class="aspect-ratio-btns">Free</button>
+            </div>
+            <div class="action-btns">
+                <button id="preview" class="hide">Preview</button>
+                <a href="" id="download" class="hide">Download</a>
+            </div>
+        </div>
+        <div class="preview-container">
+            <img id="preview-image" />
+        </div>
+    </div>
+    <!-- Script -->
+    <script>
+        let fileInput = document.getElementById("file");
+        let image = document.getElementById("image");
+        let downloadButton = document.getElementById("download");
+        let aspectRatioBtns = document.querySelectorAll(".aspect-ratio-btns");
+        const rotateRightButton = document.getElementById("rotate-right");
+        const rotateLeftButton = document.getElementById("rotate-left");
+        const scaleXButton = document.getElementById("scale-X-button");
+        const scaleYButton = document.getElementById("scale-Y-button");
+        const previewButton = document.getElementById("preview");
+        const previewImage = document.getElementById("preview-image");
+        const options = document.querySelector(".options-btn");
+        let cropper = "";
+        let fileName = "";
+        let scaleXClick = false,
+            scaleYClick = false;
+        let rotateRightValue = -45,
+            rotateLeftValue = 45;
+
+        //Function on window load
+        window.onload = () => {
+            downloadButton.classList.add("hide");
+            options.classList.add("hide");
+            previewButton.classList.add("hide");
+        };
+
+        fileInput.onchange = () => {
+            //The FileReader object helps tp read contents of file stored on computer
+            let reader = new FileReader();
+            //readAsDataURL read the content of input file
+            reader.readAsDataURL(fileInput.files[0]);
+            reader.onload = () => {
+                //onload is triggered after file reading operation is successfully completed
+                //set src attribute of image to the result/input file
+                image.setAttribute("src", reader.result);
+                //set filename for setting downloaded file name later
+                //initialize cropper
+                if (cropper) {
+                    cropper.destroy();
+                }
+                cropper = new Cropper(image);
+                options.classList.remove("hide");
+                previewButton.classList.remove("hide");
+            };
+            fileName = fileInput.files[0].name.split(".")[0];
+        };
+
+        //Change Aspect Ratio
+        aspectRatioBtns.forEach((element) => {
+            element.addEventListener("click", () => {
+                if (element.innerText == "Free") {
+                    cropper.setAspectRatio(NaN);
+                } else {
+                    cropper.setAspectRatio(eval(element.innerText.replace(":", "/")));
+                }
+            });
+        });
+
+        //Function for rotate buttons
+        rotateRightButton.addEventListener("click", () => {
+            cropper.rotate(rotateRightValue);
+        });
+
+        rotateLeftButton.addEventListener("click", () => {
+            cropper.rotate(rotateLeftValue);
+        });
+
+        //Flip Vertically and flip horizontally
+        scaleXButton.addEventListener("click", () => {
+            if (scaleXClick) {
+                cropper.scaleX(1);
+                scaleXClick = false;
+            } else {
+                cropper.scaleX(-1);
+                scaleXClick = true;
+            }
+        });
+
+        scaleYButton.addEventListener("click", () => {
+            if (scaleYClick) {
+                cropper.scaleY(1);
+                scaleYClick = false;
+            } else {
+                cropper.scaleY(-1);
+                scaleYClick = true;
+            }
+        });
+
+        //Function to preview output image
+        previewButton.addEventListener("click", () => {
+            downloadButton.classList.remove("hide");
+            let imgSrc = cropper.getCroppedCanvas({}).toDataURL();
+            previewImage.src = imgSrc;
+        });
+
+        //Function to download the edited image
+        downloadButton.addEventListener("click", (e) => {
+            //get cropped result
+            let imgSrc = cropper.getCroppedCanvas({}).toDataURL();
+            //Download name
+            downloadButton.download = `cropped_${fileName}.png`;
+            downloadButton.setAttribute("href", imgSrc);
+        });
+    </script>
+</body>
+
+</html>
