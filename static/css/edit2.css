@@ -1,0 +1,200 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: poppins;
+    text-decoration: none;
+    list-style: none
+}
+
+.wrapper {
+    display: -webkit-flex;
+    display: -moz-flex;
+    display: -ms-flex;
+    display: -o-flex;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100%;
+    background-image: url(https://images.pexels.com/photos/612252/pexels-photo-612252.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940);
+    -webkit-background-size: cover;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.wrapper label {
+    background: #262626;
+    border-radius: 50px;
+    color: #fff;
+    font-size: 24px;
+    padding: 16px 48px;
+}
+
+#chkBox {
+    display: none;
+}
+
+.mainContntTextEdit {
+    width: 55%;
+    height: 100%;
+    display: -webkit-flex;
+    display: -moz-flex;
+    display: -ms-flex;
+    display: -o-flex;
+    display: flex;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.7s;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 300;
+    /* background: rgba(0, 0, 0, 0.8); */
+}
+
+.box {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    width: 50%;
+    height: 400px;
+    transform: translateY(-1000px);
+    transition: all 2s;
+    margin: auto;
+    background: #fff;
+}
+
+.bx1 {
+    background-image: url(https://images.pexels.com/photos/1938032/pexels-photo-1938032.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500);
+    -webkit-background-size: cover;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+
+.bx2 {
+    padding: 60px 32px 0 32px;
+}
+
+.bx2 h3 {
+    margin-bottom: 16px;
+    text-transform: uppercase;
+}
+
+.login-form input {
+    width: 100%;
+    height: 52px;
+    padding: 15px;
+    margin-bottom: 25px;
+}
+
+.login-form input[type="submit"] {
+    background: deepskyblue;
+    font-size: 25px;
+    text-transform: uppercase;
+    line-height: 20px;
+    color: #fff;
+}
+
+.close-box {
+    position: relative;
+    text-align: right;
+    color: #262626;
+    font-weight: bold;
+}
+
+.box-close {
+    position: absolute;
+    right: 3px;
+}
+
+#chkBox:checked+.mainContntTextEdit {
+    visibility: visible;
+    opacity: 1;
+}
+
+#chkBox:checked+.mainContntTextEdit .box {
+    transform: translateY(0);
+}
+
+
+/* css */
+
+.container {
+    background-color: #ffffff;
+    width: 90vmin;
+    padding: 50px 30px;
+    position: absolute;
+    transform: translate(-50%, -50%);
+    left: 50%;
+    top: 50%;
+    border-radius: 10px;
+    box-shadow: 0 25px 50px rgba(7, 20, 35, 0.2);
+}
+
+.options {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 15px;
+}
+
+button {
+    height: 28px;
+    width: 28px;
+    display: grid;
+    place-items: center;
+    border-radius: 3px;
+    border: none;
+    background-color: #ffffff;
+    outline: none;
+    color: #020929;
+}
+
+select {
+    padding: 7px;
+    border: 1px solid #020929;
+    border-radius: 3px;
+}
+
+.options label,
+.options select {
+    font-family: "Poppins", sans-serif;
+}
+
+.input-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+input[type="color"] {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-color: transparent;
+    width: 40px;
+    height: 28px;
+    border: none;
+    cursor: pointer;
+}
+
+input[type="color"]::-webkit-color-swatch {
+    border-radius: 15px;
+    box-shadow: 0 0 0 2px #ffffff, 0 0 0 3px #020929;
+}
+
+input[type="color"]::-moz-color-swatch {
+    border-radius: 15px;
+    box-shadow: 0 0 0 2px #ffffff, 0 0 0 3px #020929;
+}
+
+#text-input {
+    margin-top: 10px;
+    border: 1px solid #dddddd;
+    padding: 20px;
+    height: 50vh;
+}
+
+.active {
+    background-color: #e0e9ff;
+}

@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--divinectorweb.com-->
+
+<head>
+    <meta charset="UTF-8">
+    <title>How to Create a Modal Using only HTML and CSS</title>
+    <link rel="stylesheet" href="{{url_for('static',filename='css/edit2.css')}}">
+    <link rel="stylesheet" href="{{url_for('static',filename='css/edit1.css')}}">
+
+
+
+    <style>
+        .imgUp:hover {
+            background-color: #6366F1;
+        }
+        
+        .container3 {
+            display: flex;
+            justify-content: center;
+            box-sizing: inherit;
+            margin: 0;
+            padding: 0;
+            height: 100%;
+        }
+        
+        .container3 .thumbnails {
+            flex-direction: column;
+            line-height: 0;
+        }
+        
+        .container3 .thumbnails li {
+            flex: auto;
+        }
+        
+        .container3 .thumbnails a {
+            display: block;
+        }
+        
+        .container3 .thumbnails img {
+            width: 30vmin;
+            height: 20vmin;
+            -o-object-fit: cover;
+            object-fit: cover;
+            -o-object-position: top;
+            object-position: top;
+            padding: 0;
+        }
+        
+        .container3 .slides {
+            overflow: hidden;
+            width: 75vmin;
+            height: 100vmin;
+        }
+        
+        .container3 .slides li {
+            width: 75vmin;
+            height: 100vmin;
+            position: absolute;
+            z-index: 1;
+        }
+        
+        .container3 .slides img {
+            height: 100vmin;
+            -o-object-fit: cover;
+            object-fit: cover;
+            -o-object-position: top;
+            object-position: top;
+            position: relative;
+            text-align: center;
+            color: white;
+        }
+        
+        .container3 .slides li:target {
+            z-index: 3;
+            -webkit-animation: slide 1s 1;
+        }
+        
+        .container3 .slides li:not(:target) {
+            -webkit-animation: hidden 1s 1;
+        }
+        
+        @-webkit-keyframes slide {
+            0% {
+                transform: translateY(-100%);
+            }
+            100% {
+                transform: translateY(0%);
+            }
+        }
+        
+        @keyframes slide {
+            0% {
+                transform: translateY(-100%);
+            }
+            100% {
+                transform: translateY(0%);
+            }
+        }
+        
+        @-webkit-keyframes hidden {
+            0% {
+                z-index: 2;
+            }
+            100% {
+                z-index: 2;
+            }
+        }
+        
+        @keyframes hidden {
+            0% {
+                z-index: 2;
+            }
+            100% {
+                z-index: 2;
+            }
+        }
+    </style>
+    <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
+    <!-- <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet" /> -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Tangerine">
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+    <script src="https://cdn.rawgit.com/jackmoore/colorbox/master/jquery.colorbox-min.js"></script>
+
+
+</head>
+
+<body>
+    <!-- navbar -->
+    <div class="area"></div>
+    <nav class="main-menu">
+        <ul>
+            <li>
+                <a href="/">
+                    <i class='fa fa-tshirt' style='color:red'></i>
+                    <span class="nav-text">
+                      <h3>Memer<span class='highlight' style="color:black;">Kida</span></h3>
+                    </span>
+                </a>
+
+            </li>
+            <li>
+                <a href="#">
+                    <i class="fa fa-home fa-2x"></i>
+                    <span class="nav-text">
+        Home
+      </span>
+                </a>
+
+            </li>
+            <li class="has-subnav">
+                <a href="#">
+                    <i class="fa fa-circle-o" aria-hidden="true"></i>
+                    <span class="nav-text">
+        Colour
+      </span>
+                </a>
+
+            </li>
+            <li class="has-subnav">
+                <a> <label for="imageUploader">
+                    <i class="fa fa-picture-o" aria-hidden="true"></i>
+                    <span class="nav-text">
+        Upload
+      </span>
+               </label> </a>
+
+            </li>
+            <li class="has-subnav">
+                <a>
+                    <label for="imageEditor">
+             
+                <i class="fa fa-crop fa-2x" aria-hidden="true"></i>
+                <span class="nav-text">
+                          Image editor
+        
+      </span>
+                
+              </label></a>
+            </li>
+
+            <li>
+                <a> <label for="textEditor">
+                    <i class="fa fa-font fa-2x" aria-hidden="true"></i>
+                    <span class="nav-text">
+        Add Text
+      </span>
+                </label></a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="fa fa-sort-amount-desc fa-2x" aria-hidden="true"></i>
+                    <span class="nav-text">
+        Size
+      </span>
+                </a>
+            </li>
+
+    </nav>
+
+    <!-- navbar -->
+
+    <!-- <div id="framebd">
+        <ul id="Frames"> 
+    <li class="Frame">
+     <img src="/static/assets/Tshirts/Baseball-Tshirt_122719.png" style="height:99vh;width:50%" alt=""> 
+       <img id="mainImg" src="http://farm8.staticflickr.com/7129/7617079532_0fddbaa8cd_z.jpg" alt="" /> 
+    </li> 
+    </ul>
+    </div> -->
+
+
+    <div class="container3">
+        <ul class="slides">
+            <li id="slide1">
+                <img src="/static/img/tshitsForEdits/tshirt_white.png" width="515" height="700" alt="" />
+            </li>
+            <li id="slide2">
+                <img src="/static/img/tshitsForEdits/tshirt_black.png" width="515" height="700" alt="" />
+            </li>
+            <li id="slide3">
+                <img src="/static/img/tshitsForEdits/tshirt_blue.png" width="515" height="700" alt="" />
+            </li>
+
+        </ul>
+        <div class="mainImgCont" style="position:absolute;top:35%;left:33%;z-index:3;width:225px;height:325px;">
+            <img id="mainImg" style="position:relative;width:225px;height:325px;" alt="">
+            <div id="divpre">
+                <!-- <pre style="position: absolute;top: 40%;left:40%;color:white;">Hello bhaii</pre> -->
+
+            </div>
+        </div>
+
+        <ul class="thumbnails">
+            <li>
+                <a href="#slide1"><img src="/static/img/tshitsForEdits/tshirt_white.png" /></a>
+            </li>
+            <li>
+                <a href="#slide2"><img src="/static/img/tshitsForEdits/tshirt_black.png" /></a>
+            </li>
+            <li>
+                <a href="#slide3"><img src="/static/img/tshitsForEdits/tshirt_blue.png" /></a>
+            </li>
+        </ul>
+    </div>
+
+
+
+
+    <div style="margin:auto 0; width:40%;">
+
+        <!-- Uploader -->
+        <input type="checkbox" name="" id="imageUploader">
+        <div class="mainContntUpload">
+
+            <div class="container">
+                <div class="close-box">
+                    <label for="imageUploader" style="z-index:2;" class="box-close">X</label>
+                </div>
+                <h1 style="text-align:center ;">Memer<span class='highlight' style="color: #5092c7;">Kida</span></h1>
+
+                <hr/>
+                <div class="" style="display: flex; position: fixed; top: 0; z-index: 1; --bg-opacity: 0.6; width: 100%; height: 100%; ">
+                    <div class="" style="padding: 1rem; margin: 30vh auto;background-color: #ffffff; width:fit-content; height:fit-content;border-radius: 0.5rem; ">
+                        <div class="" style="width: 450px;position: relative; padding: 1.25rem; border-radius: 0.5rem; border-width: 4px; border-color: #D1D5DB; border-style: dotted; ">
+                            <div class="" style="width:100%;margin:0 auto;text-align:center">
+                                <svg class="" style="margin-bottom: 1rem; color: #6366F1; width: 6rem; " xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" /></svg>
+                                <div class="" style="display: flex;text-align: center;flex-direction: column;width:100%; ">
+                                    <label>
+                        <input type="file" name="" id="Uploader-imgUpload" accept="image/*" hidden  style="display: none; font-size: 0.875rem;line-height: 1.25rem; width: 9rem; cursor: pointer; "  />
+                        <div class="imgUp" style="padding: 0.25rem; padding-left: 0.75rem;padding-right: 0.75rem; background-color: #4F46E5; color: #ffffff; font-weight: 600; border-radius: 0.25rem; border-width: 1px; border-color: #D1D5DB; cursor: pointer;  ">
+                            Select
+                        </div>
+                    </label>
+
+                                    <div class="" style="color: #6366F1; text-transform: uppercase; ">or drop files here</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <!-- Uploader -->
+
+
+
+        <!-- Image Editor -->
+        <input type="checkbox" name="" id="imageEditor">
+        <div class="mainContnt">
+            <div class="container">
+                <div class="close-box">
+                    <label for="imageEditor" class="box-close">X</label>
+                </div>
+                <h1 style="text-align:center ;">Memer<span class='highlight' style="color: #5092c7;">Kida</span></h1>
+                <hr/>
+                <div class="view_img" id="imgCont" style="position: relative;text-align: center;color: white;">
+                    <img src="one.png" alt="" />
+                    <div id="divpre"></div>
+
+                </div>
+
+
+                <!-- <div class="choose_img">
+                    <button>choose Image <img src="images/upload.png" alt="" />
+                    </button>
+                    <input type="file" name="" id="" accept="image/*" hidden />
+                </div> -->
+
+                <div class="slider">
+                    <div class="filter_info">
+                        <span class="name">brightness</span>
+                        <span class="value">100%</span>
+                    </div>
+                    <input type="range" name="" id="" max="200" min="0" value="100" />
+                </div>
+                <div class="icons_filter">
+                    <p>filters</p>
+                    <div class="icons_room">
+                        <button title="brightness" id="brightness" class="active">
+                      <img src="{{url_for('static',filename='assets/editor/brightnss.png')}}" alt="" />
+                    </button>
+                        <button title="contrast" id="contrast">
+                      <img src="{{url_for('static',filename='assets/editor/contrast.png')}}" alt="" />
+                    </button>
+                        <button title="saturate" id="saturate">
+                      <img src="{{url_for('static',filename='assets/editor/opactiy.png')}}" alt="" />
+                    </button>
+                        <button title="invert" id="invert">
+                      <img src="{{url_for('static',filename='assets/editor/invert.png')}}" alt="" />
+                    </button>
+                        <button title="blur" id="blur">
+                      <img src="{{url_for('static',filename='assets/editor/blur.png')}}" alt="" />
+                    </button>
+                    </div>
+                </div>
+                <div class="icons_filter">
+                    <p>rotate & flip</p>
+                    <div class="icons_room1">
+                        <button title="rotate_left" id="rotate_left"><img src="{{url_for('static',filename='assets/editor/rotateleft.png')}}" alt="" /></button>
+                        <button title="rotate_right" id="rotate_right"><img src="{{url_for('static',filename='assets/editor/rotateright.png')}}" alt="" /></button>
+                        <button title="flip_x" id="flip_x"><img src="{{url_for('static',filename='assets/editor/flip.png')}}" alt="" /></button>
+                        <button title="flip_y" id="flip_y"><img src="{{url_for('static',filename='assets/editor/flip.png)}}" alt="" /></button>
+                    </div>
+                </div>
+
+                <div class="btn_contain">
+                    <button class="reset">reset filter</button>
+                    <button class="save">save image</button>
+                </div>
+            </div>
+
+        </div>
+        <!-- Image Editor -->
+
+        <!-- text Editor -->
+        <input type="checkbox" name="" id="textEditor">
+        <div class="mainContntTextEdit">
+            <div class="container">
+                <div class="close-box">
+                    <label for="textEditor" class="box-close">X</label>
+                </div>
+                <div class="options">
+                    <!-- Text Format -->
+                    <button id="bold" class="option-button format">
+                <img src="/static/assets/TextEditor/bold.png" width="15" height="15" alt="">
+               </button>
+                    <button id="italic" class="option-button format">
+                  <img src="/static/assets/TextEditor/italic.png" width="15" height="15" alt="">
+               </button>
+                    <button id="underline" class="option-button format">
+               <img src="/static/assets/TextEditor/underline.png" width="15" height="15" alt="">
+               </button>
+                    <button id="strikethrough" class="option-button format">
+                  <img src="/static/assets/TextEditor/strikethrough.png" width="15" height="15" alt="">
+               </button>
+                    <button id="superscript" class="option-button script">
+                  <img src="/static/assets/TextEditor/superscript.png" width="15" height="15" alt="">
+               </button>
+                    <button id="subscript" class="option-button script">
+                  <img src="/static/assets/TextEditor/subscript.png" width="15" height="15" alt="">
+               </button>
+
+                    <!-- List -->
+                    <button id="insertOrderedList" class="option-button">
+                  <img src="/static/assets/TextEditor/list.png" width="15" height="15" alt="">
+               </button>
+                    <button id="insertUnorderedList" class="option-button">
+                  <img src="/static/assets/TextEditor/list (1).png" width="15" height="15" alt="">
+               </button>
+
+                    <!-- Undo/Redo -->
+                    <button id="undo" class="option-button">
+                  <img src="/static/assets/TextEditor/undo-arrow.png" width="15" height="15" alt="">
+               </button>
+                    <button id="redo" class="option-button">
+                  <img src="/static/assets/TextEditor/redo.png" width="15" height="15" alt="">
+               </button>
+
+                    <!-- Link -->
+                    <button id="createLink" class="adv-option-button">
+                  <img src="/static/assets/TextEditor/link.png" width="15" height="15" alt="">
+                 <!-- <i class="fa fa-link"></i> -->
+               </button>
+                    <button id="unlink" class="option-button">
+                  <img src="/static/assets/TextEditor/unlink.png" width="15" height="15" alt="">
+                 <!-- <i class="fa fa-unlink"></i> -->
+               </button>
+
+                    <!-- Alignment -->
+                    <button id="justifyLeft" class="option-button align">
+                  <img src="/static/assets/TextEditor/align-left.png" width="15" height="15" alt="">
+                 <!-- <i class="fa-solid fa-align-left"></i> -->
+               </button>
+                    <button id="justifyCenter" class="option-button align">
+                  <img src="/static/assets/TextEditor/format.png" width="15" height="15" alt="">
+                 <!-- <i class="fa-solid fa-align-center"></i> -->
+               </button>
+                    <button id="justifyRight" class="option-button align">
+                  <img src="/static/assets/TextEditor/align-right.png" width="15" height="15" alt="">
+                 <!-- <i class="fa-solid fa-align-right"></i> -->
+               </button>
+                    <button id="justifyFull" class="option-button align">
+                  <img src="/static/assets/TextEditor/justify.png" width="15" height="15" alt="">
+                 <!-- <i class="fa-solid fa-align-justify"></i> -->
+               </button>
+                    <button id="indent" class="option-button spacing">
+                  <img src="/static/assets/TextEditor/right-indent.png" width="15" height="15" alt="">
+                  <!-- <i class="fa-solid fa-indent"></i> -->
+               </button>
+                    <button id="outdent" class="option-button spacing">
+                  <img src="/static/assets/TextEditor/left-indent.png" width="15" height="15" alt="">
+                    <!-- <i class="fa-solid fa-outdent"></i> -->
+               </button>
+
+                    <!-- Headings -->
+                    <select id="formatBlock" class="adv-option-button">
+                 <option value="H1">xx-large</option>
+                 <option value="H2">x-large</option>
+                 <option value="H3">large</option>
+                 <option value="H4">medium</option>
+                 <option value="H5">small</option>
+                 <option value="H6">x-small</option>
+               </select>
+
+                    <!-- Font -->
+                    <select id="fontName" class="adv-option-button"></select>
+                    <select id="fontSize" class="adv-option-button"></select>
+
+                    <!-- Color -->
+                    <div class="input-wrapper">
+                        <input type="color" id="foreColor" class="adv-option-button" />
+                        <label for="foreColor">Font Color</label>
+                    </div>
+                    <div class="input-wrapper">
+                        <input type="color" id="backColor" class="adv-option-button" />
+                        <label for="backColor">Highlight Color</label>
+                    </div>
+                </div>
+                <div id="text-input" contenteditable="true"></div>
+                <div class="container2">
+                    <button id="txtSaveBtn" type="button" style="border:#000000 2px solid;width:max-content;height:max-content;">Save</button>
+                </div>
+            </div>
+            <!--Script-->
+            <script>
+                let imgCont = document.getElementById("imgCont");
+                let divpre = document.getElementById("divpre");
+                let textinput = document.getElementById("text-input");
+                let txtSaveBtn = document.getElementById("txtSaveBtn");
+                fontName = document.getElementById("fontName");
+                fontSize = document.getElementById("fontSize");
+                let pre = document.querySelector("pre")
+                txtSaveBtn.addEventListener("click", () => {
+                    divpre.innerHTML += `<pre style="position: absolute;top: 40%;left:40%;color:white;">${textinput.innerHTML}</pre>`
+                    console.log(textinput.innerHTML);
+                })
+                fontName.addEventListener("change", () => {
+                    pre.style.fontFamily = fontName.value;
+                });
+                fontSize.addEventListener("change", () => {
+                    pre.style.fontSize = fontSize.value;
+                });
+            </script>
+
+
+            <script src="{{url_for('static',filename='js/edit1.js')}}"></script>
+
+        </div>
+        <!-- text Editor -->
+    </div>
+    <script>
+        let UploaderimgUpload = document.getElementById("Uploader-imgUpload");
+        mainImg = document.getElementById("mainImg");
+        imgSrc = document.querySelector(".view_img img");
+        UploaderimgUpload.addEventListener("change", (e) => {
+            let file = UploaderimgUpload.files[0];
+            if (!file) return;
+            imgSrc.src = URL.createObjectURL(file);
+            imgSrc.addEventListener("load", () => {
+                document.querySelector(".container").classList.remove("disabled");
+            });
+            mainImg.src = URL.createObjectURL(file);
+            mainImg.addEventListener("load", () => {});
+
+        });
+    </script>
+</body>
+
+</html>

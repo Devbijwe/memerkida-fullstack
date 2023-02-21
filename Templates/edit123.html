@@ -1,0 +1,1411 @@
+{% extends "layout.html" %}{% block style %}
+<link type="text/css" href="https://uicdn.toast.com/tui-color-picker/v2.2.6/tui-color-picker.css" rel="stylesheet" />
+
+
+<link rel="stylesheet" href="{{url_for('static',filename='css/edit123.css')}}"> {% endblock %}{% block main %}
+<!-- component -->
+<div x-data="setup()" x-init="$refs.loading.classList.add('hidden');$refs.loading.classList.remove('bg-indigo-800');" @resize.window="watchScreen()">
+    <div class="flex h-fit md:min-h-screen antialiased text-gray-900 bg-gray-100 dark:bg-dark dark:text-light ">
+        <!-- Loading screen -->
+        <div x-ref="loading" id="loader2" class="fixed inset-0 hidden z-50 flex items-center justify-center text-2xl font-semibold text-white bg-indigo-800">
+            <div class="loadingio-spinner-spinner-dohl2uy4d4">
+                <div class="ldio-fupypcu83g">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="flex flex-shrink-0 transition-all">
+            <div x-show="isSidebarOpen" @click="isSidebarOpen = false" class="fixed inset-0 z-10 bg-black bg-opacity-50 lg:hidden"></div>
+            <div x-show="isSidebarOpen" class="fixed inset-y-0 z-10 w-16 bg-white"></div>
+
+            <!-- Mobile bottom bar -->
+            <!-- <nav aria-label="Options" class="fixed inset-x-0 bottom-0 flex flex-row-reverse items-center justify-between px-4 py-2 bg-white border-t border-indigo-100 sm:hidden shadow-t rounded-t-3xl"> -->
+            <!-- Menu button -->
+            <!-- <button @click="(isSidebarOpen && currentSidebarTab == 'linksTab') ? isSidebarOpen = false : isSidebarOpen = true; currentSidebarTab = 'linksTab'" class="p-2 transition-colors rounded-lg shadow-md hover:bg-indigo-800 hover:text-white focus:outline-none focus:ring focus:ring-indigo-600 focus:ring-offset-white focus:ring-offset-2"
+                    :class="(isSidebarOpen && currentSidebarTab == 'linksTab') ? 'text-white bg-indigo-600' : 'text-gray-500 bg-white'">
+            <span class="sr-only">Toggle sidebar</span>
+            <svg
+              aria-hidden="true"
+              class="w-6 h-6"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7" />
+            </svg>
+          </button> -->
+
+            <!-- Logo -->
+            <!-- <a href="#">
+                    <img class="w-10 h-auto" src="https://raw.githubusercontent.com/kamona-ui/dashboard-alpine/main/public/assets/images/logo.png" alt="K-UI" />
+                </a> -->
+
+            <!-- User avatar button -->
+            <!-- <div class="relative flex items-center flex-shrink-0 p-2" x-data="{ isOpen: false }">
+                    <button @click="isOpen = !isOpen; $nextTick(() => {isOpen ? $refs.userMenu.focus() : null})" class="transition-opacity rounded-lg opacity-80 hover:opacity-100 focus:outline-none focus:ring focus:ring-indigo-600 focus:ring-offset-white focus:ring-offset-2">
+              <img
+                class="w-8 h-8 rounded-lg shadow-md"
+                src="https://avatars.githubusercontent.com/u/57622665?s=460&u=8f581f4c4acd4c18c33a87b3e6476112325e8b38&v=4"
+                alt="Ahmed Kamel"
+              />
+              <span class="sr-only">User menu</span>
+            </button>
+                    <div x-show="isOpen" @click.away="isOpen = false" @keydown.escape="isOpen = false" x-ref="userMenu" tabindex="-1" class="absolute w-48 py-1 mt-2 origin-bottom-left bg-white rounded-md shadow-lg left-10 bottom-14 focus:outline-none" role="menu" aria-orientation="vertical"
+                        aria-label="user menu">
+                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Your Profile</a
+              >
+
+              <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Settings</a>
+
+                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Sign out</a>
+                    </div>
+                </div> -->
+            <!-- </nav> -->
+
+            <!-- Left mini bar -->
+            <nav aria-label="Options" id="laptopSidebar" class="z-20 flex-col items-center flex-shrink-0 hidden w-16 py-4 bg-white border-r-2 border-indigo-100 shadow-md sm:flex rounded-tr-3xl rounded-br-3xl">
+                <!-- Logo -->
+                <!-- <div class="flex-shrink-0 py-4">
+                    <a href="#">
+                        <img class="w-10 h-auto" src="https://raw.githubusercontent.com/kamona-ui/dashboard-alpine/main/public/assets/images/logo.png" alt="K-UI" />
+                    </a>
+                </div> -->
+                <div class="flex flex-col items-center flex-1 p-2 space-y-4">
+                    <!-- Menu button -->
+                    <button @click="(isSidebarOpen && currentSidebarTab == 'linksTab') ? isSidebarOpen = false : isSidebarOpen = true; currentSidebarTab = 'linksTab'" class="p-2 transition-colors rounded-lg shadow-md hover:bg-indigo-800 hover:text-white focus:outline-none focus:ring focus:ring-indigo-600 focus:ring-offset-white focus:ring-offset-2"
+                        :class="(isSidebarOpen && currentSidebarTab == 'linksTab') ? 'text-white bg-indigo-600' : 'text-gray-500 bg-white'">
+              <span class="sr-only">Toggle sidebar</span>
+              <svg
+                aria-hidden="true"
+                class="w-6 h-6"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7" />
+              </svg>
+            </button>
+                    <!-- Messages button -->
+                    <button @click="(isSidebarOpen && currentSidebarTab == 'messagesTab') ? isSidebarOpen = false : isSidebarOpen = true; currentSidebarTab = 'messagesTab'" class="p-2 transition-colors rounded-lg shadow-md hover:bg-indigo-800 hover:text-white focus:outline-none focus:ring focus:ring-indigo-600 focus:ring-offset-white focus:ring-offset-2"
+                        :class="(isSidebarOpen && currentSidebarTab == 'messagesTab') ? 'text-white bg-indigo-600' : 'text-gray-500 bg-white'">
+              <span class="sr-only">Toggle message panel</span>
+              <svg
+                aria-hidden="true"
+                class="w-6 h-6"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"
+                />
+              </svg>
+            </button>
+                    <!-- Notifications button -->
+                    <button @click="(isSidebarOpen && currentSidebarTab == 'notificationsTab') ? isSidebarOpen = false : isSidebarOpen = true; currentSidebarTab = 'notificationsTab'" class="p-2 transition-colors rounded-lg shadow-md hover:bg-indigo-800 hover:text-white focus:outline-none focus:ring focus:ring-indigo-600 focus:ring-offset-white focus:ring-offset-2"
+                        :class="(isSidebarOpen && currentSidebarTab == 'notificationsTab') ? 'text-white bg-indigo-600' : 'text-gray-500 bg-white'">
+              <span class="sr-only">Toggle notifications panel</span>
+              <svg
+                aria-hidden="true"
+                class="w-6 h-6"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
+                />
+              </svg>
+            </button>
+                    <!-- Crop button -->
+                    <button id="btn-crop1" @click="(isSidebarOpen && currentSidebarTab == 'cropTab') ? isSidebarOpen = false : isSidebarOpen = true; currentSidebarTab = 'cropTab'" class="p-2 transition-colors rounded-lg shadow-md hover:bg-indigo-800 hover:text-white focus:outline-none focus:ring focus:ring-indigo-600 focus:ring-offset-white focus:ring-offset-2"
+                        :class="(isSidebarOpen && currentSidebarTab == 'cropTab') ? 'text-white bg-indigo-600' : 'text-gray-500 bg-white'">
+                   <span class="sr-only">Toggl Crop panel</span>
+                   <svg    class="w-6 h-6" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#000000" stroke-width="1" stroke-linecap="round" stroke-linejoin="miter"><polyline points="22 19 5 19 5 2"></polyline><polyline points="9 5 19 5 19 15"></polyline><line x1="19" y1="19" x2="19" y2="22"></line><line x1="2" y1="5" x2="5" y2="5"></line></svg>
+                      </button>
+                    <!-- Flip button -->
+                    <button @click="(isSidebarOpen && currentSidebarTab == 'flipTab') ? isSidebarOpen = false : isSidebarOpen = true; currentSidebarTab = 'flipTab'" class="p-2 transition-colors rounded-lg shadow-md hover:bg-indigo-800 hover:text-white focus:outline-none focus:ring focus:ring-indigo-600 focus:ring-offset-white focus:ring-offset-2"
+                        :class="(isSidebarOpen && currentSidebarTab == 'flipTab') ? 'text-white bg-indigo-600' : 'text-gray-500 bg-white'">
+               <span class="sr-only">Toggl Flip panel</span>
+               <svg    class="w-6 h-6" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#000000" stroke-width="1" stroke-linecap="round" stroke-linejoin="miter">  <path d="M22,9.5 L22,18.5 C22,18.9328855 21.4872789,19.1612322 21.1655176,18.8716471 L16.1655176,14.3716471 C15.9448275,14.1730259 15.9448275,13.8269741 16.1655176,13.6283529 L21.1655176,9.12835293 C21.4872789,8.83876779 22,9.06711449 22,9.5 Z M21,10.6226812 L17.2474236,14 L21,17.3773188 L21,10.6226812 Z M3.83448237,9.12835293 L8.83448237,13.6283529 C9.05517254,13.8269741 9.05517254,14.1730259 8.83448237,14.3716471 L3.83448237,18.8716471 C3.5127211,19.1612322 3,18.9328855 3,18.5 L3,9.5 C3,9.06711449 3.5127211,8.83876779 3.83448237,9.12835293 Z M7.75257644,14 L4,10.6226812 L4,17.3773188 L7.75257644,14 Z M7.08397485,6.2226499 C8.5054573,4.09042623 10.3228344,3 12.5,3 C14.6771656,3 16.4945427,4.09042623 17.9160251,6.2226499 C18.0692014,6.45241425 18.0071144,6.76284892 17.7773501,6.91602515 C17.5475858,7.06920138 17.2371511,7.00711444 17.0839749,6.7773501 C15.8387906,4.90957377 14.3228344,4 12.5,4 C10.6771656,4 9.16120937,4.90957377 7.91602515,6.7773501 C7.76284892,7.00711444 7.45241425,7.06920138 7.2226499,6.91602515 C6.99288556,6.76284892 6.93079862,6.45241425 7.08397485,6.2226499 Z M13,8.5 L13,19.5 C13,19.7761424 12.7761424,20 12.5,20 C12.2238576,20 12,19.7761424 12,19.5 L12,8.5 C12,8.22385763 12.2238576,8 12.5,8 C12.7761424,8 13,8.22385763 13,8.5 Z M17,6 L17,3.5 C17,3.22385763 17.2238576,3 17.5,3 C17.7761424,3 18,3.22385763 18,3.5 L18,6.5 C18,6.77614237 17.7761424,7 17.5,7 L14.5,7 C14.2238576,7 14,6.77614237 14,6.5 C14,6.22385763 14.2238576,6 14.5,6 L17,6 Z"/>
+               </svg>
+                  </button>
+                    <!-- Rotation button -->
+                    <button @click="(isSidebarOpen && currentSidebarTab == 'rotationTab') ? isSidebarOpen = false : isSidebarOpen = true; currentSidebarTab = 'rotationTab'" class="p-2 transition-colors rounded-lg shadow-md hover:bg-indigo-800 hover:text-white focus:outline-none focus:ring focus:ring-indigo-600 focus:ring-offset-white focus:ring-offset-2"
+                        :class="(isSidebarOpen && currentSidebarTab == 'rotationTab') ? 'text-white bg-indigo-600' : 'text-gray-500 bg-white'">
+                   <span class="sr-only">Toggl Rotation panel</span>
+                   <svg fill="none"  class="w-6 h-6" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" >
+                        <path d="M5.06697 5.91046L5.65392 1.99997" stroke="#333333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M5.06697 5.91046L8.80751 7.19296" stroke="#333333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M3 12.0609C3 17.0314 7.02944 21.0609 12 21.0609C16.9706 21.0609 21 17.0314 21 12.0609C21 7.09029 16.9706 3.06085 12 3.06085C9.92877 3.06085 8.02095 3.76052 6.5 4.9364" stroke="#333333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg> </button>
+                    <!-- Draw button -->
+                    <button @click="(isSidebarOpen && currentSidebarTab == 'drawTab') ? isSidebarOpen = false : isSidebarOpen = true; currentSidebarTab = 'drawTab'" class="p-2 transition-colors rounded-lg shadow-md hover:bg-indigo-800 hover:text-white focus:outline-none focus:ring focus:ring-indigo-600 focus:ring-offset-white focus:ring-offset-2"
+                        :class="(isSidebarOpen && currentSidebarTab == 'drawTab') ? 'text-white bg-indigo-600' : 'text-gray-500 bg-white'">
+               <span class="sr-only">Toggl Draw panel</span>
+               <svg fill="#000000"  class="cf-icon-svg w-6 h-6" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M5.9 4.544 2.534 7.912 1.225 6.604a1.111 1.111 0 0 1 0-1.567l1.8-1.8a1.112 1.112 0 0 1 1.568 0zm7.926 11.565a.456.456 0 0 1-.099-.011l-3.419-.77a1.96 1.96 0 0 1-.77-.412v.001l-3.709-3.71-2.512-2.511 1.71-1.71 6.22 6.221-1.181 1.182a1.294 1.294 0 0 0 .406.213l1.508.339.95-.95-.34-1.508a1.278 1.278 0 0 0-.213-.405l-.345.345-6.222-6.22.874-.875L9.197 7.84l1.751 1.752 1.957 1.958a1.962 1.962 0 0 1 .412.77l.77 3.419c.05.22-.065.37-.26.37z"/>
+             </svg>   
+            
+            
+            </button>
+                    <!-- Shapes button -->
+                    <button @click="(isSidebarOpen && currentSidebarTab == 'shapeTab') ? isSidebarOpen = false : isSidebarOpen = true; currentSidebarTab = 'shapeTab'" class="p-2 transition-colors rounded-lg shadow-md hover:bg-indigo-800 hover:text-white focus:outline-none focus:ring focus:ring-indigo-600 focus:ring-offset-white focus:ring-offset-2"
+                        :class="(isSidebarOpen && currentSidebarTab == 'shapeTab') ? 'text-white bg-indigo-600' : 'text-gray-500 bg-white'">
+                   <span class="sr-only">Toggl Shape panel</span>
+                   <svg fill="#000000"  class="w-6 h-6" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+                    <style type="text/css">
+                        .st0{fill:none;stroke:#000000;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
+                    </style>
+                    <circle class="st0" cx="22" cy="21" r="7"/>
+                    <path class="st0" d="M17.3,15.8l-4.7-6.9c-0.8-1.2-2.4-1.2-3.2,0l-6,8.9C2.4,19.1,3.4,21,5,21h10"/>
+                    <path class="st0" d="M15,12.4V7c0-1.1,0.9-2,2-2h8c1.1,0,2,0.9,2,2v8"/> </svg>
+                      </button>
+                    <!-- Icons button -->
+                    <button @click="(isSidebarOpen && currentSidebarTab == 'iconTab') ? isSidebarOpen = false : isSidebarOpen = true; currentSidebarTab = 'iconTab'" class="p-2 transition-colors rounded-lg shadow-md hover:bg-indigo-800 hover:text-white focus:outline-none focus:ring focus:ring-indigo-600 focus:ring-offset-white focus:ring-offset-2"
+                        :class="(isSidebarOpen && currentSidebarTab == 'iconTab') ? 'text-white bg-indigo-600' : 'text-gray-500 bg-white'">
+               <span class="sr-only">Toggl Icons panel</span>
+               <svg fill="#000000"  class="w-6 h-6" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg"><path d="M116.65 219.35a15.68 15.68 0 0 0 22.65 0l96.75-99.83c28.15-29 26.5-77.1-4.91-103.88C203.75-7.7 163-3.5 137.86 22.44L128 32.58l-9.85-10.14C93.05-3.5 52.25-7.7 24.86 15.64c-31.41 26.78-33 74.85-5 103.88zm143.92 100.49h-48l-7.08-14.24a27.39 27.39 0 0 0-25.66-17.78h-71.71a27.39 27.39 0 0 0-25.66 17.78l-7 14.24h-48A27.45 27.45 0 0 0 0 347.3v137.25A27.44 27.44 0 0 0 27.43 512h233.14A27.45 27.45 0 0 0 288 484.55V347.3a27.45 27.45 0 0 0-27.43-27.46zM144 468a52 52 0 1 1 52-52 52 52 0 0 1-52 52zm355.4-115.9h-60.58l22.36-50.75c2.1-6.65-3.93-13.21-12.18-13.21h-75.59c-6.3 0-11.66 3.9-12.5 9.1l-16.8 106.93c-1 6.3 4.88 11.89 12.5 11.89h62.31l-24.2 83c-1.89 6.65 4.2 12.9 12.23 12.9a13.26 13.26 0 0 0 10.92-5.25l92.4-138.91c4.88-6.91-1.16-15.7-10.87-15.7zM478.08.33L329.51 23.17C314.87 25.42 304 38.92 304 54.83V161.6a83.25 83.25 0 0 0-16-1.7c-35.35 0-64 21.48-64 48s28.65 48 64 48c35.2 0 63.73-21.32 64-47.66V99.66l112-17.22v47.18a83.25 83.25 0 0 0-16-1.7c-35.35 0-64 21.48-64 48s28.65 48 64 48c35.2 0 63.73-21.32 64-47.66V32c0-19.48-16-34.42-33.92-31.67z"/></svg>
+                  </button>
+                    <!-- Text button -->
+                    <button @click="(isSidebarOpen && currentSidebarTab == 'textTab') ? isSidebarOpen = false : isSidebarOpen = true; currentSidebarTab = 'textTab'" class="p-2 transition-colors rounded-lg shadow-md hover:bg-indigo-800 hover:text-white focus:outline-none focus:ring focus:ring-indigo-600 focus:ring-offset-white focus:ring-offset-2"
+                        :class="(isSidebarOpen && currentSidebarTab == 'textTab') ? 'text-white bg-indigo-600' : 'text-gray-500 bg-white'">
+                   <span class="sr-only">Toggl Text panel</span>
+                   <svg    class="w-6 h-6" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#000000" stroke-width="1" stroke-linecap="round" stroke-linejoin="miter"><polygon points="3,3 3,7 5,7 5,5 11,5 11,19 9,19 9,21 15,21 15,19 13,19 13,5 19,5 19,7 21,7 21,3 "/></svg>
+                      </button>
+                    <!-- Mask button -->
+                    <button @click="(isSidebarOpen && currentSidebarTab == 'maskTab') ? isSidebarOpen = false : isSidebarOpen = true; currentSidebarTab = 'maskTab'" class="p-2 transition-colors rounded-lg shadow-md hover:bg-indigo-800 hover:text-white focus:outline-none focus:ring focus:ring-indigo-600 focus:ring-offset-white focus:ring-offset-2"
+                        :class="(isSidebarOpen && currentSidebarTab == 'maskTab') ? 'text-white bg-indigo-600' : 'text-gray-500 bg-white'">
+               <span class="sr-only">Toggl Mask panel</span>
+               <svg    class="w-6 h-6" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#000000" stroke-width="1" stroke-linecap="round" stroke-linejoin="miter"> <title>mask</title>
+                <desc>Created with sketchtool.</desc>
+                <g id="production" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                    <g id="mask" fill="#000000">
+                        <path d="M5,3 L19,3 C20.1045695,3 21,3.8954305 21,5 L21,19 C21,20.1045695 20.1045695,21 19,21 L5,21 C3.8954305,21 3,20.1045695 3,19 L3,5 C3,3.8954305 3.8954305,3 5,3 Z M19,19 C19,11.2680135 12.7319865,5 5,5 L5,19 L19,19 Z" id="Shape"></path>
+                    </g>
+                </g></svg>
+                  </button>
+
+                    <!-- Filter button -->
+                    <button @click="(isSidebarOpen && currentSidebarTab == 'filterTab') ? isSidebarOpen = false : isSidebarOpen = true; currentSidebarTab = 'filterTab'" class="p-2 transition-colors rounded-lg shadow-md hover:bg-indigo-800 hover:text-white focus:outline-none focus:ring focus:ring-indigo-600 focus:ring-offset-white focus:ring-offset-2"
+                        :class="(isSidebarOpen && currentSidebarTab == 'filterTab') ? 'text-white bg-indigo-600' : 'text-gray-500 bg-white'">
+               <span class="sr-only">Toggl Filter panel</span>
+               <svg fill="#000000"  class="w-6 h-6" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="cf-icon-svg">
+              <path clip-rule="evenodd" d="M6.13232 7C6.13232 7.41421 5.79654 7.75 5.38232 7.75L3.26468 7.75C2.85046 7.75 2.51468 7.41421 2.51468 7C2.51468 6.58579 2.85046 6.25 3.26468 6.25L5.38232 6.25C5.79654 6.25 6.13232 6.58579 6.13232 7Z" fill="#000000" fill-rule="evenodd"/><path clip-rule="evenodd" d="M21.4851 7C21.4851 7.41421 21.1493 7.75 20.7351 7.75L13.3233 7.75C12.9091 7.75 12.5733 7.41421 12.5733 7C12.5733 6.58578 12.9091 6.25 13.3233 6.25L20.7351 6.25C21.1493 6.25 21.4851 6.58579 21.4851 7Z" fill="#000000" fill-rule="evenodd"/><path d="M4.85278 7C4.85278 5.60218 4.85278 4.90326 5.08114 4.35195C5.38563 3.61687 5.96965 3.03284 6.70473 2.72836C7.25605 2.5 7.95496 2.5 9.35278 2.5V2.5C10.7506 2.5 11.4495 2.5 12.0008 2.72836C12.7359 3.03284 13.3199 3.61687 13.6244 4.35195C13.8528 4.90326 13.8528 5.60218 13.8528 7V7C13.8528 8.39782 13.8528 9.09674 13.6244 9.64805C13.3199 10.3831 12.7359 10.9672 12.0008 11.2716C11.4495 11.5 10.7506 11.5 9.35278 11.5V11.5C7.95496 11.5 7.25605 11.5 6.70473 11.2716C5.96965 10.9672 5.38563 10.3831 5.08114 9.64805C4.85278 9.09674 4.85278 8.39782 4.85278 7V7Z" fill="#000000"/><path clip-rule="evenodd" d="M17.8674 18C17.8674 17.5858 18.2032 17.25 18.6174 17.25L20.7351 17.25C21.1493 17.25 21.4851 17.5858 21.4851 18C21.4851 18.4142 21.1493 18.75 20.7351 18.75L18.6174 18.75C18.2032 18.75 17.8674 18.4142 17.8674 18Z" fill="#000000" fill-rule="evenodd"/><path clip-rule="evenodd" d="M2.51465 18C2.51465 17.5858 2.85044 17.25 3.26465 17.25L10.6764 17.25C11.0906 17.25 11.4264 17.5858 11.4264 18C11.4264 18.4142 11.0906 18.75 10.6764 18.75L3.26465 18.75C2.85043 18.75 2.51465 18.4142 2.51465 18Z" fill="#000000" fill-rule="evenodd"/><path d="M19.147 18C19.147 19.3978 19.147 20.0967 18.9186 20.6481C18.6141 21.3831 18.0301 21.9672 17.295 22.2716C16.7437 22.5 16.0448 22.5 14.647 22.5V22.5C13.2491 22.5 12.5502 22.5 11.9989 22.2716C11.2638 21.9672 10.6798 21.3831 10.3753 20.648C10.147 20.0967 10.147 19.3978 10.147 18V18C10.147 16.6022 10.147 15.9033 10.3753 15.3519C10.6798 14.6169 11.2638 14.0328 11.9989 13.7284C12.5502 13.5 13.2491 13.5 14.647 13.5V13.5C16.0448 13.5 16.7437 13.5 17.295 13.7284C18.0301 14.0328 18.6141 14.6169 18.9186 15.3519C19.147 15.9033 19.147 16.6022 19.147 18V18Z" fill="#000000"/>
+            </svg>
+               
+            </button>
+                </div>
+
+                <!-- User avatar -->
+                <div class="relative flex items-center flex-shrink-0 p-2" x-data="{ isOpen: false }">
+                    <button @click="isOpen = !isOpen; $nextTick(() => {isOpen ? $refs.userMenu.focus() : null})" class="transition-opacity rounded-lg opacity-80 hover:opacity-100 focus:outline-none focus:ring focus:ring-indigo-600 focus:ring-offset-white focus:ring-offset-2">
+              <img
+                class="w-10 h-10 rounded-lg shadow-md"
+                src="https://avatars.githubusercontent.com/u/57622665?s=460&u=8f581f4c4acd4c18c33a87b3e6476112325e8b38&v=4"
+                alt="Ahmed Kamel"
+              />
+              <span class="sr-only">User menu</span>
+            </button>
+                    <div x-show="isOpen" @click.away="isOpen = false" @keydown.escape="isOpen = false" x-ref="userMenu" tabindex="-1" class="absolute w-48 py-1 mt-2 origin-bottom-left bg-white rounded-md shadow-lg left-10 bottom-14 focus:outline-none" role="menu" aria-orientation="vertical"
+                        aria-label="user menu">
+                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Your Profile</a
+              >
+
+              <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Settings</a>
+
+                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Sign out</a>
+                    </div>
+                </div>
+            </nav>
+            <!-- <div x-transition:enter="transform transition-transform duration-300" x-transition:enter-start="-translate-y-full" x-transition:enter-end="translate-y-0" x-transition:leave="transform transition-transform duration-300" x-transition:leave-start="translate-y-0"
+                x-transition:leave-end="-translate-y-full" x-show="isSidebarOpen" class="fixed inset-y-0 left-0 z-10 flex-shrink-0 w-64 bg-white border-r-2 border-indigo-100 shadow-lg sm:left-16 rounded-tr-3xl rounded-br-3xl sm:w-72 lg:static lg:w-64">
+                <nav x-show="currentSidebarTab == 'linksTab'" aria-label="Main" class="flex flex-col h-auto"> -->
+            <div x-transition:enter="transform transition-transform duration-300" x-transition:enter-start="-translate-x-full" x-transition:enter-end="translate-x-0" x-transition:leave="transform transition-transform duration-300" x-transition:leave-start="translate-x-0"
+                x-transition:leave-end="-translate-x-full" x-show="isSidebarOpen" class="fixed inset-y-0 left-0 z-10 flex-shrink-0 w-64 bg-white border-r-2 border-indigo-100 shadow-lg sm:left-16 rounded-tr-3xl rounded-br-3xl sm:w-72 lg:static lg:w-64">
+                <nav x-show="currentSidebarTab == 'linksTab'" aria-label="Main" class="flex flex-col h-full">
+                    <!-- Logo -->
+                    <div class="flex items-center justify-center flex-shrink-0 py-10">
+                        <a href="#">
+                            <!-- <svg
+                  class="text-indigo-600"
+                  width="96"
+                  height="53"
+                  fill="currentColor"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M7.691 34.703L13.95 28.2 32.09 52h8.087L18.449 23.418 38.594.813h-8.157L7.692 26.125V.812H.941V52h6.75V34.703zm27.61-7.793h17.156v-5.308H35.301v5.308zM89.19 13v22.512c0 3.703-1.02 6.574-3.058 8.613-2.016 2.04-4.934 3.059-8.754 3.059-3.773 0-6.68-1.02-8.719-3.059-2.039-2.063-3.058-4.945-3.058-8.648V.813h-6.68v34.874c.047 5.297 1.734 9.458 5.062 12.481 3.328 3.023 7.793 4.535 13.395 4.535l1.793-.07c5.156-.375 9.234-2.098 12.234-5.168 3.024-3.07 4.547-7.02 4.57-11.848V13h-6.785zM89 8h7V1h-7v7z"
+                  />
+                </svg> -->
+                            <!-- <img class="w-24 h-auto" src="https://raw.githubusercontent.com/kamona-ui/dashboard-alpine/main/public/assets/images/logo.png" alt="K-UI" /> -->
+                        </a>
+                    </div>
+
+                    <!-- Links -->
+                    <div class="flex-1 px-4 space-y-2 overflow-hidden hover:overflow-auto">
+                        <a href="#" class="flex items-center w-full space-x-2 text-white bg-indigo-600 rounded-lg">
+                            <span aria-hidden="true" class="p-2 bg-indigo-700 rounded-lg">
+                  <svg
+                    class="w-6 h-6"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+                    />
+                  </svg>
+                </span>
+                            <span>Home</span>
+                        </a>
+                        <a href="#" class="flex items-center space-x-2 text-indigo-600 transition-colors rounded-lg group hover:bg-indigo-600 hover:text-white">
+                            <span aria-hidden="true" class="p-2 transition-colors rounded-lg group-hover:bg-indigo-700 group-hover:text-white">
+                  <svg
+                    class="w-6 h-6"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"
+                    />
+                  </svg>
+                </span>
+                            <span>Pages</span>
+                        </a>
+                    </div>
+
+                    <!-- <div class="flex-shrink-0 p-4 mt-10">
+                        <div class="hidden p-2 space-y-6 bg-gray-100 rounded-lg md:block">
+                            <img aria-hidden="true" class="-mt-10" src="https://raw.githubusercontent.com/kamona-ui/dashboard-alpine/52b4b4abb92ef251f6610be416038b48209d7a81/public/assets/images/undraw_web_developer_p3e5.svg" />
+                            <p class="text-sm text-indigo-600">
+                                Use our <span class="text-base text-indigo-700er">Premium</span> features now! <br />
+                            </p>
+                            <button class="w-full px-4 py-2 text-center text-white transition-colors bg-indigo-600 rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring focus:ring-indigo-600 focus:ring-offset-2 focus:ring-offset-gray-100">
+                  Upgrade to pro
+                </button>
+                        </div>
+
+                        <button class="w-full px-4 py-2 text-center text-white transition-colors bg-indigo-600 rounded-lg md:hidden hover:bg-indigo-700 focus:outline-none focus:ring focus:ring-indigo-600 focus:ring-offset-2 focus:ring-offset-gray-100">
+                Upgrade to pro
+              </button>
+                    </div> -->
+                </nav>
+
+                <section x-show="currentSidebarTab == 'messagesTab'" class="px-4 py-6">
+                    <h2 class="text-xl">Messages</h2>
+                </section>
+
+                <section x-show="currentSidebarTab == 'notificationsTab'" class="px-4 py-6">
+                    <h2 class="text-xl">Notifications</h2>
+                </section>
+
+                <section x-show="currentSidebarTab == 'cropTab'" class="px-4 py-6">
+                    <h2 class="text-xl">crop</h2>
+                    <ul class="menu">
+                        <li class="menu-item btn-apply-crop" id="btn-apply-crop">Apply</li>
+                        <li class="menu-item  btn-cancel-crop" id="btn-cancel-crop">Cancel</li>
+                    </ul>
+
+
+                </section>
+
+                <section x-show="currentSidebarTab == 'filterTab'" class="px-4 py-6">
+                    <h2 class="text-xl">filter</h2>
+                    <ul class="menu">
+                        <li class="menu-item align-left-top">
+                            <table>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <label><input class="input-check-grayscale" type="checkbox" id="input-check-grayscale" />Grayscale</label>
+                                        </td>
+                                        <td>
+                                            <label><input class="input-check-invert" type="checkbox" id="input-check-invert" />Invert</label>
+                                        </td>
+                                        <td>
+                                            <label><input class="input-check-sepia" type="checkbox" id="input-check-sepia" />Sepia</label>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <label><input class="input-check-sepia2" type="checkbox" id="input-check-sepia2" />Sepia2</label>
+                                        </td>
+                                        <td>
+                                            <label><input class="input-check-blur" type="checkbox" id="input-check-blur" />Blur</label>
+                                        </td>
+                                        <td>
+                                            <label><input class="input-check-sharpen" type="checkbox" id="input-check-sharpen" />Sharpen</label>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <label><input class="input-check-emboss" type="checkbox" id="input-check-emboss" />Emboss</label>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </li>
+                        <li class="menu-item align-left-top">
+                            <p>
+                                <label>
+                      <input class="input-check-remove-white" type="checkbox" id="input-check-remove-white" />
+                      RemoveWhite
+                    </label>
+                                <br />
+                                <label>
+                      Distance
+                      <input
+                        class="range-narrow input-range-remove-white-distance"
+                        
+                        id="input-range-remove-white-distance"
+                        type="range"
+                        min="0"
+                        value="10"
+                        max="255"
+                      />
+                    </label>
+                            </p>
+                        </li>
+                        <li class="menu-item align-left-top">
+                            <p>
+                                <label><input class="input-check-brightness" type="checkbox" id="input-check-brightness" />Brightness</label><br />
+                                <label>
+                      Value
+                      <input
+                        class="range-narrow input-range-brightness-value"
+                        id="input-range-brightness-value"
+                        type="range"
+                        min="-255"
+                        value="100"
+                        max="255"
+                      />
+                    </label>
+                            </p>
+                        </li>
+                        <li class="menu-item align-left-top">
+                            <p>
+                                <label><input class="input-check-noise" type="checkbox" id="input-check-noise" />Noise</label><br />
+                                <label>
+                      Value
+                      <input
+                        class="range-narrow input-range-noise-value"
+                        id="input-range-noise-value"
+                        type="range"
+                        min="0"
+                        value="100"
+                        max="1000"
+                      />
+                    </label>
+                            </p>
+                        </li>
+                        <li class="menu-item align-left-top">
+                            <p>
+                                <label>
+                      <input class="input-check-color-filter" type="checkbox" id="input-check-color-filter" />
+                      ColorFilter
+                    </label>
+                                <br />
+                                <label>
+                      Threshold
+                      <input
+                        class="range-narrow input-range-color-filter-value"
+                        id="input-range-color-filter-value"
+                        type="range"
+                        min="0"
+                        value="45"
+                        max="255"
+                      />
+                    </label>
+                            </p>
+                        </li>
+                        <li class="menu-item align-left-top">
+                            <p>
+                                <label><input class="input-check-pixelate" type="checkbox" id="input-check-pixelate" />Pixelate</label><br />
+                                <label>
+                      Value
+                      <input
+                        class="range-narrow input-range-pixelate-value"
+                        id="input-range-pixelate-value"
+                        type="range"
+                        min="2"
+                        value="4"
+                        max="20"
+                      />
+                    </label>
+                            </p>
+                        </li>
+                        <li class="menu-item align-left-top">
+                            <p>
+                                <label><input class="input-check-tint" type="checkbox" id="input-check-tint" />Tint</label><br />
+                            </p>
+                            <div class="tui-tint-color-picker" id="tui-tint-color-picker1"></div>
+                            <label>
+                    Opacity
+                    <input
+                      class="range-narrow input-range-tint-opacity-value"
+                      id="input-range-tint-opacity-value"
+                      type="range"
+                      min="0"
+                      value="1"
+                      max="1"
+                      step="0.1"
+                    />
+                  </label>
+                        </li>
+                        <li class="menu-item align-left-top">
+                            <p>
+                                <label><input class="input-check-multiply" type="checkbox" id="input-check-multiply" />Multiply</label>
+                            </p>
+                            <div class="tui-multiply-color-picker" id="tui-multiply-color-picker1"></div>
+                        </li>
+                        <li class="menu-item align-left-top">
+                            <p>
+                                <label><input class="input-check-blend" type="checkbox" id="input-check-blend" />Blend</label>
+                            </p>
+                            <div class="tui-blend-color-picker" id="tui-blend-color-picker1"></div>
+                            <select name="select-blend-type">
+                    <option value="add" selected>Add</option>
+                    <option value="diff">Diff</option>
+                    <option value="diff">Subtract</option>
+                    <option value="multiply">Multiply</option>
+                    <option value="screen">Screen</option>
+                    <option value="lighten">Lighten</option>
+                    <option value="darken">Darken</option>
+                  </select>
+                        </li>
+                        <li class="menu-item close">Close</li>
+                    </ul>
+                </section>
+
+                <section x-show="currentSidebarTab == 'rotationTab'" class="px-4 py-6">
+                    <h2 class="text-xl">rotation</h2>
+                    <ul class="menu">
+                        <li class="menu-item btn-rotate-clockwise" id="btn-rotate-clockwise">Clockwise(30)</li>
+                        <li class="menu-item btn-rotate-counter-clockwise" id="btn-rotate-counter-clockwise">Counter-Clockwise(-30)</li>
+                        <li class="menu-item no-pointer">
+                            <label>
+                    Range input
+                    <input class="input-rotation-range" id="input-rotation-range" type="range" min="-360" value="0" max="360" />
+                  </label>
+                        </li>
+                        <li class="menu-item close">Close</li>
+                    </ul>
+                </section>
+
+                <section x-show="currentSidebarTab == 'maskTab'" class="px-4 py-6">
+                    <h2 class="text-xl">mask</h2>
+                    <ul class="menu">
+                        <li class="menu-item border input-wrapper">
+                            Load Mask Image
+                            <input type="file" class="input-mask-image-file" accept="image/*" id="input-mask-image-file" />
+                        </li>
+                        <li class="menu-item btn-apply-mask" id="btn-apply-mask">Apply mask filter</li>
+                        <li class="menu-item close">Close</li>
+                    </ul>
+                </section>
+
+                <section x-show="currentSidebarTab == 'drawTab'" class="px-4 py-6">
+                    <h2 class="text-xl">draw</h2>
+                    <ul class="menu">
+                        <li class="menu-item">
+                            <label>
+                    <input type="radio" name="select-line-type" value="freeDrawing" checked="checked" />
+                    Free drawing
+                  </label>
+                            <label>
+                    <input type="radio" name="select-line-type" value="lineDrawing" />
+                    Straight line
+                  </label>
+                        </li>
+                        <li class="menu-item">
+                            <div class="tui-brush-color-picker" id="tui-brush-color-picker1">Brush color</div>
+                        </li>
+                        <li class="menu-item">
+                            <label class="menu-item no-pointer">
+                    Brush width
+                    <input class="input-brush-width-range" id="input-brush-width-range" type="range" min="5" max="30" value="12" />
+                  </label>
+                        </li>
+                        <li class="menu-item close">Close</li>
+                    </ul>
+                </section>
+                <section x-show="currentSidebarTab == 'shapeTab'" class="px-4 py-6">
+                    <h2 class="text-xl">shape</h2>
+                    <ul class="menu">
+                        <li class="menu-item">
+                            <label>
+                    <input type="radio" name="select-shape-type" value="rect" checked="checked" />
+                    rect
+                  </label>
+                            <label>
+                    <input type="radio" name="select-shape-type" value="circle" />
+                    circle
+                  </label>
+                            <label>
+                    <input type="radio" name="select-shape-type" value="triangle" />
+                    triangle
+                  </label>
+                        </li>
+                        <li class="menu-item">
+                            <select name="select-color-type">
+                    <option value="fill">Fill</option>
+                    <option value="stroke">Stroke</option>
+                  </select>
+                            <label>
+                    <input
+                      class="input-check-transparent"
+                      type="radio"
+                      name="input-check-fill"
+                      id="input-check-transparent"
+                      value="transparent"
+                    />
+                    transparent
+                  </label>
+                            <label>
+                    <input
+                      class="input-check-filter"
+                      type="radio"
+                      name="input-check-fill"
+                      id="input-check-filter"
+                      value="filter"
+                    />
+                    filter
+                  </label>
+                            <div class="tui-shape-color-picker" id="tui-shape-color-picker1"></div>
+                        </li>
+                        <li class="menu-item">
+                            <label class="menu-item no-pointer">
+                    Stroke width
+                    <input class="input-stroke-width-range" id="input-stroke-width-range" type="range" min="0" max="300" value="12" />
+                  </label>
+                        </li>
+                        <li class="menu-item close">Close</li>
+                    </ul>
+                </section>
+                <section x-show="currentSidebarTab == 'flipTab'" class="px-4 py-6">
+                    <h2 class="text-xl">flip</h2>
+                    <ul class="menu">
+                        <li class="menu-item btn-flip-x" id="btn-flip-x">FlipX</li>
+                        <li class="menu-item btn-flip-y" id="btn-flip-y">FlipY</li>
+                        <li class="menu-item btn-reset-flip" id="btn-reset-flip">Reset</li>
+                        <li class="menu-item close">Close</li>
+                    </ul>
+                </section>
+                <section x-show="currentSidebarTab == 'textTab'" class="px-4 py-6">
+                    <h2 class="text-xl">text</h2>
+                    <ul class="menu">
+                        <li class="menu-item">
+                            <div>
+                                <button class="btn-text-style" data-style-type="b">Bold</button>
+                                <button class="btn-text-style" data-style-type="i">Italic</button>
+                                <button class="btn-text-style" data-style-type="u">Underline</button>
+                            </div>
+                            <div>
+                                <button class="btn-text-style" data-style-type="l">Left</button>
+                                <button class="btn-text-style" data-style-type="c">Center</button>
+                                <button class="btn-text-style" data-style-type="r">Right</button>
+                            </div>
+                        </li>
+                        <li class="menu-item">
+                            <label class="no-pointer">
+                    <input class="input-font-size-range" id="input-font-size-range" type="range" min="10" max="100" value="10" />
+                  </label>
+                        </li>
+                        <li class="menu-item">
+                            <div class="tui-text-color-picker" id="tui-text-color-picker1">Text color</div>
+                        </li>
+                        <li class="menu-item close">Close</li>
+                    </ul>
+                </section>
+                <section x-show="currentSidebarTab == 'iconTab'" class="px-4 py-6">
+                    <h2 class="text-xl">icon</h2>
+                    <ul class="menu">
+                        <li class="menu-item">
+                            <div class="tui-icon-color-picker" id="tui-icon-color-picker1">Icon color</div>
+                        </li>
+                        <li class="menu-item border btn-register-icon" id="btn-register-icon">Register custom icon</li>
+                        <li class="menu-item icon-text" data-icon-type="arrow">➡</li>
+                        <li class="menu-item icon-text" data-icon-type="cancel">✖</li>
+                        <li class="menu-item close">Close</li>
+                    </ul>
+                </section>
+
+            </div>
+        </div>
+        <div class="flex flex-col flex-1  overflow-x-hidden">
+            <header class="relative flex items-center justify-between flex-shrink-0 p-4 z-[25] " id="mainFuncContainer">
+                <form action="#" class="flex-1">
+                    <!--  -->
+                </form>
+                <!-- <div class="items-center hidden ml-4 sm:flex ">
+                    <button @click="isSettingsPanelOpen = true" class="p-2 mr-4 text-gray-400 bg-white rounded-lg shadow-md hover:text-gray-600 focus:outline-none focus:ring focus:ring-white focus:ring-offset-gray-100 focus:ring-offset-4">
+              <span class="sr-only">Settings</span>
+              <svg
+                aria-hidden="true"
+                class="w-6 h-6"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
+                />
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                />
+              </svg>
+            </button>
+
+                  
+                    <a href="https://github.com/kamona-ui/dashboard-alpine" target="_blank" class="p-2 text-white bg-black rounded-lg shadow-md hover:text-gray-200 focus:outline-none focus:ring focus:ring-black focus:ring-offset-gray-100 focus:ring-offset-2">
+                        <span class="sr-only">github link</span>
+                        <svg aria-hidden="true" class="w-6 h-6" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                  d="M12.026,2c-5.509,0-9.974,4.465-9.974,9.974c0,4.406,2.857,8.145,6.821,9.465 c0.499,0.09,0.679-0.217,0.679-0.481c0-0.237-0.008-0.865-0.011-1.696c-2.775,0.602-3.361-1.338-3.361-1.338 c-0.452-1.152-1.107-1.459-1.107-1.459c-0.905-0.619,0.069-0.605,0.069-0.605c1.002,0.07,1.527,1.028,1.527,1.028 c0.89,1.524,2.336,1.084,2.902,0.829c0.091-0.645,0.351-1.085,0.635-1.334c-2.214-0.251-4.542-1.107-4.542-4.93 c0-1.087,0.389-1.979,1.024-2.675c-0.101-0.253-0.446-1.268,0.099-2.64c0,0,0.837-0.269,2.742,1.021 c0.798-0.221,1.649-0.332,2.496-0.336c0.849,0.004,1.701,0.115,2.496,0.336c1.906-1.291,2.742-1.021,2.742-1.021 c0.545,1.372,0.203,2.387,0.099,2.64c0.64,0.696,1.024,1.587,1.024,2.675c0,3.833-2.33,4.675-4.552,4.922 c0.355,0.308,0.675,0.916,0.675,1.846c0,1.334-0.012,2.41-0.012,2.737c0,0.267,0.178,0.577,0.687,0.479 C19.146,20.115,22,16.379,22,11.974C22,6.465,17.535,2,12.026,2z"
+                ></path>
+              </svg>
+                    </a>
+                </div> -->
+
+                <!-- Mobile sub header button -->
+                <button @click="isSubHeaderOpen = !isSubHeaderOpen" class="p-2 text-gray-400 bg-white rounded-lg shadow-md sm:hidden hover:text-gray-600 focus:outline-none focus:ring focus:ring-white focus:ring-offset-gray-100 focus:ring-offset-4">
+            <span class="sr-only">More</span>
+            <svg  class="w-6 h-6" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><path d="m0 0h32v32h-32z"/><path d="m17.9996617 2v2h-13.9996617v24h24v-13.9780704h2v15.9780704h-28v-28zm8.3642993-.61 4.2426407 4.24264069-12.6007644 12.60076441-6.6967078 2.3860346 2.5352379-6.7098461zm.0005357 2.8287567-10.8003489 10.800349-.8563064 2.2662772 2.2033448-.7848885 10.8675241-10.86752413z" fill="#000000" fill-rule="nonzero"/></g></svg>
+            <!-- <svg
+              aria-hidden="true"
+              class="w-6 h-6"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"
+              />
+            </svg> -->
+          </button>
+
+                <!-- Mobile sub header -->
+                <div x-transition:enter="transform transition-transform" x-transition:enter-start="translate-y-full opacity-0" x-transition:enter-end="translate-y-0 opacity-100" x-transition:leave="transform transition-transform" x-transition:leave-start="translate-y-0 opacity-100"
+                    x-transition:leave-end="translate-y-full opacity-0" x-show="isSubHeaderOpen" @click.away="isSubHeaderOpen = false" class="absolute overflow-x-auto flex items-center justify-between p-2 bg-white rounded-md shadow-lg sm:hidden top-16 left-5 right-5">
+                    <!-- Seetings button -->
+                    <!-- <button @click="isSettingsPanelOpen = true; isSubHeaderOpen = false" class="p-2 text-gray-400 bg-white rounded-lg shadow-md hover:text-gray-600 focus:outline-none focus:ring focus:ring-white focus:ring-offset-gray-100 focus:ring-offset-4">
+              <span class="sr-only">Settings</span>
+              <svg
+                aria-hidden="true"
+                class="w-6 h-6"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
+                />
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                />
+              </svg>
+            </button> -->
+                    <!-- Messages button -->
+                    <!-- <button @click="isSidebarOpen = true; currentSidebarTab = 'messagesTab'; isSubHeaderOpen = false" class="p-2 text-gray-400 bg-white rounded-lg shadow-md hover:text-gray-600 focus:outline-none focus:ring focus:ring-white focus:ring-offset-gray-100 focus:ring-offset-4">
+              <span class="sr-only">Toggle message panel</span>
+              <svg
+                aria-hidden="true"
+                class="w-6 h-6"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"
+                />
+              </svg>
+            </button> -->
+                    <!-- Notifications button -->
+                    <!-- <button @click="isSidebarOpen = true; currentSidebarTab = 'notificationsTab'; isSubHeaderOpen = false" class="p-2 text-gray-400 bg-white rounded-lg shadow-md hover:text-gray-600 focus:outline-none focus:ring focus:ring-white focus:ring-offset-gray-100 focus:ring-offset-4">
+              <span class="sr-only">Toggle notifications panel</span>
+              <svg
+                aria-hidden="true"
+                class="w-6 h-6"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
+                />
+              </svg>
+            </button> -->
+                    <!-- Crop button -->
+                    <button id="btn-crop" class="p-2 mx-2 text-gray-400 bg-white rounded-lg shadow-md hover:text-gray-600 focus:outline-none focus:ring focus:ring-white focus:ring-offset-gray-100 focus:ring-offset-4">
+   
+<span class="sr-only">Toggle Crop panel</span>
+<svg    class="  w-6 h-6" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#000000" stroke-width="1" stroke-linecap="round" stroke-linejoin="miter"><polyline points="22 19 5 19 5 2"></polyline><polyline points="9 5 19 5 19 15"></polyline><line x1="19" y1="19" x2="19" y2="22"></line><line x1="2" y1="5" x2="5" y2="5"></line></svg>
+</button>
+
+                    <!-- Filter button -->
+                    <button id="btn-image-filter" class="p-2 mx-2  text-gray-400 bg-white rounded-lg shadow-md hover:text-gray-600 focus:outline-none focus:ring focus:ring-white focus:ring-offset-gray-100 focus:ring-offset-4">
+    
+    <span class="sr-only">Toggle Filter panel</span>
+    <svg fill="#000000"  class="w-6 h-6" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="cf-icon-svg">
+        <path clip-rule="evenodd" d="M6.13232 7C6.13232 7.41421 5.79654 7.75 5.38232 7.75L3.26468 7.75C2.85046 7.75 2.51468 7.41421 2.51468 7C2.51468 6.58579 2.85046 6.25 3.26468 6.25L5.38232 6.25C5.79654 6.25 6.13232 6.58579 6.13232 7Z" fill="#000000" fill-rule="evenodd"/><path clip-rule="evenodd" d="M21.4851 7C21.4851 7.41421 21.1493 7.75 20.7351 7.75L13.3233 7.75C12.9091 7.75 12.5733 7.41421 12.5733 7C12.5733 6.58578 12.9091 6.25 13.3233 6.25L20.7351 6.25C21.1493 6.25 21.4851 6.58579 21.4851 7Z" fill="#000000" fill-rule="evenodd"/><path d="M4.85278 7C4.85278 5.60218 4.85278 4.90326 5.08114 4.35195C5.38563 3.61687 5.96965 3.03284 6.70473 2.72836C7.25605 2.5 7.95496 2.5 9.35278 2.5V2.5C10.7506 2.5 11.4495 2.5 12.0008 2.72836C12.7359 3.03284 13.3199 3.61687 13.6244 4.35195C13.8528 4.90326 13.8528 5.60218 13.8528 7V7C13.8528 8.39782 13.8528 9.09674 13.6244 9.64805C13.3199 10.3831 12.7359 10.9672 12.0008 11.2716C11.4495 11.5 10.7506 11.5 9.35278 11.5V11.5C7.95496 11.5 7.25605 11.5 6.70473 11.2716C5.96965 10.9672 5.38563 10.3831 5.08114 9.64805C4.85278 9.09674 4.85278 8.39782 4.85278 7V7Z" fill="#000000"/><path clip-rule="evenodd" d="M17.8674 18C17.8674 17.5858 18.2032 17.25 18.6174 17.25L20.7351 17.25C21.1493 17.25 21.4851 17.5858 21.4851 18C21.4851 18.4142 21.1493 18.75 20.7351 18.75L18.6174 18.75C18.2032 18.75 17.8674 18.4142 17.8674 18Z" fill="#000000" fill-rule="evenodd"/><path clip-rule="evenodd" d="M2.51465 18C2.51465 17.5858 2.85044 17.25 3.26465 17.25L10.6764 17.25C11.0906 17.25 11.4264 17.5858 11.4264 18C11.4264 18.4142 11.0906 18.75 10.6764 18.75L3.26465 18.75C2.85043 18.75 2.51465 18.4142 2.51465 18Z" fill="#000000" fill-rule="evenodd"/><path d="M19.147 18C19.147 19.3978 19.147 20.0967 18.9186 20.6481C18.6141 21.3831 18.0301 21.9672 17.295 22.2716C16.7437 22.5 16.0448 22.5 14.647 22.5V22.5C13.2491 22.5 12.5502 22.5 11.9989 22.2716C11.2638 21.9672 10.6798 21.3831 10.3753 20.648C10.147 20.0967 10.147 19.3978 10.147 18V18C10.147 16.6022 10.147 15.9033 10.3753 15.3519C10.6798 14.6169 11.2638 14.0328 11.9989 13.7284C12.5502 13.5 13.2491 13.5 14.647 13.5V13.5C16.0448 13.5 16.7437 13.5 17.295 13.7284C18.0301 14.0328 18.6141 14.6169 18.9186 15.3519C19.147 15.9033 19.147 16.6022 19.147 18V18Z" fill="#000000"/>
+      </svg>
+         
+    </button>
+
+                    <!-- Text button -->
+                    <button id="btn-text" class="p-2 mx-2  text-gray-400 bg-white rounded-lg shadow-md hover:text-gray-600 focus:outline-none focus:ring focus:ring-white focus:ring-offset-gray-100 focus:ring-offset-4">
+
+    <span class="sr-only">Toggle Text panel</span>
+     <svg    class="w-6 h-6" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#000000" stroke-width="1" stroke-linecap="round" stroke-linejoin="miter"><polygon points="3,3 3,7 5,7 5,5 11,5 11,19 9,19 9,21 15,21 15,19 13,19 13,5 19,5 19,7 21,7 21,3 "/></svg>
+                      </button>
+                    <!-- Mask button -->
+                    <button id="btn-mask-filter" class="p-2 mx-2  text-gray-400 bg-white rounded-lg shadow-md hover:text-gray-600 focus:outline-none focus:ring focus:ring-white focus:ring-offset-gray-100 focus:ring-offset-4">
+    
+    <span class="sr-only">Toggle Mask panel</span>
+    <svg    class="w-6 h-6" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#000000" stroke-width="1" stroke-linecap="round" stroke-linejoin="miter"> <title>mask</title>
+        <desc>Created with sketchtool.</desc>
+        <g id="production" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+            <g id="mask" fill="#000000">
+                <path d="M5,3 L19,3 C20.1045695,3 21,3.8954305 21,5 L21,19 C21,20.1045695 20.1045695,21 19,21 L5,21 C3.8954305,21 3,20.1045695 3,19 L3,5 C3,3.8954305 3.8954305,3 5,3 Z M19,19 C19,11.2680135 12.7319865,5 5,5 L5,19 L19,19 Z" id="Shape"></path>
+            </g>
+        </g></svg>
+    </button>
+
+
+                    <!-- Flip button -->
+                    <button id="btn-flip" class="p-2 mx-2 text-gray-400 bg-white rounded-lg shadow-md hover:text-gray-600 focus:outline-none focus:ring focus:ring-white focus:ring-offset-gray-100 focus:ring-offset-4">
+
+<span class="sr-only">Toggle Flip panel</span>
+<svg    class=" w-6 h-6" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#000000" stroke-width="1" stroke-linecap="round" stroke-linejoin="miter">  <path d="M22,9.5 L22,18.5 C22,18.9328855 21.4872789,19.1612322 21.1655176,18.8716471 L16.1655176,14.3716471 C15.9448275,14.1730259 15.9448275,13.8269741 16.1655176,13.6283529 L21.1655176,9.12835293 C21.4872789,8.83876779 22,9.06711449 22,9.5 Z M21,10.6226812 L17.2474236,14 L21,17.3773188 L21,10.6226812 Z M3.83448237,9.12835293 L8.83448237,13.6283529 C9.05517254,13.8269741 9.05517254,14.1730259 8.83448237,14.3716471 L3.83448237,18.8716471 C3.5127211,19.1612322 3,18.9328855 3,18.5 L3,9.5 C3,9.06711449 3.5127211,8.83876779 3.83448237,9.12835293 Z M7.75257644,14 L4,10.6226812 L4,17.3773188 L7.75257644,14 Z M7.08397485,6.2226499 C8.5054573,4.09042623 10.3228344,3 12.5,3 C14.6771656,3 16.4945427,4.09042623 17.9160251,6.2226499 C18.0692014,6.45241425 18.0071144,6.76284892 17.7773501,6.91602515 C17.5475858,7.06920138 17.2371511,7.00711444 17.0839749,6.7773501 C15.8387906,4.90957377 14.3228344,4 12.5,4 C10.6771656,4 9.16120937,4.90957377 7.91602515,6.7773501 C7.76284892,7.00711444 7.45241425,7.06920138 7.2226499,6.91602515 C6.99288556,6.76284892 6.93079862,6.45241425 7.08397485,6.2226499 Z M13,8.5 L13,19.5 C13,19.7761424 12.7761424,20 12.5,20 C12.2238576,20 12,19.7761424 12,19.5 L12,8.5 C12,8.22385763 12.2238576,8 12.5,8 C12.7761424,8 13,8.22385763 13,8.5 Z M17,6 L17,3.5 C17,3.22385763 17.2238576,3 17.5,3 C17.7761424,3 18,3.22385763 18,3.5 L18,6.5 C18,6.77614237 17.7761424,7 17.5,7 L14.5,7 C14.2238576,7 14,6.77614237 14,6.5 C14,6.22385763 14.2238576,6 14.5,6 L17,6 Z"/>
+</svg>
+</button>
+                    <!-- Rotation button -->
+                    <button id="btn-rotation" class="p-2 mx-2  text-gray-400 bg-white rounded-lg shadow-md hover:text-gray-600 focus:outline-none focus:ring focus:ring-white focus:ring-offset-gray-100 focus:ring-offset-4">
+
+<span class="sr-only">Toggle Rotation panel</span>
+<svg fill="none"  class="w-6 h-6" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" >
+    <path d="M5.06697 5.91046L5.65392 1.99997" stroke="#333333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M5.06697 5.91046L8.80751 7.19296" stroke="#333333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M3 12.0609C3 17.0314 7.02944 21.0609 12 21.0609C16.9706 21.0609 21 17.0314 21 12.0609C21 7.09029 16.9706 3.06085 12 3.06085C9.92877 3.06085 8.02095 3.76052 6.5 4.9364" stroke="#333333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg> </button>
+                    <!-- Draw button -->
+                    <button id="btn-draw-line" class="p-2 mx-2  text-gray-400 bg-white rounded-lg shadow-md hover:text-gray-600 focus:outline-none focus:ring focus:ring-white focus:ring-offset-gray-100 focus:ring-offset-4">
+
+<span class="sr-only">Toggle Draw Lines panel</span>
+<svg fill="#000000"  class="cf-icon-svg w-6 h-6" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M5.9 4.544 2.534 7.912 1.225 6.604a1.111 1.111 0 0 1 0-1.567l1.8-1.8a1.112 1.112 0 0 1 1.568 0zm7.926 11.565a.456.456 0 0 1-.099-.011l-3.419-.77a1.96 1.96 0 0 1-.77-.412v.001l-3.709-3.71-2.512-2.511 1.71-1.71 6.22 6.221-1.181 1.182a1.294 1.294 0 0 0 .406.213l1.508.339.95-.95-.34-1.508a1.278 1.278 0 0 0-.213-.405l-.345.345-6.222-6.22.874-.875L9.197 7.84l1.751 1.752 1.957 1.958a1.962 1.962 0 0 1 .412.77l.77 3.419c.05.22-.065.37-.26.37z"/>
+ </svg> </button>
+                    <!-- Shapes button -->
+                    <button id="btn-draw-shape" class="p-2 mx-2  text-gray-400 bg-white rounded-lg shadow-md hover:text-gray-600 focus:outline-none focus:ring focus:ring-white focus:ring-offset-gray-100 focus:ring-offset-4">
+
+<span class="sr-only">Toggle Draw Shape panel</span>
+<svg fill="#000000"  class="w-6 h-6" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+    <style type="text/css">
+        .st0{fill:none;stroke:#000000;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
+    </style>
+    <circle class="st0" cx="22" cy="21" r="7"/>
+    <path class="st0" d="M17.3,15.8l-4.7-6.9c-0.8-1.2-2.4-1.2-3.2,0l-6,8.9C2.4,19.1,3.4,21,5,21h10"/>
+    <path class="st0" d="M15,12.4V7c0-1.1,0.9-2,2-2h8c1.1,0,2,0.9,2,2v8"/> </svg>
+</button>
+                    <!-- Icons button -->
+                    <button id="btn-add-icon" class="p-2 mx-2  text-gray-400 bg-white rounded-lg shadow-md hover:text-gray-600 focus:outline-none focus:ring focus:ring-white focus:ring-offset-gray-100 focus:ring-offset-4">
+
+<span class="sr-only">Toggle Icons panel</span>
+<svg fill="#000000"  class="w-6 h-6" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg"><path d="M116.65 219.35a15.68 15.68 0 0 0 22.65 0l96.75-99.83c28.15-29 26.5-77.1-4.91-103.88C203.75-7.7 163-3.5 137.86 22.44L128 32.58l-9.85-10.14C93.05-3.5 52.25-7.7 24.86 15.64c-31.41 26.78-33 74.85-5 103.88zm143.92 100.49h-48l-7.08-14.24a27.39 27.39 0 0 0-25.66-17.78h-71.71a27.39 27.39 0 0 0-25.66 17.78l-7 14.24h-48A27.45 27.45 0 0 0 0 347.3v137.25A27.44 27.44 0 0 0 27.43 512h233.14A27.45 27.45 0 0 0 288 484.55V347.3a27.45 27.45 0 0 0-27.43-27.46zM144 468a52 52 0 1 1 52-52 52 52 0 0 1-52 52zm355.4-115.9h-60.58l22.36-50.75c2.1-6.65-3.93-13.21-12.18-13.21h-75.59c-6.3 0-11.66 3.9-12.5 9.1l-16.8 106.93c-1 6.3 4.88 11.89 12.5 11.89h62.31l-24.2 83c-1.89 6.65 4.2 12.9 12.23 12.9a13.26 13.26 0 0 0 10.92-5.25l92.4-138.91c4.88-6.91-1.16-15.7-10.87-15.7zM478.08.33L329.51 23.17C314.87 25.42 304 38.92 304 54.83V161.6a83.25 83.25 0 0 0-16-1.7c-35.35 0-64 21.48-64 48s28.65 48 64 48c35.2 0 63.73-21.32 64-47.66V99.66l112-17.22v47.18a83.25 83.25 0 0 0-16-1.7c-35.35 0-64 21.48-64 48s28.65 48 64 48c35.2 0 63.73-21.32 64-47.66V32c0-19.48-16-34.42-33.92-31.67z"/></svg>
+ 
+</button>
+
+
+
+                </div>
+            </header>
+
+            <div class="container  my-10">
+
+                {% set img= url_for('static',filename='files/Tshirts/'+tshirt.img) %}
+
+                <div class="tui-image-editor mx-auto w-96 h-[500px]"></div>
+                <!-- <div class=" static bg-no-repeat bg-contain mx-auto lg:bg-[length:700px_700px] bg-center  hidden" style="background-image:url('{{img}}');" id="imgDisplay"> -->
+                <canvas class="static  mx-auto md:w-[35%] w-[100%] hidden" id="myCanvas" height="500" width="500" style="border:1px solid #d3d3d3;background:transparent;"></canvas>
+                <div style="display:none;">
+                    <img id="frame" src={{img}} class="w-full md:w-[500px]" />
+                    <img class="w-full md:w-[500px]" id="customizedImg" width="300" height="227" />
+                </div>
+                <!-- <div class="absolute-center m-0 p-0 w-screen h-100pc flex justify-center items-center bg-black-50 backdrop-blur-0 h-[60vh] md:h-screen"> -->
+
+                <!-- </div> -->
+
+            </div>
+
+            <!-- <div class=" static bg-no-repeat bg-contain mx-auto lg:bg-[length:700px_700px] bg-center" style="background-image:url('{{img}}');">
+                    <div class="absolute-center m-0 p-0 w-screen h-100pc flex justify-center items-center bg-black-50 backdrop-blur-0 h-[60vh] md:h-screen" >
+                 
+                        <div class="tui-image-editor mx-auto object-contain h-[500px] w-[200px] "></div>
+                    </div>
+                </div> -->
+
+            <!-- <h2 class="text-2xl text-purple-600">Tailwind CSS Overlay Image Card</h2>
+                    <p class="mb-8 text-gray-800">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quo reiciendis, consectetur ea eveniet quas iste aliquid nulla sed totam non aliquam at sit nesciunt, tempora doloribus eius earum odit doloremque.</p>
+                    <button class="px-4 py-2 text-purple-100 bg-purple-600 rounded">Read more</button> -->
+            <!-- </div> -->
+
+            <!-- <img alt="ecommerce" class="object-cover object-center w-full h-full block static" src="{{url_for('static',filename=img)}}">
+                <div class="tui-image-editor object-cover object-center w-full h-full block absolute"></div> -->
+            <!-- <div class="tui-image-editor object-cover object-center w-full h-full block absolute"></div> -->
+
+
+            <div class="flex justify-center w-screen hidden" id="selectPos">
+                <div class="mb-3  xl:w-96">
+
+                    <div id="posManipulator" class="posManipulator  ">
+                        <div class="flex w-80 range-slider">
+                            <label for="selectX" class="flex-1  w-1/6 block mb-4 text-sm font-medium text-gray-900 dark:text-white">X-Pos</label>
+                            <input id="selectX" type="range" min="-250" max="500" value="160" class="w-4/6  h-1 mt-2 bg-gray-200 rounded-lg appearance-none cursor-pointer range-sm dark:bg-gray-700">
+                            <label for="selectX" class="range-slider-val w-1/6 ml-3 block mb-4 text-sm font-medium text-gray-900 dark:text-white">160px</label>
+                        </div>
+                        <div class="flex w-80 range-slider">
+                            <label for="selectY" class="flex-1  w-1/6 block mb-4 text-sm font-medium text-gray-900 dark:text-white">Y-Pos</label>
+                            <input id="selectY" type="range" min="-250" max="500" value="150" class=" w-4/6  h-1 mt-2 bg-gray-200 rounded-lg appearance-none cursor-pointer range-sm dark:bg-gray-700">
+                            <label for="selectY" class="range-slider-val  w-1/6 ml-3 block mb-4 text-sm font-medium text-gray-900 dark:text-white">150px</label>
+                        </div>
+                        <div class="flex w-80 range-slider">
+                            <label for="selectWidth" class="flex-1  w-1/6 block mb-4 text-sm font-medium text-gray-900 dark:text-white">Width</label>
+                            <input id="selectWidth" type="range" min="-0" max="500" value="200" class="w-4/6  h-1 mt-2 bg-gray-200 rounded-lg appearance-none cursor-pointer range-sm dark:bg-gray-700">
+                            <label for="selectWidth" class="range-slider-val  w-1/6 ml-3 block mb-4 text-sm font-medium text-gray-900 dark:text-white">200px</label>
+                        </div>
+                        <div class="flex w-80 range-slider">
+                            <label for="selectHeight" class="flex-1 w-1/6 block mb-4 text-sm font-medium text-gray-900 dark:text-white">Height</label>
+                            <input id="selectHeight" type="range" min="0" max="500" value="137" class="w-4/6 h-1 mt-2 mx-2 bg-gray-200 rounded-lg appearance-none cursor-pointer range-sm dark:bg-gray-700">
+                            <label for="selectHeight" class="range-slider-val  w-1/6  ml-3 block mb-4 text-sm font-medium text-gray-900 dark:text-white">137px</label>
+                        </div>
+                    </div>
+                    <div class="flex  w-80">
+
+                        <button onclick="downT()" class="bg-gray-300 mx-auto hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center">
+                          <svg class="h-5 w-5 mr-2" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M21 15.6V19.2C21 20.1941 20.1941 21 19.2 21H4.8C3.80589 21 3 20.1941 3 19.2V15.6H4.8V19.2H19.2V15.6H21ZM12.9 12.5272L15.8636 9.5636L17.1364 10.8364L12 15.9728L6.86362 10.8364L8.13641 9.5636L11.1 12.5272V3H12.9V12.5272Z" fill="#000000"/>
+                            </svg> 
+                          Download
+                      </button>
+                        <button onclick="saveEditImg()" x-init="$refs.loading.classList.add('hidden');$refs.loading.classList.remove('bg-indigo-800');" id="saveBtn" class="bg-gray-300 mx-auto hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center">
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-save h-5 w-5 mr-2">
+                            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline>
+                         </svg> 
+                          Save
+                      </button>
+
+                        <a href="/prodRev/0=rev" id="buyBtn" class="hidden">
+
+                            <button class="bg-gray-300 mx-auto hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center ">
+                              <span class="flex"> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather  feather-credit-card  h-5 w-5 mr-2">
+                                <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line>
+                          </svg>
+                         Buy </span>
+                            </button>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <script>
+                const sliders = document.querySelectorAll('.range-slider');
+                Array.prototype.forEach.call(sliders, (slider) => {
+                    slider.querySelector('input').addEventListener('input', (event) => {
+                        slider.querySelector('.range-slider-val').innerHTML = event.target.value + "px";
+                    });
+                });
+            </script>
+            <div class="container mb-5 mx-auto mt-10 md:mt-5 md:w-fit w-screen" id="opsContainer">
+
+                <div class=" md:flex  md:flex-row flex-wrap">
+
+                    <button id="btn-undo" class="inline-flex items-center px-4 py-2 m-1 bg-gray-200 hover:bg-gray-300 text-gray-800 text-sm font-medium rounded-md">
+                      <svg fill="#000000" class="h-5 w-5 mr-2" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+                          <path class="cls-1" d="M6,3.6V0L0,6l6,6V8c6-.27,7.53,3.76,7.88,5.77a.27.27,0,0,0,.53,0C17.08,2.86,6,3.6,6,3.6Z"/>
+                          </svg>
+                    Undo
+                  </button>
+                    <button id="btn-redo" class="inline-flex items-center px-4 m-1 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 text-sm font-medium rounded-md">
+                      <svg fill="#000000" class="h-5 w-5 mr-2" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+                          <path class="cls-1" d="M16,6,10,0V3.6S-1.08,2.86,1.59,13.78a.27.27,0,0,0,.53,0c.35-2,1.9-6,7.88-5.77v4Z"/>
+                          </svg>
+                    Redo
+                  </button>
+                    <button id="btn-clear-objects" class="inline-flex items-center px-4 m-1 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 text-sm font-medium rounded-md">
+                      <svg fill="#000000" class="h-5 w-5 mr-2" viewBox="0 0 56 56" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M 13.7851 49.5742 L 42.2382 49.5742 C 47.1366 49.5742 49.5743 47.1367 49.5743 42.3086 L 49.5743 13.6914 C 49.5743 8.8633 47.1366 6.4258 42.2382 6.4258 L 13.7851 6.4258 C 8.9101 6.4258 6.4257 8.8398 6.4257 13.6914 L 6.4257 42.3086 C 6.4257 47.1602 8.9101 49.5742 13.7851 49.5742 Z M 13.8554 45.8008 C 11.5117 45.8008 10.1992 44.5586 10.1992 42.1211 L 10.1992 13.8789 C 10.1992 11.4414 11.5117 10.1992 13.8554 10.1992 L 42.1679 10.1992 C 44.4882 10.1992 45.8007 11.4414 45.8007 13.8789 L 45.8007 42.1211 C 45.8007 44.5586 44.4882 45.8008 42.1679 45.8008 Z M 18.1913 35.9336 C 18.1913 36.9649 19.0117 37.8086 20.0429 37.8086 C 20.5585 37.8086 21.0273 37.6211 21.3554 37.2696 L 27.9882 30.6133 L 34.6444 37.2696 C 34.9726 37.5977 35.4179 37.8086 35.9335 37.8086 C 36.9648 37.8086 37.8085 36.9649 37.8085 35.9336 C 37.8085 35.3945 37.5976 34.9727 37.2460 34.6211 L 30.6366 27.9883 L 37.2695 21.3320 C 37.6444 20.9571 37.8320 20.5352 37.8320 20.0430 C 37.8320 19.0118 37.0117 18.1680 35.9570 18.1680 C 35.4882 18.1680 35.0898 18.3555 34.7148 18.7305 L 27.9882 25.4102 L 21.3085 18.7539 C 20.9570 18.4258 20.5585 18.2149 20.0429 18.2149 C 19.0351 18.2149 18.1913 19.0352 18.1913 20.0664 C 18.1913 20.5586 18.4023 21.0039 18.7304 21.3555 L 25.3632 27.9883 L 18.7304 34.6445 C 18.4023 34.9961 18.1913 35.4180 18.1913 35.9336 Z"/>
+                  </svg>
+                  Clear Objects
+                  </button>
+                    <!-- <button id="btn-remove-active-object" class="inline-flex items-center px-4 m-1 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 text-sm font-medium rounded-md">
+                      <svg class="h-5 w-5 mr-2" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M9.87871 14.1213L12 12M14.1213 9.87868L12 12M12 12L9.87871 9.87868M12 12L14.1213 14.1213" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                          <path d="M21 3.6V20.4C21 20.7314 20.7314 21 20.4 21H3.6C3.26863 21 3 20.7314 3 20.4V3.6C3 3.26863 3.26863 3 3.6 3H20.4C20.7314 3 21 3.26863 21 3.6Z" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                          </svg>
+                  Remove Active Objects
+                  </button> -->
+                </div>
+            </div>
+            <div class="container" id="funcContainer">
+
+
+                <div class="conatiner my-4">
+                    <div class="sub-menu-container" id="crop-sub-menu">
+                        <ul class="menu">
+                            <li class="menu-item btn-apply-crop border-2 border-indigo-500/75 rounded-full px-10" id="btn-apply-crop">Apply</li>
+                            <li class="menu-item btn-cancel-crop border-2 border-indigo-500/75 rounded-full px-10" id="btn-cancel-crop">Cancel</li>
+                        </ul>
+                    </div>
+                    <div class="sub-menu-container" id="flip-sub-menu">
+                        <ul class="menu">
+                            <li class="menu-item btn-flip-x" id="btn-flip-x">FlipX</li>
+                            <li class="menu-item btn-flip-y" id="btn-flip-y">FlipY</li>
+                            <li class="menu-item btn-reset-flip" id="btn-reset-flip">Reset</li>
+                            <li class="menu-item close">Close</li>
+                        </ul>
+                    </div>
+                    <div class="sub-menu-container" id="rotation-sub-menu">
+                        <ul class="menu">
+                            <li class="menu-item btn-rotate-clockwise" id="btn-rotate-clockwise">Clockwise(30)</li>
+                            <li class="menu-item btn-rotate-counter-clockwise" id="btn-rotate-counter-clockwise">Counter-Clockwise(-30)</li>
+                            <li class="menu-item no-pointer">
+                                <label>
+                        Range input
+                        <input  id="input-rotation-range1" type="range" min="-360" value="0" max="360" />
+                      </label>
+                            </li>
+                            <li class="menu-item close">Close</li>
+                        </ul>
+                    </div>
+                    <div class="sub-menu-container menu" id="draw-line-sub-menu">
+                        <ul class="menu">
+                            <li class="menu-item">
+                                <label>
+                        <input type="radio" name="select-line-type" value="freeDrawing" checked="checked" />
+                        Free drawing
+                      </label>
+                                <label>
+                        <input type="radio" name="select-line-type" value="lineDrawing" />
+                        Straight line
+                      </label>
+                            </li>
+                            <li class="menu-item">
+                                <div class="tui-brush-color-picker" id="tui-brush-color-picker">Brush color</div>
+                            </li>
+                            <li class="menu-item">
+                                <label class="menu-item no-pointer">
+                        Brush width
+                        <input class="input-brush-width-range" id="input-brush-width-range" type="range" min="5" max="30" value="12" />
+                      </label>
+                            </li>
+                            <li class="menu-item close">Close</li>
+                        </ul>
+                    </div>
+                    <div class="sub-menu-container draw-shape-sub-menu" id="draw-shape-sub-menu">
+                        <ul class="menu">
+                            <li class="menu-item">
+                                <label>
+                        <input type="radio" name="select-shape-type" value="rect" checked="checked" />
+                        rect
+                      </label>
+                                <label>
+                        <input type="radio" name="select-shape-type" value="circle" />
+                        circle
+                      </label>
+                                <label>
+                        <input type="radio" name="select-shape-type" value="triangle" />
+                        triangle
+                      </label>
+                            </li>
+                            <li class="menu-item">
+                                <select name="select-color-type">
+                        <option value="fill">Fill</option>
+                        <option value="stroke">Stroke</option>
+                      </select>
+                                <label>
+                        <input
+                          class="input-check-transparent"
+                          type="radio"
+                          name="input-check-fill"
+                          id="input-check-transparent"
+                          value="transparent"
+                        />
+                        transparent
+                      </label>
+                                <label>
+                        <input
+                          class="input-check-filter"
+                          type="radio"
+                          name="input-check-fill"
+                          id="input-check-filter"
+                          value="filter"
+                        />
+                        filter
+                      </label>
+                                <div class="tui-shape-color-picker" id="tui-shape-color-picker"></div>
+                            </li>
+                            <li class="menu-item">
+                                <label class="menu-item no-pointer">
+                        Stroke width
+                        <input class="input-stroke-width-range" id="input-stroke-width-range" type="range" min="0" max="300" value="12" />
+                      </label>
+                            </li>
+                            <li class="menu-item close">Close</li>
+                        </ul>
+                    </div>
+                    <div class="sub-menu-container" id="icon-sub-menu">
+                        <ul class="menu">
+                            <li class="menu-item">
+                                <div class="tui-icon-color-picker" id="tui-icon-color-picker">Icon color</div>
+                            </li>
+                            <li class="menu-item border btn-register-icon" id="btn-register-icon">Register custom icon</li>
+                            <li class="menu-item icon-text" data-icon-type="arrow">➡</li>
+                            <li class="menu-item icon-text" data-icon-type="cancel">✖</li>
+                            <li class="menu-item close">Close</li>
+                        </ul>
+                    </div>
+                    <div class="sub-menu-container" id="text-sub-menu">
+                        <ul class="menu">
+                            <li class="menu-item">
+                                <div>
+                                    <button class="btn-text-style" data-style-type="b">Bold</button>
+                                    <button class="btn-text-style" data-style-type="i">Italic</button>
+                                    <button class="btn-text-style" data-style-type="u">Underline</button>
+                                </div>
+                                <div>
+                                    <button class="btn-text-style" data-style-type="l">Left</button>
+                                    <button class="btn-text-style" data-style-type="c">Center</button>
+                                    <button class="btn-text-style" data-style-type="r">Right</button>
+                                </div>
+                            </li>
+                            <li class="menu-item">
+                                <label class="no-pointer">
+                        <input class="input-font-size-range" id="input-font-size-range" type="range" min="10" max="100" value="10" />
+                      </label>
+                            </li>
+                            <li class="menu-item">
+                                <div class="tui-text-color-picker" id="tui-text-color-picker">Text color</div>
+                            </li>
+                            <li class="menu-item close">Close</li>
+                        </ul>
+                    </div>
+                    <div class="sub-menu-container" id="filter-sub-menu">
+                        <ul class="menu">
+                            <li class="menu-item border input-wrapper">
+                                Load Mask Image
+                                <input type="file" class="input-mask-image-file" accept="image/*" id="input-mask-image-file" />
+                            </li>
+                            <li class="menu-item btn-apply-mask" id="btn-apply-mask">Apply mask filter</li>
+                            <li class="menu-item close">Close</li>
+                        </ul>
+                    </div>
+                    <div class="sub-menu-container" id="image-filter-sub-menu">
+                        <ul class="menu">
+                            <li class="menu-item align-left-top">
+                                <table>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <label><input class="input-check-grayscale" type="checkbox" id="input-check-grayscale" />Grayscale</label>
+                                            </td>
+                                            <td>
+                                                <label><input class="input-check-invert" type="checkbox" id="input-check-invert" />Invert</label>
+                                            </td>
+                                            <td>
+                                                <label><input class="input-check-sepia" type="checkbox" id="input-check-sepia" />Sepia</label>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <label><input class="input-check-sepia2" type="checkbox" id="input-check-sepia2" />Sepia2</label>
+                                            </td>
+                                            <td>
+                                                <label><input class="input-check-blur" type="checkbox" id="input-check-blur" />Blur</label>
+                                            </td>
+                                            <td>
+                                                <label><input class="input-check-sharpen" type="checkbox" id="input-check-sharpen" />Sharpen</label>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <label><input class="input-check-emboss" type="checkbox" id="input-check-emboss" />Emboss</label>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </li>
+                            <li class="menu-item align-left-top">
+                                <p>
+                                    <label>
+                          <input class="input-check-remove-white" type="checkbox" id="input-check-remove-white" />
+                          RemoveWhite
+                        </label>
+                                    <br />
+                                    <label>
+                          Distance
+                          <input
+                            class="range-narrow input-range-remove-white-distance"
+                            
+                            id="input-range-remove-white-distance"
+                            type="range"
+                            min="0"
+                            value="10"
+                            max="255"
+                          />
+                        </label>
+                                </p>
+                            </li>
+                            <li class="menu-item align-left-top">
+                                <p>
+                                    <label><input class="input-check-brightness" type="checkbox" id="input-check-brightness" />Brightness</label><br />
+                                    <label>
+                          Value
+                          <input
+                            class="range-narrow input-range-brightness-value"
+                            id="input-range-brightness-value"
+                            type="range"
+                            min="-255"
+                            value="100"
+                            max="255"
+                          />
+                        </label>
+                                </p>
+                            </li>
+                            <li class="menu-item align-left-top">
+                                <p>
+                                    <label><input class="input-check-noise" type="checkbox" id="input-check-noise" />Noise</label><br />
+                                    <label>
+                          Value
+                          <input
+                            class="range-narrow input-range-noise-value"
+                            id="input-range-noise-value"
+                            type="range"
+                            min="0"
+                            value="100"
+                            max="1000"
+                          />
+                        </label>
+                                </p>
+                            </li>
+                            <li class="menu-item align-left-top">
+                                <p>
+                                    <label>
+                          <input class="input-check-color-filter" type="checkbox" id="input-check-color-filter" />
+                          ColorFilter
+                        </label>
+                                    <br />
+                                    <label>
+                          Threshold
+                          <input
+                            class="range-narrow input-range-color-filter-value"
+                            id="input-range-color-filter-value"
+                            type="range"
+                            min="0"
+                            value="45"
+                            max="255"
+                          />
+                        </label>
+                                </p>
+                            </li>
+                            <li class="menu-item align-left-top">
+                                <p>
+                                    <label><input class="input-check-pixelate" type="checkbox" id="input-check-pixelate" />Pixelate</label><br />
+                                    <label>
+                          Value
+                          <input
+                            class="range-narrow input-range-pixelate-value"
+                            id="input-range-pixelate-value"
+                            type="range"
+                            min="2"
+                            value="4"
+                            max="20"
+                          />
+                        </label>
+                                </p>
+                            </li>
+                            <li class="menu-item align-left-top">
+                                <p>
+                                    <label><input class="input-check-tint" type="checkbox" id="input-check-tint" />Tint</label><br />
+                                </p>
+                                <div class="tui-tint-color-picker" id="tui-tint-color-picker"></div>
+                                <label>
+                        Opacity
+                        <input
+                          class="range-narrow input-range-tint-opacity-value"
+                          id="input-range-tint-opacity-value"
+                          type="range"
+                          min="0"
+                          value="1"
+                          max="1"
+                          step="0.1"
+                        />
+                      </label>
+                            </li>
+                            <li class="menu-item align-left-top">
+                                <p>
+                                    <label><input class="input-check-multiply" type="checkbox" id="input-check-multiply" />Multiply</label>
+                                </p>
+                                <div class="tui-multiply-color-picker" id="tui-multiply-color-picker"></div>
+                            </li>
+                            <li class="menu-item align-left-top">
+                                <p>
+                                    <label><input class="input-check-blend" type="checkbox" id="input-check-blend" />Blend</label>
+                                </p>
+                                <div class="tui-blend-color-picker" id="tui-blend-color-picker"></div>
+                                <select name="select-blend-type">
+                        <option value="add" selected>Add</option>
+                        <option value="diff">Diff</option>
+                        <option value="diff">Subtract</option>
+                        <option value="multiply">Multiply</option>
+                        <option value="screen">Screen</option>
+                        <option value="lighten">Lighten</option>
+                        <option value="darken">Darken</option>
+                      </select>
+                            </li>
+                            <li class="menu-item close">Close</li>
+                        </ul>
+                    </div>
+                </div>
+                <ul class="menu my-3 ">
+                    <li class="menu-item   input-wrapper">
+                        <button class="inline-flex items-center px-4 py-2 bg-indigo-500 hover:bg-indigo-600 text-white text-sm font-medium rounded-md">
+                                <svg fill="#000000" class="h-5 w-5 mr-2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19,13a1,1,0,0,0-1,1v.38L16.52,12.9a2.79,2.79,0,0,0-3.93,0l-.7.7L9.41,11.12a2.85,2.85,0,0,0-3.93,0L4,12.6V7A1,1,0,0,1,5,6h7a1,1,0,0,0,0-2H5A3,3,0,0,0,2,7V19a3,3,0,0,0,3,3H17a3,3,0,0,0,3-3V14A1,1,0,0,0,19,13ZM5,20a1,1,0,0,1-1-1V15.43l2.9-2.9a.79.79,0,0,1,1.09,0l3.17,3.17,0,0L15.46,20Zm13-1a.89.89,0,0,1-.18.53L13.31,15l.7-.7a.77.77,0,0,1,1.1,0L18,17.21ZM22.71,4.29l-3-3a1,1,0,0,0-.33-.21,1,1,0,0,0-.76,0,1,1,0,0,0-.33.21l-3,3a1,1,0,0,0,1.42,1.42L18,4.41V10a1,1,0,0,0,2,0V4.41l1.29,1.3a1,1,0,0,0,1.42,0A1,1,0,0,0,22.71,4.29Z"/></svg>
+                              Upload
+                            </button>
+                        <input type="file" accept="image/*" id="input-image-file" />
+                    </li>
+                    <li class="menu-item " id="btn-download">
+                        <button class="inline-flex items-center px-4 py-2 bg-indigo-500 hover:bg-indigo-600 text-white text-sm font-medium rounded-md">
+                            <svg class="h-5 w-5 mr-2" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" clip-rule="evenodd" d="M21 15.6V19.2C21 20.1941 20.1941 21 19.2 21H4.8C3.80589 21 3 20.1941 3 19.2V15.6H4.8V19.2H19.2V15.6H21ZM12.9 12.5272L15.8636 9.5636L17.1364 10.8364L12 15.9728L6.86362 10.8364L8.13641 9.5636L11.1 12.5272V3H12.9V12.5272Z" fill="#000000"/>
+                                </svg>    Download
+                        </button>
+                    </li>
+                    <li class="menu-item " id="btn-img-save">
+                        <button class="inline-flex items-center px-4 py-2 bg-indigo-500 hover:bg-indigo-600 text-white text-sm font-medium rounded-md"> 
+                          Next
+<svg xmlns="http://www.w3.org/2000/svg"  fill="#000000" class="h-5 w-5 ml-2" viewBox="0 0 24 24" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right">
+  <line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline>
+</svg>
+                      </button>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Panels -->
+
+    <!-- Settings Panel -->
+    <!-- Backdrop -->
+    <!-- <div x-show="isSettingsPanelOpen" class="fixed inset-0 bg-black bg-opacity-50" @click="isSettingsPanelOpen = false" aria-hidden="true"></div> -->
+    <!-- Panel -->
+    <!-- <section x-transition:enter="transform transition-transform duration-300" x-transition:enter-start="translate-x-full" x-transition:enter-end="translate-x-0" x-transition:leave="transform transition-transform duration-300" x-transition:leave-start="translate-x-0"
+        x-transition:leave-end="translate-x-full" x-show="isSettingsPanelOpen" class="fixed inset-y-0 right-0 w-64 bg-white border-l border-indigo-100 rounded-l-3xl">
+        <div class="px-4 py-8">
+            <h2 class="text-lg font-semibold">Settings</h2>
+        </div>
+    </section> -->
+
+
+
+
+</div>
+
+
+<p class="hidden" id="tshirtId">{{tshirt.publicId}}</p>
+
+{% endblock %} {% block script %}
+<script>
+</script>
+
+
+<script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.7.3/dist/alpine.min.js" defer></script>
+<script>
+    const setup = () => {
+        return {
+            isSidebarOpen: false,
+            currentSidebarTab: null,
+            isSettingsPanelOpen: false,
+            isSubHeaderOpen: false,
+            watchScreen() {
+                if (window.innerWidth <= 1024) {
+                    this.isSidebarOpen = false
+                }
+            },
+        }
+    }
+</script>
+<script type="text/javascript" src="https://api-storage.cloud.toast.com/v1/AUTH_e18353c4ea5746c097143946d0644e61/toast-ui-cdn/tui-image-editor/v3.11.0/example/fabric-v4.2.0.js"></script>
+<script type="text/javascript" src="https://uicdn.toast.com/tui.code-snippet/v1.5.0/tui-code-snippet.min.js"></script>
+<script type="text/javascript" src="https://uicdn.toast.com/tui-color-picker/v2.2.6/tui-color-picker.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.3/FileSaver.min.js"></script>
+<script src="https://uicdn.toast.com/tui-image-editor/latest/tui-image-editor.js"></script>
+<script src="{{url_for('static',filename='js/edit123.js')}}"></script>
+
+
+{% endblock %}

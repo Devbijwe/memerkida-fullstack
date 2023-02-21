@@ -1,0 +1,198 @@
+{% extends "layout.html" %}{% block style %}
+
+<style>
+    @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700;800&display=swap");
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Poppins", sans-serif;
+        -ms-overflow-style: none;
+        /* Internet Explorer 10+ */
+        scrollbar-width: none;
+        /* Firefox */
+    }
+    
+    *::-webkit-scrollbar {
+        display: none;
+        /* Safari and Chrome */
+    }
+    
+    .bdcard {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        min-height: 100vh;
+        background: #e2e4e7;
+    }
+    
+    #cont1 {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        max-width: 1200px;
+        margin: 40px 0;
+    }
+    
+    #cont1 .card {
+        position: relative;
+        min-width: 320px;
+        height: 440px;
+        box-shadow: inset 5px 5px 5px rgba(0, 0, 0, 0.2), inset -5px -5px 15px rgba(255, 255, 255, 0.1), 5px 5px 15px rgba(0, 0, 0, 0.3), -5px -5px 15px rgba(255, 255, 255, 0.1);
+        border-radius: 15px;
+        margin: 30px;
+        transition: 0.5s;
+    }
+    
+    #cont1 .card:nth-child(1) .box .content a {
+        background: #2196f3;
+    }
+    
+    #cont1 .card:nth-child(2) .box .content a {
+        background: #e91e63;
+    }
+    
+    #cont1 .card:nth-child(3) .box .content a {
+        background: #23c186;
+    }
+    
+    #cont1 .card .box {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        right: 20px;
+        bottom: 20px;
+        border-radius: 15px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+        transition: 0.5s;
+    }
+    
+    #cont1 .card .box:hover {
+        transform: translateY(-50px);
+    }
+    
+    #cont1 .card .box:before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 50%;
+        height: 100%;
+    }
+    
+    #cont1 .boll1 .card {
+        background-image: url("/static/img/customTshirt1.jpg");
+        background-size: cover;
+    }
+    
+    #cont1 .boll2 .card {
+        background-image: url("/static/img/customTshirt2.jpg");
+        background-size: cover;
+    }
+    
+    #cont1 .boll3 .card {
+        background-image: url("/static/img/customTshirt3.jpg");
+        background-size: cover;
+    }
+    
+    .boll1,
+    .boll1,
+    .boll3 {
+        margin: 0 15px;
+    }
+    
+    #cont1 .card .box .content {
+        padding: 20px;
+        text-align: center;
+    }
+    
+    #cont1 .card .box .content h2 {
+        position: absolute;
+        top: -10px;
+        right: 30px;
+        font-size: 8rem;
+        color: rgba(255, 255, 255, 0.1);
+    }
+    
+    #cont1 .card .box .content h3 {
+        font-size: 1.8rem;
+        color: #fff;
+        z-index: 1;
+        transition: 0.5s;
+        margin-bottom: 15px;
+    }
+    
+    #cont1 .card .box .content p {
+        font-size: 1rem;
+        font-weight: 300;
+        color: rgba(255, 255, 255, 0.9);
+        z-index: 1;
+        transition: 0.5s;
+    }
+    
+    #cont1 .card .box .content a {
+        position: relative;
+        display: inline-block;
+        padding: 8px 20px;
+        background: black;
+        border-radius: 5px;
+        text-decoration: none;
+        color: white;
+        margin-top: 200px;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        transition: 0.5s;
+    }
+    
+    #cont1 .card .box .content a:hover {
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.6);
+        background: #fff;
+        color: #000;
+    }
+</style>
+{% endblock %}{% block main %}
+
+<div class="bdcard">
+    <div class="container" id="cont1">
+        <div class="boll1">
+            <div class="card">
+                <div class="box">
+                    <div class="content">
+                        <h2>01</h2>
+                        <h3>Customize by memerkida</h3>
+                        <p></p>
+                        <a href="/customize/default=ty">Explore</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="boll2">
+            <div class="card">
+                <div class="box">
+                    <div class="content">
+                        <h2>02</h2>
+                        <h3>Customize by yourself</h3>
+
+                        <a href="/customize/cust=ty">Explore</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- <div class="boll3">
+            <div class="card">
+                <div class="box">
+                    <div class="content">
+                        <h2>03</h2>
+                        <h3>twitter quote</h3>
+
+                        <a href="#">Read More</a>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+    </div>
+</div>{% endblock %}

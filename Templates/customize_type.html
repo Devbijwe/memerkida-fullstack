@@ -1,0 +1,30 @@
+{% extends "layout.html" %}{% block style %}
+<!-- <script src="https://cdn.tailwindcss.com">
+</script> -->
+{% endblock %}{% block main %}
+<div class="container mx-2 min-h-screen overflow-hidden capitalize">
+    <section class="text-gray-600  body-font ">
+        {% if tshirts %}
+        <h1 class="my-3" style="text-align:center ;font-size:xx-large;">Select a T-shirt</h1>
+        <div class="container px-5 py-24 mx-auto">
+
+            <div class="flex flex-wrap -m-4">
+                {% for key in tshirts %} {% set img='files/Tshirts/'+key.img %}
+                <div class="lg:w-1/4 md:w-1/2 p-4 w-full">
+                    <a href="/{{load}}/{{key.publicId}}=t" class="block relative h-65 rounded overflow-hidden">
+                        <img alt="ecommerce" class="object-cover object-center w-full h-full block" src="{{url_for('static',filename=img)}}">
+                    </a>
+                    <div class="mt-4">
+                        <h3 class="text-gray-500 text-xs tracking-widest title-font mb-1">CATEGORY</h3>
+                        <h2 class="text-gray-900 title-font text-lg font-medium">{{key.name}}</h2>
+
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% else %}
+        <h1 class="mt-[20%]" style="text-align:center ;font-size:xx-large;">No T-shirt was Added...</h1>{% endif %}
+    </section>
+</div>
+{% endblock %}

@@ -1,0 +1,240 @@
+{% extends "admin.html" %}{% block style %} {% endblock %}{% block main %}
+
+<div class=" w-full  mx-auto  overflow-y-auto overflow-x-hidden">
+    <!-- <h1 class="text-center my-5">T-shirt Adder</h1> -->
+    <form class="w-full " action="/tshirt/{{type}}/add/{{id}}=id/{{sid}}=sid/{{fid}}=fid" method="post" enctype="multipart/form-data">
+        <div class=" flex flex-wrap -mx-3 mb-2">
+
+            <div class="w-full md:w-1/4 px-3 mb-6 md:mb-0">
+                <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-tid">
+                 Tshirt Id
+        </label>
+                <input readonly required name="tshirtId" value="{{id}}" id="grid-tid" type="text" placeholder="Tshirt Id" maxlength="11" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
+
+            </div>
+            <div class="w-full md:w-1/4 px-3 mb-6 md:mb-0">
+                <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-sid">
+               Sub-Id
+             </label>
+                <input readonly required name="sid" value="{{sid}}" id="grid-sid" type="text" placeholder="Sub Id" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
+            </div>
+
+            <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+                <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-name">
+                Name
+              </label>
+                <input required name="name" value="{{tshirts.name}}{{tdata.name}}" maxlength="100" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                    id="grid-name" type="text" placeholder="Tshirt Name">
+            </div>
+        </div>
+        <div class="flex flex-wrap -mx-3 mb-6">
+
+            <div class="w-full md:w-1/3 px-3 mb-6 md:mb-0">
+                <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-neck">
+                 Neck Type
+        </label>
+                <div class="relative">
+                    <select required name="neck" value="{{tshirts.neck}}{{tdata.neck}}" class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-neck">
+                      {% if tshirts.neck or tdata.neck %}  <option value="{{tshirts.neck}}{{tdata.neck}}">{{tshirts.neck}}{{tdata.neck}}</option>
+                      {% endif %}
+                        <option value="Boat Neck">Boat Neck</option>
+<option value="Collared Neck">Collared Neck</option>
+<option value="Cowl Neck">Cowl Neck</option>
+<option value="Crew Neck">Crew Neck</option>
+<option value="Henley Neck">Henley Neck</option>
+<option value="High Neck">High Neck</option>
+<option value="Hooded Neck">Hooded Neck</option>
+<option value="Mandarin Neck">Mandarin Neck</option>
+<option value="Mock Neck">Mock Neck</option>
+<option value="Notch Neck">Notch Neck</option>
+<option value="Off Shoulder Neck">Off Shoulder Neck</option>
+<option value="Scoop Neck">Scoop Neck</option>
+<option value="Turtle Neck">Turtle Neck</option>
+<option value="V Neck">V Neck</option>
+    
+  </select>
+                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                        <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                    </div>
+                </div>
+            </div>
+            <div class="w-full md:w-1/3 px-3 mb-6 md:mb-0">
+                <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-sleeve">
+                 Sleeves Type
+        </label>
+                <div class="relative">
+                    <select required name="sleeve" value="{{tshirts.sleeve}}{{tdata.sleeve}}" class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                        id="grid-sleeve">
+                        {% if tshirts.sleeve or tdata.sleeve %}  <option value="{{tshirts.sleeve}}{{tdata.sleeve}}">{{tshirts.sleeve}}{{tdata.sleeve}}</option>
+                        {% endif %}
+    <option value="3/4 Sleeve">3/4 Sleeve</option>
+    <option value="Half Sleeve">Half Sleeve</option>
+    <option value="Long Sleeve">Long Sleeve</option>
+    <option value="Short Sleeve">Short Sleeve</option>
+    <option value="Sleeveless">Sleeveless</option>
+    
+  </select>
+                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                        <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                    </div>
+                </div>
+            </div>
+            <div class="w-full md:w-1/3 px-3">
+                <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-type">
+         Tshirt Type
+        </label>
+                <div class="relative">
+                    <select required name="type" value="{{tshirts.type}}" class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-type">
+   
+                        {% if type=="Sell" %}
+    <option selected value="Sell">Sell</option>{% else %}  <option selected value="Demo">Demo</option>   {% endif %}
+ 
+   
+  </select>
+                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                        <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+
+
+
+        <div class="flex flex-wrap -mx-3 mb-2">
+
+            <div class="w-full md:w-2/12 px-3 mb-6 md:mb-0">
+                <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-price">
+                    Price (in Rs.)
+        </label>
+                <input required name="price" value="{{tshirts.price}}" maxlength="11" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-price"
+                    type="number" placeholder="150 Rupeeya dega">
+            </div>
+            <div class="w-full md:w-5/12 px-3 mb-6 md:mb-0">
+                <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-colour">
+          Colour
+        </label>
+                <!-- <div class="relative"> -->
+                <input required name="colour" type="text" placeholder="Pls add , after color as Red,blue" value="{{tshirts.colour}}" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                    id="grid-colour">
+
+
+                <!-- <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                        <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                    </div>
+                </div> -->
+            </div>
+            <div class="w-full md:w-5/12 px-3">
+                <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-size">
+                    Sizes
+                  </label>
+                <input required name="size" value="{{tshirts.size}}" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-size" type="text"
+                    placeholder="L,M,XL,XXL">
+
+            </div>
+        </div>
+
+        <div class="flex flex-wrap -mx-3 mb-2">
+            <div class="w-full md:w-3/4 px-3">
+                <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-description">
+                    Description
+                  </label>
+                <input required name="description" value="{{tshirts.description}}{{tdata.description}}" maxlength="500" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                    id="grid-description" type="text" placeholder="Description">
+
+            </div>
+            <div class="w-full md:w-1/4 px-3 mb-6 md:mb-0">
+                <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-zip">
+        Status
+        </label>
+                <div class="relative">
+                    <select required name="status" value="{{tshirts.status}}" class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-status">
+    <option value="Active" selected>Active</option>
+    <option value="In-Active">In-Active</option>
+ 
+  </select>
+                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                        <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex flex-wrap -mx-3 mb-6">
+
+            <div class="w-full px-3">
+                {% if fid==0 %}
+                <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-img">
+          Tshirt Image 
+        </label>
+                <input required name="img" value="{{tshirts.img}}" onchange="loadFile(event)" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                    id="grid-img" type="file" placeholder="******************" accept="image/*">
+
+            </div>
+        </div>
+        <div class="flex flex-wrap -mx-3 mb-6">
+            <div class="w-full mx-auto px-3 hidden" id="previewImg">
+                <label class="block uppercase text-center tracking-wide text-gray-700 text-xl my-1 font-bold mb-2" for="output">
+                    Preview
+                  </label>
+                <img id="output" class="mx-auto" src="" width="250" height="250" alt="your image" /> {% else %}
+                <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-img">
+                        Tshirt Image <span class="lowercase"> ( {{tshirts.img}} )</span>
+                      </label>
+                <input name="img" value="{{tshirts.img}}" onchange="loadFile(event)" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-img"
+                    type="file" placeholder="******************" accept="image/*">
+
+            </div>
+        </div>
+        <div class="flex flex-wrap -mx-3 mb-6">
+            <div class="w-full mx-auto px-3">
+                <label class="block uppercase text-center tracking-wide text-gray-700 text-xl my-1 font-bold mb-2" for="output">
+                    Preview
+                  </label> {% set img='files/Tshirts/'+tshirts.img %}
+                <img id="output" class="mx-auto" src="{{url_for('static',filename=img)}}" width="250" height="250" alt="your image" /> {% endif %}
+            </div>
+        </div>
+        <div class="flex flex-wrap -mx-3 mb-6">
+            <div class="w-full px-3 ">
+                <button type="submit" class="text-gray-900 w-full mt-5 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800">Submit</button>
+            </div>
+        </div>
+    </form>
+
+</div>
+<p class="hidden" id="idSell">{{id}}</p>
+<p class="hidden" id="sidSell">{{sid}}</p>
+{% endblock %} {% block script %}
+<script>
+    var loadFile = function(event) {
+        try {
+            document.getElementById("previewImg").classList.remove("hidden");
+        } catch {
+
+        }
+
+        var output = document.getElementById('output');
+        output.src = URL.createObjectURL(event.target.files[0]);
+        output.onload = function() {
+            URL.revokeObjectURL(output.src) // free memory
+        }
+    };
+</script>
+
+{% if type=="Demo" %}
+
+<script>
+    document.getElementById("add-product").classList.remove("hidden");
+    document.getElementById("add-product").innerHTML = `  <button class="app-content-headerButton">Delete Tshirt</button>`;
+    document.getElementById("add-product").setAttribute("href", `/tshirt/Demo/Delete/${document.getElementById("idSell").innerHTML}=id/0=sid/0=fid`)
+    document.getElementById("headerTxt").innerHTML = `Tshirts - Demo`;
+</script>
+{% elif type=="Sell" %}
+<script>
+    document.getElementById("add-product").classList.remove("hidden");
+    document.getElementById("add-product").innerHTML = `  <button class="app-content-headerButton">Delete Tshirt</button>`;
+    document.getElementById("add-product").setAttribute("href", `/tshirt/Sell/Delete/${document.getElementById("idSell").innerHTML}=id/${document.getElementById("sidSell").innerHTML}=sid/0=fid`);
+    document.getElementById("headerTxt").innerHTML = `Tshirts - Sell`;
+</script>{% endif %} {% endblock %}

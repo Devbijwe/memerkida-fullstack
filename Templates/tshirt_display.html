@@ -1,0 +1,62 @@
+ {% extends "admin.html" %} {% block style %} {% endblock %}{% block main %}
+<div class="container mx-2 overflow-auto capitalize">
+    <section class="text-gray-600 body-font ">
+        <!-- <h1 class="my-3" style="text-align:center ;font-size:xx-large;">Select a T-shirt</h1> -->
+        {% if tshirts %}
+        <div class="container px-5 py-24 mx-auto">
+            <div class="flex flex-wrap -m-4">
+
+                {% for key in tshirts %} {% set img='files/Tshirts/'+key.img %}
+                <div class="lg:w-1/4 md:w-1/2 p-4 w-full">
+                    {% if type=="Demo" %}
+                    <a href="/tshirt/Sell/view/{{key.tshirtId}}=id/{{key.subId}}=sid/0=fid" class="block relative h-65 rounded overflow-hidden">
+                        <img alt="ecommerce" class="object-cover object-center w-full h-full block" src="{{url_for('static',filename=img)}}">
+                        <div class="mt-4">
+                            <h3 class="text-gray-500 flex justify-between text-xs tracking-widest title-font mb-1 "> <span>CATEGORY </span><a href="/tshirt/Demo/add/{{key.tshirtId}}=id/0=sid/{{key.tshirtId}}=fid"><svg  xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-3"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg> </a></h3>
+                            <h2 class="text-gray-900 title-font text-lg font-medium">{{key.name}}</h2>
+                        </div>
+                    </a>
+                    {% elif type=="Sell" %}
+                    <a href="/tshirt/Sell/add/{{key.tshirtId}}=id/{{key.subId}}=sid/{{key.subId}}=fid" class="block relative h-65 rounded overflow-hidden">
+                        <img alt="ecommerce" class="object-cover object-center w-full h-full block" src="{{url_for('static',filename=img)}}">
+                        <div class="mt-4">
+                            <h3 class="text-gray-500  text-xs tracking-widest title-font mb-1 ">CATEGORY</h3>
+                            <h2 class="text-gray-900 title-font text-lg font-medium">{{key.name}}</h2>
+                        </div>
+                    </a>
+                    {% endif %}
+
+                </div>
+                {% endfor %}
+
+            </div>
+        </div>
+        {% else %}
+        <h1 class="my-3" style="text-align:center ;font-size:xx-large;">No T-shirt was Added...</h1>{% endif %}
+    </section>
+</div>
+<p class="hidden" id="idSell">{{id}}</p>
+<p class="hidden" id="sidSell">{{sid}}</p>
+{% endblock %} {% block script %}
+<script>
+    document.getElementById("tshirts").classList.add("active");
+    document.getElementById("export").classList.remove("hidden");
+    document.getElementById("export").innerHTML = `  <button class="app-content-headerButton">Export</button>`;
+    document.getElementById("export").setAttribute("href", `/admin/export/excel/tshirts`);
+</script>
+{% if type=="Demo" %}
+
+<script>
+    document.getElementById("add-product").classList.remove("hidden");
+    document.getElementById("add-product").innerHTML = `  <button class="app-content-headerButton">Add Tshirt</button>`;
+    document.getElementById("add-product").setAttribute("href", "/tshirt/Demo/add/0=id/0=sid/0=fid")
+    document.getElementById("headerTxt").innerHTML = `Tshirts - Demo`;
+</script>
+{% elif type=="Sell" %}
+<script>
+    document.getElementById("add-product").classList.remove("hidden");
+    document.getElementById("add-product").innerHTML = `  <button class="app-content-headerButton">Add Tshirt</button>`;
+    document.getElementById("add-product").setAttribute("href", `/tshirt/Sell/add/${document.getElementById("idSell").innerHTML}=id/${document.getElementById("sidSell").innerHTML}=sid/0=fid`);
+    document.getElementById("headerTxt").innerHTML = `Tshirts - Sell`;
+</script>
+{% endif %}{% endblock %}

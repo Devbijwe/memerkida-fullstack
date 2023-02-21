@@ -1,944 +1,387 @@
 {% extends "layout.html" %}{% block style %}
 
+
 <style>
-    .boll1,
-    .boll1,
-    .boll3 {
-        margin: 0 15px;
-    }
-    
-    * {
-        box-sizing: border-box;
-    }
-    
-    .mainbd {
-        padding: 40px;
-        font-size: 14px;
-        background: #f6f9fc;
-        font-family: "Open Sans", sans-serif;
-        color: #525f7f;
-    }
-    
-    h2.taglineh2 {
-        margin: 5%;
-        text-align: center;
-        font-size: 2rem;
-        font-weight: 100;
-    }
-    
-    .timeline {
-        display: flex;
-        flex-direction: column;
-        margin: 20px auto;
-        position: relative;
-    }
-    
-    .timeline__event {
-        margin-bottom: 20px;
-        position: relative;
-        display: flex;
-        margin: 20px 0;
-        border-radius: 6px;
-        align-self: center;
-        width: 50vw;
-    }
-    
-    .timeline__event:nth-child(2n+1) {
-        flex-direction: row-reverse;
-    }
-    
-    .timeline__event:nth-child(2n+1) .timeline__event__date {
-        border-radius: 0 6px 6px 0;
-    }
-    
-    .timeline__event:nth-child(2n+1) .timeline__event__content {
-        border-radius: 6px 0 0 6px;
-    }
-    
-    .timeline__event:nth-child(2n+1) .timeline__event__icon:before {
-        content: "";
-        width: 2px;
-        height: 100%;
-        background: #f6a4ec;
-        position: absolute;
-        top: 0%;
-        left: 50%;
-        right: auto;
-        z-index: -1;
-        transform: translateX(-50%);
-        -webkit-animation: fillTop 2s forwards 4s ease-in-out;
-        animation: fillTop 2s forwards 4s ease-in-out;
-    }
-    
-    .timeline__event:nth-child(2n+1) .timeline__event__icon:after {
-        content: "";
-        width: 100%;
-        height: 2px;
-        background: #f6a4ec;
-        position: absolute;
-        right: 0;
-        z-index: -1;
-        top: 50%;
-        left: auto;
-        transform: translateY(-50%);
-        -webkit-animation: fillLeft 2s forwards 4s ease-in-out;
-        animation: fillLeft 2s forwards 4s ease-in-out;
-    }
-    
-    .timeline__event__title {
-        font-size: 1.2rem;
-        line-height: 1.4;
-        text-transform: uppercase;
-        font-weight: 600;
-        color: #9251ac;
-        letter-spacing: 1.5px;
-    }
-    
-    .timeline__event__content {
-        padding: 20px;
-        box-shadow: 0 30px 60px -12px rgba(50, 50, 93, 0.25), 0 18px 36px -18px rgba(0, 0, 0, 0.3), 0 -12px 36px -8px rgba(0, 0, 0, 0.025);
-        background: #fff;
-        width: calc(40vw - 84px);
-        border-radius: 0 6px 6px 0;
-    }
-    
-    .timeline__event__date {
-        color: #f6a4ec;
-        font-size: 1.5rem;
-        font-weight: 600;
-        background: #9251ac;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        white-space: nowrap;
-        padding: 0 20px;
-        border-radius: 6px 0 0 6px;
-    }
-    
-    .timeline__event__icon {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: #9251ac;
-        padding: 20px;
-        align-self: center;
-        margin: 0 20px;
-        background: #f6a4ec;
-        border-radius: 100%;
-        width: 40px;
-        box-shadow: 0 30px 60px -12px rgba(50, 50, 93, 0.25), 0 18px 36px -18px rgba(0, 0, 0, 0.3), 0 -12px 36px -8px rgba(0, 0, 0, 0.025);
-        padding: 40px;
-        height: 40px;
-        position: relative;
-    }
-    
-    .timeline__event__icon i {
-        font-size: 32px;
-    }
-    
-    .timeline__event__icon:before {
-        content: "";
-        width: 2px;
-        height: 100%;
-        background: #f6a4ec;
-        position: absolute;
-        top: 0%;
-        z-index: -1;
-        left: 50%;
-        transform: translateX(-50%);
-        -webkit-animation: fillTop 2s forwards 4s ease-in-out;
-        animation: fillTop 2s forwards 4s ease-in-out;
-    }
-    
-    .timeline__event__icon:after {
-        content: "";
-        width: 100%;
-        height: 2px;
-        background: #f6a4ec;
-        position: absolute;
-        left: 0%;
-        z-index: -1;
-        top: 50%;
-        transform: translateY(-50%);
-        -webkit-animation: fillLeftOdd 2s forwards 4s ease-in-out;
-        animation: fillLeftOdd 2s forwards 4s ease-in-out;
-    }
-    
-    .timeline__event__description {
-        flex-basis: 60%;
-    }
-    
-    .timeline__event--type2:after {
-        background: #555ac0;
-    }
-    
-    .timeline__event--type2 .timeline__event__date {
-        color: #87bbfe;
-        background: #555ac0;
-    }
-    
-    .timeline__event--type2:nth-child(2n+1) .timeline__event__icon:before,
-    .timeline__event--type2:nth-child(2n+1) .timeline__event__icon:after {
-        background: #87bbfe;
-    }
-    
-    .timeline__event--type2 .timeline__event__icon {
-        background: #87bbfe;
-        color: #555ac0;
-    }
-    
-    .timeline__event--type2 .timeline__event__icon:before,
-    .timeline__event--type2 .timeline__event__icon:after {
-        background: #87bbfe;
-    }
-    
-    .timeline__event--type2 .timeline__event__title {
-        color: #555ac0;
-    }
-    
-    .timeline__event--type3:after {
-        background: #24b47e;
-    }
-    
-    .timeline__event--type3 .timeline__event__date {
-        color: #aff1b6;
-        background-color: #24b47e;
-    }
-    
-    .timeline__event--type3:nth-child(2n+1) .timeline__event__icon:before,
-    .timeline__event--type3:nth-child(2n+1) .timeline__event__icon:after {
-        background: #aff1b6;
-    }
-    
-    .timeline__event--type3 .timeline__event__icon {
-        background: #aff1b6;
-        color: #24b47e;
-    }
-    
-    .timeline__event--type3 .timeline__event__icon:before,
-    .timeline__event--type3 .timeline__event__icon:after {
-        background: #aff1b6;
-    }
-    
-    .timeline__event--type3 .timeline__event__title {
-        color: #24b47e;
-    }
-    
-    .timeline__event:last-child .timeline__event__icon:before {
-        content: none;
-    }
-    
-    @media (max-width: 786px) {
-        .timeline__event {
-            flex-direction: column;
-            align-self: center;
-            width: 100%;
-        }
-        .timeline__event__content {
-            width: 100%;
-        }
-        .timeline__event__icon {
-            border-radius: 6px 6px 0 0;
-            width: 100%;
-            margin: 0;
-            box-shadow: none;
-        }
-        .timeline__event__icon:before,
-        .timeline__event__icon:after {
-            display: none;
-        }
-        .timeline__event__date {
-            border-radius: 0;
-            padding: 20px;
-        }
-        .timeline__event:nth-child(2n+1) {
-            flex-direction: column;
-            align-self: center;
-        }
-        .timeline__event:nth-child(2n+1) .timeline__event__date {
-            border-radius: 0;
-            padding: 20px;
-        }
-        .timeline__event:nth-child(2n+1) .timeline__event__icon {
-            border-radius: 6px 6px 0 0;
-            margin: 0;
-        }
-    }
-    
-    @-webkit-keyframes fillLeft {
-        100% {
-            right: 100%;
-        }
-    }
-    
-    @keyframes fillLeft {
-        100% {
-            right: 100%;
-        }
-    }
-    
-    @-webkit-keyframes fillTop {
-        100% {
-            top: 100%;
-        }
-    }
-    
-    @keyframes fillTop {
-        100% {
-            top: 100%;
-        }
-    }
-    
-    @-webkit-keyframes fillLeftOdd {
-        100% {
-            left: 100%;
-        }
-    }
-    
-    @keyframes fillLeftOdd {
-        100% {
-            left: 100%;
-        }
-    }
-    /* button */
-    /*Neon Button*/
-    
-    .secbd {
-        margin: 50px auto;
-        box-sizing: border-box;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        font-family: 'Raleway', sans-serif;
-        font-weight: bold;
-    }
-    
-    .gb {
-        position: relative;
-        display: inline-block;
-        padding: 25px 30px;
-        color: #03e9f4;
-        text-decoration: none;
-        text-transform: uppercase;
-        transition: 0.5s;
-        letter-spacing: 4px;
-        overflow: hidden;
-        margin-right: 50px;
-    }
-    
-    .gb:hover {
-        background: #03e9f4;
-        color: #050801;
-        box-shadow: 0 0 5px #03e9f4, 0 0 25px #03e9f4, 0 0 50px #03e9f4, 0 0 200px #03e9f4;
-        -webkit-box-reflect: below 1px linear-gradient(transparent, #0005);
-    }
-    
-    .gb:nth-child(1) {
-        filter: hue-rotate(270deg);
-    }
-    
-    .gb:nth-child(2) {
-        filter: hue-rotate(110deg);
-    }
-    
-    .gb span {
-        position: absolute;
-        display: block;
-    }
-    
-    .gb span:nth-child(1) {
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 2px;
-        background: linear-gradient(90deg, transparent, #03e9f4);
-        animation: animate1 1s linear infinite;
-    }
-    
-    @keyframes animate1 {
-        0% {
-            left: -100%;
-        }
-        50%,
-        100% {
-            left: 100%;
-        }
-    }
-    
-    .gb span:nth-child(2) {
-        top: -100%;
-        right: 0;
-        width: 2px;
-        height: 100%;
-        background: linear-gradient(180deg, transparent, #03e9f4);
-        animation: animate2 1s linear infinite;
-        animation-delay: 0.25s;
-    }
-    
-    @keyframes animate2 {
-        0% {
-            top: -100%;
-        }
-        50%,
-        100% {
-            top: 100%;
-        }
-    }
-    
-    .gb span:nth-child(3) {
-        bottom: 0;
-        right: 0;
-        width: 100%;
-        height: 2px;
-        background: linear-gradient(270deg, transparent, #03e9f4);
-        animation: animate3 1s linear infinite;
-        animation-delay: 0.50s;
-    }
-    
-    @keyframes animate3 {
-        0% {
-            right: -100%;
-        }
-        50%,
-        100% {
-            right: 100%;
-        }
-    }
-    
-    .gb span:nth-child(4) {
-        bottom: -100%;
-        left: 0;
-        width: 2px;
-        height: 100%;
-        background: linear-gradient(360deg, transparent, #03e9f4);
-        animation: animate4 1s linear infinite;
-        animation-delay: 0.75s;
-    }
-    
-    @keyframes animate4 {
-        0% {
-            bottom: -100%;
-        }
-        50%,
-        100% {
-            bottom: 100%;
-        }
-    }
-    /*Neon Button*/
-    /* carousel*/
-    
-    .cor .carousel {
-        margin: 50px auto;
-        padding: 0 70px;
-    }
-    
-    .cor .carousel .carousel-item {
-        min-height: 330px;
-        text-align: center;
-        overflow: hidden;
-    }
-    
-    .img-box {
-        height: 160px;
-        width: 100%;
-        position: relative;
-    }
-    
-    img {
-        max-width: 100%;
-        max-height: 100%;
-        display: inline-block;
-        position: absolute;
-        bottom: 0;
-        margin: 0 auto;
-        left: 0;
-        right: 0;
-    }
-    
-    h4 {
-        font-size: 18px;
-        margin: 10px 0;
-    }
-    
-    .btn {
-        color: #333;
-        border-radius: 0;
-        font-size: 11px;
-        text-transform: uppercase;
-        font-weight: bold;
-        background: none;
-        border: 1px solid #ccc;
-        padding: 5px 10px;
-        margin-top: 5px;
-        line-height: 16px;
-    }
-    
-    .btn:hover,
-    .btn:focus {
-        color: #fff;
-        background: #000;
-        border-color: #000;
-        box-shadow: none;
-    }
-    
-    .btn i {
-        font-size: 14px;
-        font-weight: bold;
-        margin-left: 5px;
-    }
-    
-    .thumb-wrapper {
-        text-align: center;
-    }
-    
-    .thumb-content {
-        padding: 0px;
-    }
-    
-    .cor .carousel-control-prev,
-    .cor .carousel-control-next {
-        height: 100px;
-        width: 40px;
-        background: none;
-        margin: auto 0;
-        background: rgba(0, 0, 0, 0.2);
-    }
-    
-    .cor .carousel-control-prev i,
-    .cor .carousel-control-next i {
-        font-size: 30px;
-        position: absolute;
-        top: 50%;
-        display: inline-block;
-        margin: -16px 0 0 0;
-        z-index: 5;
-        left: 0;
-        right: 0;
-        color: rgba(0, 0, 0, 0.8);
-        text-shadow: none;
-        font-weight: bold;
-    }
-    
-    .cor .carousel-control-prev i {
-        margin-left: -3px;
-    }
-    
-    .cor .carousel-control-next i {
-        margin-right: -3px;
-    }
-    
-    .item-price {
-        font-size: 13px;
-        padding: 2px 0;
-    }
-    
-    .item-price strike {
-        color: #999;
-        margin-right: 5px;
-    }
-    
-    .item-price span {
-        color: #86bd57;
-        font-size: 110%;
-    }
-    
-    .carousel-indicators {
-        bottom: -50px;
-    }
-    
-    .star-rating {
-        display: flex;
-    }
-    
-    .star-rating li {
-        float: auto;
-        text-align: center;
-        display: inline;
+    .grid {
         padding: 0;
+        margin: 0 0 10px;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
     }
     
-    .star-rating i {
-        align-items: center;
-        align-self: center;
-        margin: 0 auto;
-        font-size: 14px;
-        color: #ffc000;
+    .grid .grid-item {
+        width: calc(100% / 3);
+        background-size: cover;
+        background-position: 50% 50%;
     }
     
-    ul.list-inline {
-        margin: 25px auto;
+    .grid .grid-item-body {
+        padding-top: 30%;
+        position: relative;
     }
-    /* carousel*/
+    
+    .grid .grid-item-body .item-title {
+        position: absolute;
+        top: 4px;
+        left: 4px;
+        background: rgba(255, 255, 255, 0.8);
+        display: inline-block;
+        font-size: 2em;
+        line-height: 1em;
+        height: 1em;
+        min-width: 0.5em;
+        padding: 0.1em 0.5em 0.3em 0.2em;
+        border-radius: 3px 3px 100% 3px;
+    }
+    
+    .grid .grid-item-body .item-extra {
+        margin: 10px;
+        padding: 10px;
+        background: rgba(0, 0, 0, 0.5);
+        color: #fff;
+    }
+    /* slider btn */
+    
+    .grid.tinyslide {
+        --tinyslide-size: 3;
+        --tinyslide-speed: 0.5s;
+        --tinyslide-autoplay: 5s;
+        --tinyslide-gutter: 10px;
+        --tinyslide-btn-width: 100px;
+        --tinyslide-btn-pad-h: 10px;
+        --tinyslide-btn-pad-v: 10px;
+        --tinyslide-btn-background: transparent;
+        --tinyslide-btn-opacity: 0;
+        --tinyslide-btn-hover-background: transparent;
+        --tinyslide-btn-hover-opacity: 0;
+    }
+    /* Easy responsive carousel size 😁 */
+    
+    @media (max-width:1000px) {
+        .grid.tinyslide {
+            --tinyslide-size: 2;
+            --tinyslide-btn-width: 60px;
+        }
+    }
+    
+    @media (max-width:700px) {
+        .grid.tinyslide {
+            --tinyslide-size: 1;
+            --tinyslide-btn-width: 30px;
+        }
+    }
 </style>
-
+<script src="{{url_for('static',filename='js/tinyslide.js')}}"></script>
+<style>
+    .tinyslide-ctrl-prev {
+        background-color: blue;
+    }
+</style>
 {% endblock %}{% block main %}
-
 <div class="zoom">
-    <section>
-        <div class="mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8">
-            <div class="swiper-container !overflow-hidden">
-                <div class="swiper-wrapper">
-                    <div class="swiper-slide">
-                        <!-- <div class="row">
-                            <div class="col-sm-3"> -->
-                        <div class="thumb-wrapper">
-                            <div class="img-box">
-                                <img src="/static/assets/samplePosts/sp1010.png" class="img-fluid" alt="">
-                            </div>
-                            <div class="thumb-content">
-                                <h4>Apple iPad</h4>
-                                <p class="item-price"><strike>$400.00</strike> <span>$369.00</span></p>
-                                <div class="star-rating">
-                                    <ul class="list-inline">
-                                        <li class="list-inline-item"><i class="fa fa-star"></i></li>
-                                        <li class="list-inline-item"><i class="fa fa-star"></i></li>
-                                        <li class="list-inline-item"><i class="fa fa-star"></i></li>
-                                        <li class="list-inline-item"><i class="fa fa-star"></i></li>
-                                        <li class="list-inline-item"><i class="fa fa-star-o"></i></li>
-                                    </ul>
-                                </div>
-                                <a href="#" class="btn btn-primary">Add to Cart</a>
-                            </div>
-                            <!-- </div>
-                            </div> -->
-
-                        </div>
-                    </div>
-
-                    <div class="swiper-slide">
-                        <!-- <div class="row">
-                            <div class="col-sm-3"> -->
-                        <div class="thumb-wrapper">
-                            <div class="img-box">
-                                <img src="/static/assets/samplePosts/sp1010.png" class="img-fluid" alt="">
-                            </div>
-                            <div class="thumb-content">
-                                <h4>Apple iPad</h4>
-                                <p class="item-price"><strike>$400.00</strike> <span>$369.00</span></p>
-                                <div class="star-rating">
-                                    <ul class="list-inline">
-                                        <li class="list-inline-item"><i class="fa fa-star"></i></li>
-                                        <li class="list-inline-item"><i class="fa fa-star"></i></li>
-                                        <li class="list-inline-item"><i class="fa fa-star"></i></li>
-                                        <li class="list-inline-item"><i class="fa fa-star"></i></li>
-                                        <li class="list-inline-item"><i class="fa fa-star-o"></i></li>
-                                    </ul>
-                                </div>
-                                <a href="#" class="btn btn-primary">Add to Cart</a>
-                            </div>
-                            <!-- </div>
-                            </div> -->
-
-                        </div>
-                    </div>
-                    <div class="swiper-slide">
-                        <!-- <div class="row">
-                            <div class="col-sm-3"> -->
-                        <div class="thumb-wrapper">
-                            <div class="img-box">
-                                <img src="/static/assets/samplePosts/sp1010.png" class="img-fluid" alt="">
-                            </div>
-                            <div class="thumb-content">
-                                <h4>Apple iPad</h4>
-                                <p class="item-price"><strike>$400.00</strike> <span>$369.00</span></p>
-                                <div class="star-rating">
-                                    <ul class="list-inline">
-                                        <li class="list-inline-item"><i class="fa fa-star"></i></li>
-                                        <li class="list-inline-item"><i class="fa fa-star"></i></li>
-                                        <li class="list-inline-item"><i class="fa fa-star"></i></li>
-                                        <li class="list-inline-item"><i class="fa fa-star"></i></li>
-                                        <li class="list-inline-item"><i class="fa fa-star-o"></i></li>
-                                    </ul>
-                                </div>
-                                <a href="#" class="btn btn-primary">Add to Cart</a>
-                            </div>
-                            <!-- </div>
-                            </div> -->
-
-                        </div>
-                    </div>
-                    <div class="swiper-slide">
-                        <!-- <div class="row">
-                            <div class="col-sm-3"> -->
-                        <div class="thumb-wrapper">
-                            <div class="img-box">
-                                <img src="/static/assets/samplePosts/sp1010.png" class="img-fluid" alt="">
-                            </div>
-                            <div class="thumb-content">
-                                <h4>Apple iPad</h4>
-                                <p class="item-price"><strike>$400.00</strike> <span>$369.00</span></p>
-                                <div class="star-rating">
-                                    <ul class="list-inline">
-                                        <li class="list-inline-item"><i class="fa fa-star"></i></li>
-                                        <li class="list-inline-item"><i class="fa fa-star"></i></li>
-                                        <li class="list-inline-item"><i class="fa fa-star"></i></li>
-                                        <li class="list-inline-item"><i class="fa fa-star"></i></li>
-                                        <li class="list-inline-item"><i class="fa fa-star-o"></i></li>
-                                    </ul>
-                                </div>
-                                <a href="#" class="btn btn-primary">Add to Cart</a>
-                            </div>
-                            <!-- </div>
-                            </div> -->
-
-                        </div>
-                    </div>
-                    <div class="swiper-slide">
-
-                        <div class="thumb-wrapper">
-                            <div class="img-box">
-                                <img src="/static/assets/samplePosts/sp1010.png" class="img-fluid" alt="">
-                            </div>
-                            <div class="thumb-content">
-                                <h4>Apple iPad</h4>
-                                <p class="item-price"><strike>$400.00</strike> <span>$369.00</span></p>
-                                <div class="star-rating">
-                                    <ul class="list-inline">
-                                        <li class="list-inline-item"><i class="fa fa-star"></i></li>
-                                        <li class="list-inline-item"><i class="fa fa-star"></i></li>
-                                        <li class="list-inline-item"><i class="fa fa-star"></i></li>
-                                        <li class="list-inline-item"><i class="fa fa-star"></i></li>
-                                        <li class="list-inline-item"><i class="fa fa-star-o"></i></li>
-                                    </ul>
-                                </div>
-                                <a href="#" class="btn btn-primary">Add to Cart</a>
-                            </div>
-
-
-                        </div>
-                    </div>
-
+    <section class="grid tinyslide my-custom-slides p-4  md:p-10   items-center justify-center">
+        <div class=" m-6 my-0 relative overflow-hidden bg-slate-900  rounded-lg md:w-1/2 lg:w-1/4 w-96  shadow-lg">
+            <svg class="absolute bottom-0 left-0 mb-8" viewBox="0 0 375 283" fill="none" style="transform: scale(1.5); opacity: 0.1;">
+              <rect x="159.52" y="175" width="152" height="152" rx="8" transform="rotate(-45 159.52 175)" fill="white"/>
+              <rect y="107.48" width="152" height="152" rx="8" transform="rotate(-45 0 107.48)" fill="white"/>
+            </svg>
+            <div class="relative pt-10 px-10 flex items-center justify-center">
+                <div class="block absolute w-48 h-48 bottom-0 left-0 -mb-24 ml-3"></div>
+                <img class="relative w-[300px] h-[400px]" src="{{url_for('static',filename='carousel/1.png')}}" alt="">
+            </div>
+            <div class="relative text-white px-6 pb-6 mt-6">
+                <span class="block opacity-75 -mb-1 text-gray-200">Top</span>
+                <div class="flex justify-between">
+                    <span class="block font-semibold text-xl text-gray-200">Trending  &#128293; &#128293;</span>
+                    <span class="block bg-white rounded-full text-orange-500 text-xs font-bold px-3 py-2 leading-none flex items-center">Order</span>
                 </div>
-                <div class="swiper-pagination !relative !bottom-0 mt-12"></div>
             </div>
         </div>
+        <div class=" m-6  relative overflow-hidden bg-slate-900  rounded-lg md:w-1/2 lg:w-1/4 w-96  shadow-lg">
+            <svg class="absolute bottom-0 left-0 mb-8" viewBox="0 0 375 283" fill="none" style="transform: scale(1.5); opacity: 0.1;">
+              <rect x="159.52" y="175" width="152" height="152" rx="8" transform="rotate(-45 159.52 175)" fill="white"/>
+              <rect y="107.48" width="152" height="152" rx="8" transform="rotate(-45 0 107.48)" fill="white"/>
+            </svg>
+            <div class="relative pt-10 px-10 flex items-center justify-center">
+                <div class="block absolute w-48 h-48 bottom-0 left-0 -mb-24 ml-3"></div>
+                <img class="relative  w-[300px] h-[400px]" src="{{url_for('static',filename='carousel/2.png')}}" alt="">
+            </div>
+            <div class="relative text-white px-6 pb-6 mt-6">
+                <span class="block opacity-75 -mb-1 text-gray-200">Top</span>
+                <div class="flex justify-between">
+                    <span class="block font-semibold text-xl text-gray-200">Trending  &#128293; &#128293;</span>
+                    <span class="block bg-white rounded-full text-orange-500 text-xs font-bold px-3 py-2 leading-none flex items-center">Order</span>
+                </div>
+            </div>
+        </div>
+        <div class=" m-6  relative overflow-hidden bg-slate-900  rounded-lg md:w-1/2 lg:w-1/4 w-96  shadow-lg">
+            <svg class="absolute bottom-0 left-0 mb-8" viewBox="0 0 375 283" fill="none" style="transform: scale(1.5); opacity: 0.1;">
+              <rect x="159.52" y="175" width="152" height="152" rx="8" transform="rotate(-45 159.52 175)" fill="white"/>
+              <rect y="107.48" width="152" height="152" rx="8" transform="rotate(-45 0 107.48)" fill="white"/>
+            </svg>
+            <div class="relative pt-10 px-10 flex items-center justify-center">
+                <div class="block absolute w-48 h-48 bottom-0 left-0 -mb-24 ml-3"></div>
+                <img class="relative w-[300px] h-[400px]" src="{{url_for('static',filename='carousel/3.png')}}" alt="">
+            </div>
+            <div class="relative text-white px-6 pb-6 mt-6">
+                <span class="block opacity-75 -mb-1 text-gray-200">Top</span>
+                <div class="flex justify-between">
+                    <span class="block font-semibold text-xl text-gray-200">Trending  &#128293; &#128293;</span>
+                    <span class="block bg-white rounded-full text-orange-500 text-xs font-bold px-3 py-2 leading-none flex items-center">Order</span>
+                </div>
+            </div>
+        </div>
+        <div class=" m-6  relative overflow-hidden bg-slate-900  rounded-lg md:w-1/2 lg:w-1/4 w-96  shadow-lg">
+            <svg class="absolute bottom-0 left-0 mb-8" viewBox="0 0 375 283" fill="none" style="transform: scale(1.5); opacity: 0.1;">
+              <rect x="159.52" y="175" width="152" height="152" rx="8" transform="rotate(-45 159.52 175)" fill="white"/>
+              <rect y="107.48" width="152" height="152" rx="8" transform="rotate(-45 0 107.48)" fill="white"/>
+            </svg>
+            <div class="relative pt-10 px-10 flex items-center justify-center">
+                <div class="block absolute w-48 h-48 bottom-0 left-0 -mb-24 ml-3"></div>
+                <img class="relativew-[300px] h-[400px]" src="{{url_for('static',filename='carousel/4.png')}}" alt="">
+            </div>
+            <div class="relative text-white px-6 pb-6 mt-6">
+                <span class="block opacity-75 -mb-1 text-gray-200">Top</span>
+                <div class="flex justify-between">
+                    <span class="block font-semibold text-xl text-gray-200">Trending  &#128293; &#128293;</span>
+                    <span class="block bg-white rounded-full text-orange-500 text-xs font-bold px-3 py-2 leading-none flex items-center">Order</span>
+                </div>
+            </div>
+        </div>
+        <div class=" m-6  relative overflow-hidden bg-slate-900  rounded-lg md:w-1/2 lg:w-1/4 w-96  shadow-lg">
+            <svg class="absolute bottom-0 left-0 mb-8" viewBox="0 0 375 283" fill="none" style="transform: scale(1.5); opacity: 0.1;">
+              <rect x="159.52" y="175" width="152" height="152" rx="8" transform="rotate(-45 159.52 175)" fill="white"/>
+              <rect y="107.48" width="152" height="152" rx="8" transform="rotate(-45 0 107.48)" fill="white"/>
+            </svg>
+            <div class="relative pt-10 px-10 flex items-center justify-center">
+                <div class="block absolute w-48 h-48 bottom-0 left-0 -mb-24 ml-3"></div>
+                <img class="relativew-[300px] h-[400px]" src="{{url_for('static',filename='carousel/5.png')}}" alt="">
+            </div>
+            <div class="relative text-white px-6 pb-6 mt-6">
+                <span class="block opacity-75 -mb-1 text-gray-200">Top</span>
+                <div class="flex justify-between">
+                    <span class="block font-semibold text-xl text-gray-200">Trending  &#128293; &#128293;</span>
+                    <span class="block bg-white rounded-full text-orange-500 text-xs font-bold px-3 py-2 leading-none flex items-center">Order</span>
+                </div>
+            </div>
+        </div>
+
+
+
     </section>
-    <!-- <iframe src="/slide" style="height:450px; width: 100% ; border: none;"></iframe> -->
 
 </div>
-<div class="zoom1" id="zoom1" style="margin:0 ;padding:0;">
-    <div class="mainbd">
-        <h2 class="taglineh2">A clean timeline design, with animated links</h2>
-        <div class="timeline">
-            <div class="timeline__event  animated fadeInUp delay-3s timeline__event--type1">
-                <div class="timeline__event__icon ">
-                    <i class="lni-cake"></i>
+<div class="zoom1 capitalize " id="zoom1" style="margin:0 ;padding:0;">
+    <div class="px-4 py-16 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8 lg:py-20">
+        <div class="max-w-xl mb-10 md:mx-auto sm:text-center lg:max-w-2xl md:mb-12">
+            <div>
+                <p class="inline-block px-3 py-px mb-4 text-xs font-semibold tracking-wider text-teal-900 uppercase rounded-full bg-teal-accent-400">
+                </p>
+            </div>
+            <h2 class="max-w-lg mb-6 font-sans text-3xl font-bold leading-none tracking-tight text-gray-900 sm:text-4xl md:mx-auto">
+                <span class="relative inline-block">
+              <svg viewBox="0 0 52 24" fill="currentColor" class="absolute top-0 left-0 z-0 hidden w-32 -mt-8 -ml-20 text-blue-gray-100 lg:w-32 lg:-ml-28 lg:-mt-10 sm:block">
+                <defs>
+                  <pattern id="f51618fb-0edb-4bcb-b35a-ffc770941286" x="0" y="0" width=".135" height=".30">
+                    <circle cx="1" cy="1" r=".7"></circle>
+                  </pattern>
+                </defs>
+                <rect fill="url(#f51618fb-0edb-4bcb-b35a-ffc770941286)" width="52" height="24"></rect>
+              </svg>
+     
+                </span> Three easy step and your customized t-shirt is ready
+            </h2>
+            <p class="text-base text-gray-700 md:text-lg">
+                Customize t-shirt are in Customize by memerkida Select "Customize by Memerkdia"
+            </p>
+        </div>
+        <div class="grid gap-8 row-gap-0 lg:grid-cols-3">
+            <div class="relative text-center">
+                <div class="flex items-center justify-center w-16 h-16 mx-auto mb-4 rounded-full bg-indigo-50 sm:w-20 sm:h-20">
+                    <img src="{{url_for('static',filename='assets/icons/men-t-shirt-icon.svg')}}" alt="">
 
                 </div>
-                <div class="timeline__event__date">
-                    20-08-2019
-                </div>
-                <div class="timeline__event__content ">
-                    <div class="timeline__event__title">
-                        Birthday
-                    </div>
-                    <div class="timeline__event__description">
-                        <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Vel, nam! Nam eveniet ut aliquam ab asperiores, accusamus iure veniam corporis incidunt reprehenderit accusantium id aut architecto harum quidem dolorem in!</p>
-                    </div>
+                <h6 class="mb-2 text-2xl font-bold">Select t-shirt type</h6>
+                <p class="max-w-md mb-3 text-sm text-gray-900 sm:mx-auto">
+                    Choose your t-shirt type <br> (Desirable image will be print on it )
+
+                </p>
+
+                <div class="top-0 right-0 flex items-center justify-center h-24 lg:-mr-8 lg:absolute">
+                    <svg class="w-8 text-gray-700 transform rotate-90 lg:rotate-0" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+                <line fill="none" stroke-miterlimit="10" x1="2" y1="12" x2="22" y2="12"></line>
+                <polyline fill="none" stroke-miterlimit="10" points="15,5 22,12 15,19 "></polyline>
+              </svg>
                 </div>
             </div>
-            <div class="timeline__event animated fadeInUp delay-2s timeline__event--type2">
-                <div class="timeline__event__icon">
-                    <i class="lni-burger"></i>
+            <div class="relative text-center">
+                <div class="flex items-center justify-center w-16 h-16 mx-auto mb-4 rounded-full bg-indigo-50 sm:w-15 sm:h-20">
+                    <img src="{{url_for('static',filename='assets/icons/copy-outline-icon.svg')}}" alt="">
+                    <polygon stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none" points="29 13 14 29 25 29 23 39 38 23 27 23"></polygon>
+                    </svg>
+                </div>
+                <h6 class="mb-2 text-2xl font-bold">Select template</h6>
+                <p class="max-w-md mb-3 text-sm text-gray-900 sm:mx-auto">
+                    Choose a template and customize the template as per your photo(background, quote etc) fill the all the information. (Desirable image will be print on it, please put clear and HD photo)
+                </p>
 
-                </div>
-                <div class="timeline__event__date">
-                    20-08-2019
-                </div>
-                <div class="timeline__event__content">
-                    <div class="timeline__event__title">
-                        Lunch
-                    </div>
-                    <div class="timeline__event__description">
-                        <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Vel, nam! Nam eveniet ut aliquam ab asperiores, accusamus iure veniam corporis incidunt reprehenderit accusantium id aut architecto harum quidem dolorem in!</p>
-                    </div>
+                <div class="top-0 right-0 flex items-center justify-center h-24 lg:-mr-8 lg:absolute">
+                    <svg class="w-8 text-gray-700 transform rotate-90 lg:rotate-0" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+                <line fill="none" stroke-miterlimit="10" x1="2" y1="12" x2="22" y2="12"></line>
+                <polyline fill="none" stroke-miterlimit="10" points="15,5 22,12 15,19 "></polyline>
+              </svg>
                 </div>
             </div>
-            <div class="timeline__event animated fadeInUp delay-1s timeline__event--type3">
-                <div class="timeline__event__icon">
-                    <i class="lni-slim"></i>
+            <div class="relative text-center">
+                <div class="flex items-center justify-center w-16 h-16 mx-auto mb-4 rounded-full bg-indigo-50 sm:w-20 sm:h-20">
+                    <img src="{{url_for('static',filename='assets/icons/merchandise-icon.svg')}}" alt="">
+                    <polygon stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none" points="29 13 14 29 25 29 23 39 38 23 27 23"></polygon>
+                    </svg>
+                </div>
+                <h6 class="mb-2 text-2xl font-extrabold">Buy it</h6>
+                <p class="max-w-md mb-3 text-sm text-gray-900 sm:mx-auto">
+                    At the time of t shirt a arrive the t-shirt is demo type it for the demo. This shows that this type of t shirt will deliver to you.
+                </p>
 
-                </div>
-                <div class="timeline__event__date">
-                    20-08-2019
-                </div>
-                <div class="timeline__event__content">
-                    <div class="timeline__event__title">
-                        Exercise
-                    </div>
-                    <div class="timeline__event__description">
-                        <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Vel, nam! Nam eveniet ut aliquam ab asperiores, accusamus iure veniam corporis incidunt reprehenderit accusantium id aut architecto harum quidem dolorem in!</p>
-                    </div>
-
-                </div>
             </div>
-            <div class="timeline__event animated fadeInUp timeline__event--type1">
-                <div class="timeline__event__icon">
-                    <i class="lni-cake"></i>
+        </div>
+    </div>
 
-                </div>
-                <div class="timeline__event__date">
-                    20-08-2019
-                </div>
-                <div class="timeline__event__content">
-                    <div class="timeline__event__title">
-                        Birthday
-                    </div>
-                    <div class="timeline__event__description">
-                        <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Vel, nam! Nam eveniet ut aliquam ab asperiores, accusamus iure veniam corporis incidunt reprehenderit accusantium id aut architecto harum quidem dolorem in!</p>
-                    </div>
+    <hr>
+
+    <section class="pt-24 bg-white">
+        <div class="px-12 mx-auto max-w-7xl">
+            <div class="w-full mx-auto text-left md:w-11/12 xl:w-9/12 md:text-center">
+                <h1 class="mb-8 text-4xl font-extrabold leading-none tracking-normal text-gray-900 md:text-6xl md:tracking-tight">
+                    <span>Start</span> <span class="block w-full py-2 text-transparent bg-clip-text leading-12 bg-gradient-to-r from-green-400 to-purple-500 lg:inline">building a t-shirt</span> <span>by using template</span>
+                </h1>
+                <p class="px-0 mb-8 text-lg text-gray-600 md:text-xl lg:px-24">
+                    Start gaining the attraction you've always wanted with our next-level templates and designs. Crafted to help you tell your story.
+                </p>
+                <div class="mb-4 space-x-0 md:space-x-2 md:mb-8">
+                    <a href="/getStarted" class="inline-flex items-center justify-center w-full px-6 py-3 mb-2 text-lg text-white bg-green-400 rounded-2xl sm:w-auto sm:mb-0">
+                  Get Started
+                  <svg class="w-4 h-4 ml-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+              </a>
+
                 </div>
             </div>
 
         </div>
-        <div class="secbd" style="text-align:center ;">
-            <a class="gb" href="/cards">
-                <span class="gbspan"></span>
-                <span class="gbspan"></span>
-                <span class="gbspan"></span>
-                <span class="gbspan"></span> Click to Get Started
-            </a>
+    </section>
+    <hr>
+
+
+
+
+    <div class="px-4 py-16 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8 lg:py-20">
+        <div class="grid justify-item-center row-gap-8 sm:row-gap-0 sm:grid-cols-2 lg:grid-cols-3">
+            <div class="p-8 border-b sm:border-r">
+                <div class="max-w-md text-center">
+                    <div class="flex items-center justify-center w-16 h-16 mx-auto mb-4 rounded-full bg-indigo-50 sm:w-16 sm:h-16">
+                        <img src="{{url_for('static',filename='assets/icons/themes-icon.svg')}}" alt="">
+                        <polygon stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none" points="29 13 14 29 25 29 23 39 38 23 27 23"></polygon>
+                        </svg>
+                    </div>
+                    <h6 class="mb-2 font-semibold leading-5">High Quality Product</h6>
+                    <p class="mb-3 text-sm text-gray-900">
+                        Best quality product and DTG type printing which is high in quality color are more brightest.
+                    </p>
+                </div>
+            </div>
+            <div class="p-8 border-b lg:border-r">
+                <div class="max-w-md text-center">
+                    <div class="flex items-center justify-center w-16 h-16 mx-auto mb-4 rounded-full bg-indigo-50 sm:w-16 sm:h-16">
+                        <img src="{{url_for('static',filename='assets/icons/upload-icon.svg')}}" alt="">
+                        <polygon stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none" points="29 13 14 29 25 29 23 39 38 23 27 23"></polygon>
+                        </svg>
+                    </div>
+                    <h6 class="mb-2 font-semibold leading-5">Uploading meme</h6>
+                    <p class="mb-3 text-sm text-gray-900">
+                        Put your meme according to your choice. You also can select the customize by yourself which are give freedom to you to print and adjuct the space on the t-shirt
+                    </p>
+                </div>
+            </div>
+            <div class="p-8 border-b sm:border-r lg:border-r-0">
+                <div class="max-w-md text-center">
+                    <div class="flex items-center justify-center w-16 h-16 mx-auto mb-4 rounded-full bg-indigo-50 sm:w-16 sm:h-16">
+                        <img src="{{url_for('static',filename='assets/icons/cotton-fabric-icon.svg')}}" alt="">
+                        <polygon stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none" points="29 13 14 29 25 29 23 39 38 23 27 23"></polygon>
+                        </svg>
+                    </div>
+                    <h6 class="mb-2 font-semibold leading-5">High Quality Fabric</h6>
+                    <p class="mb-3 text-sm text-gray-900">
+                        Comfortable in fabric,this is incredibly convenient for creating apparel with detailed, complex designs in a variety of colors.
+                    </p>
+                </div>
+            </div>
+            <div class="p-8 border-b lg:border-b-0 lg:border-r">
+                <div class="max-w-md text-center">
+                    <div class="flex items-center justify-center w-16 h-16 mx-auto mb-4 rounded-full bg-indigo-50 sm:w-16 sm:h-16">
+                        <img src="{{url_for('static',filename='assets/icons/indian-rupee-coin-color-icon.svg')}}" alt="">
+                        <polygon stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none" points="29 13 14 29 25 29 23 39 38 23 27 23"></polygon>
+                        </svg>
+                    </div>
+                    <h6 class="mb-2 font-semibold leading-5">Customising Price</h6>
+                    <p class="mb-3 text-sm text-gray-900">
+                        Customized pricing refers to altering the price of goods or services based on customer factors </p>
+                </div>
+            </div>
+            <div class="p-8 border-b sm:border-b-0 sm:border-r">
+                <div class="max-w-md text-center">
+                    <div class="flex items-center justify-center w-16 h-16 mx-auto mb-4 rounded-full bg-indigo-50 sm:w-16 sm:h-16">
+                        <img src="{{url_for('static',filename='assets/icons/design-template-icon.svg')}}" alt="">
+                        <polygon stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none" points="29 13 14 29 25 29 23 39 38 23 27 23"></polygon>
+                        </svg>
+                    </div>
+                    <h6 class="mb-2 font-semibold leading-5">Best design template</h6>
+                    <p class="mb-3 text-sm text-gray-900">
+                        Choose a template and customize the template as per your photo(background, quote etc) (Desirable image will be print on it, please put clear and HD photo) </p>
+                </div>
+            </div>
+            <div class="p-8">
+                <div class="max-w-md text-center">
+                    <div class="flex items-center justify-center w-16 h-16 mx-auto mb-4 rounded-full bg-indigo-50 sm:w-16 sm:h-16">
+                        <img src="{{url_for('static',filename='assets/icons/fast-delivery-icon.svg')}}" alt="">
+                        <polygon stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none" points="29 13 14 29 25 29 23 39 38 23 27 23"></polygon>
+                        </svg>
+                    </div>
+                    <h6 class="mb-2 font-semibold leading-5">Fast delivery</h6>
+                    <p class="mb-3 text-sm text-gray-900">
+                        From placing orders to scheduling pick-ups as well as real-time tracking of their deliveries, Delivery provides dedicated 24/7 support. </p>
+                </div>
+            </div>
         </div>
     </div>
 
 
-
-    <!-- <iframe src="/cards" style="height:1275px; width: 100% ; border: none;"></iframe> -->
-
-
-</div>
-<div class="zoom2">
-
-    <section>
-        <div class="mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8">
-            <div class="swiper-container !overflow-hidden">
-                <div class="swiper-wrapper">
-                    <div class="swiper-slide">
-                        <blockquote class="bg-gray-100 p-8">
-                            <div class="flex items-center">
-                                <img alt="Dog" src="https://images.unsplash.com/photo-1508280756091-9bdd7ef1f463?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1832&q=80" class="h-16 w-16 rounded-full object-cover" />
-
-                                <div class="ml-4 text-sm">
-                                    <p class="font-medium">Bark Dagleish</p>
-                                    <p class="mt-1">Head of Barketing</p>
-                                </div>
-                            </div>
-
-                            <p class="relative mt-4 text-gray-500">
-                                <span class="text-xl">&ldquo;</span> Lorem ipsum dolor sit amet consectetur adipisicing elit. Magni assumenda officiis sit amet itaque eveniet accusantium corporis tempora, soluta perspiciatis rerum, ratione animi nemo
-                                inventore repellat, commodi in esse quisquam.
-
-                                <span class="text-xl">&rdquo;</span>
-                            </p>
-                        </blockquote>
-                    </div>
-
-                    <div class="swiper-slide">
-                        <blockquote class="bg-gray-100 p-8">
-                            <div class="flex items-center">
-                                <img alt="Dog" src="https://images.unsplash.com/photo-1508280756091-9bdd7ef1f463?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1832&q=80" class="h-16 w-16 rounded-full object-cover" />
-
-                                <div class="ml-4 text-sm">
-                                    <p class="font-medium">Bark Dagleish</p>
-                                    <p class="mt-1">Head of Barketing</p>
-                                </div>
-                            </div>
-
-                            <p class="relative mt-4 text-gray-500">
-                                <span class="text-xl">&ldquo;</span> Lorem ipsum dolor sit amet consectetur adipisicing elit. Magni assumenda officiis sit amet itaque eveniet accusantium corporis tempora, soluta perspiciatis rerum, ratione animi nemo
-                                inventore repellat, commodi in esse quisquam.
-
-                                <span class="text-xl">&rdquo;</span>
-                            </p>
-                        </blockquote>
-                    </div>
-
-                    <div class="swiper-slide">
-                        <blockquote class="bg-gray-100 p-8">
-                            <div class="flex items-center">
-                                <img alt="Dog" src="https://images.unsplash.com/photo-1508280756091-9bdd7ef1f463?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1832&q=80" class="h-16 w-16 rounded-full object-cover" />
-
-                                <div class="ml-4 text-sm">
-                                    <p class="font-medium">Bark Dagleish</p>
-                                    <p class="mt-1">Head of Barketing</p>
-                                </div>
-                            </div>
-
-                            <p class="relative mt-4 text-gray-500">
-                                <span class="text-xl">&ldquo;</span> Lorem ipsum dolor sit amet consectetur adipisicing elit. Magni assumenda officiis sit amet itaque eveniet accusantium corporis tempora, soluta perspiciatis rerum, ratione animi nemo
-                                inventore repellat, commodi in esse quisquam.
-
-                                <span class="text-xl">&rdquo;</span>
-                            </p>
-                        </blockquote>
-                    </div>
-
-                    <div class="swiper-slide">
-                        <blockquote class="bg-gray-100 p-8">
-                            <div class="flex items-center">
-                                <img alt="Dog" src="https://images.unsplash.com/photo-1508280756091-9bdd7ef1f463?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1832&q=80" class="h-16 w-16 rounded-full object-cover" />
-
-                                <div class="ml-4 text-sm">
-                                    <p class="font-medium">Bark Dagleish</p>
-                                    <p class="mt-1">Head of Barketing</p>
-                                </div>
-                            </div>
-
-                            <p class="relative mt-4 text-gray-500">
-                                <span class="text-xl">&ldquo;</span> Lorem ipsum dolor sit amet consectetur adipisicing elit. Magni assumenda officiis sit amet itaque eveniet accusantium corporis tempora, soluta perspiciatis rerum, ratione animi nemo
-                                inventore repellat, commodi in esse quisquam.
-
-                                <span class="text-xl">&rdquo;</span>
-                            </p>
-                        </blockquote>
-                    </div>
-                </div>
-
-                <div class="swiper-pagination !relative !bottom-0 mt-12"></div>
-            </div>
-        </div>
-    </section>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            new Swiper('.swiper-container', {
-                loop: true,
-                slidesPerView: 1,
-                spaceBetween: 8,
-                autoplay: {
-                    delay: 8000,
-                },
-                pagination: {
-                    el: '.swiper-pagination',
-                    clickable: true,
-                },
-                breakpoints: {
-                    640: {
-                        slidesPerView: 1.5,
-                    },
-                    1024: {
-                        slidesPerView: 3,
-                    },
-                },
-            })
-        })
-    </script>
-
-    <!-- <iframe src="/feedbackhome" style="height:435px; width: 100% ; border: none;"></iframe> -->
 </div>
 
 
-<!-- <div class="zoom">
-        <iframe src="slide" style="height:450px; width: 100% ; border: none;"></iframe>
 
-        <div class="zoom1">
-            <iframe src="cards" class="cardscroll" style="height:600px; width: 100% ; border: none;"></iframe>
-
-            <div class="zoom2">
-                <iframe src="feedbackhome" style="height:435px; width: 100% ; border: none;"></iframe>
-            </div>
+{% endblock %}{% block script %}
 
 
-        </div>
-    </div> -->
+<script>
+    if (window.screen.width > 1000) {
+        window.Tinyslide.Build('.my-custom-slides', {
+            style: {
+                size: 3,
+                autoplay: '5s',
+                gutter: "100px",
+            }
+        });
+    } else {
+        window.Tinyslide.Build('.my-custom-slides', {
+            style: {
+                size: 1,
+                autoplay: '5s',
+                gutter: "30px",
+
+            }
+        });
+    }
+</script>
+
 {% endblock %}

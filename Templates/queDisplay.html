@@ -1,16 +1,4 @@
-<!-- <head>
-    <title>faq page</title>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.0.3/tailwind.min.css" integrity="sha512-wl80ucxCRpLkfaCnbM88y4AxnutbGk327762eM9E/rRTvY/ZGAHWMZrYUq66VQBYMIYDFpDdJAOGSLyIPHZ2IQ==" crossorigin="anonymous" />
-    <link rel="preconnect" href="https://fonts.gstatic.com">
-    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.js" defer></script>
-    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Spartan:wght@600&display=swap" rel="stylesheet">
-
-</head> -->
-{% extends "layout.html" %}{% block style %}
+ {% extends "layout.html" %}{% block style %}
 <style>
     * {
         font-family: 'Quicksand', sans-serif;
@@ -38,7 +26,7 @@
 <article id="the-article">
 
     <div>
-        <form action="/queDisplay/{{srNo}}=view" method="post" enctype="multipart/form-data">
+        <form action="/queDisplay/{{tshirtId}}=t/{{printId}}=p" method="post" enctype="multipart/form-data">
             <div class="mx-auto max-w-6xl">
                 <div class="p-2 rounded">
                     <div class="flex flex-col  md:flex-row">
@@ -46,21 +34,8 @@
 
                             <div class="sticky inset-x-0 top-0 left-0 py-12">
 
-                                <!-- <div class="text-3xl text-green-400 mb-8">Fill the Required informations</div>
-                                    <div class="mb-2">To make a proper design , we need some basic information with some silly questions and few images (this should not avoid copyright infringement and must be of high quality).
-                                    </div>
-                                    <div class="text-xs text-gray-600">See our FAQ for more details</div>
-
-                                    <div class="relative text-gray-600 mt-8 lg:mr-16">
-                                        <input x-ref="searchField" x-model="search" x-on:keydown.window.prevent.slash="$refs.searchField.focus()" type="search" name="serch" placeholder="Search" class="bg-white w-full h-10 px-5 rounded-full text-sm focus:outline-none">
-                                        <button type="submit" class="focus:outline-none absolute right-0 top-0 mt-3 mr-4">
-                          <svg class="h-4 w-4 fill-current" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px" viewBox="0 0 56.966 56.966" style="enable-background:new 0 0 56.966 56.966;" xml:space="preserve" width="512px" height="512px">
-                            <path d="M55.146,51.887L41.588,37.786c3.486-4.144,5.396-9.358,5.396-14.786c0-12.682-10.318-23-23-23s-23,10.318-23,23  s10.318,23,23,23c4.761,0,9.298-1.436,13.177-4.162l13.661,14.208c0.571,0.593,1.339,0.92,2.162,0.92  c0.779,0,1.518-0.297,2.079-0.837C56.255,54.982,56.293,53.08,55.146,51.887z M23.984,6c9.374,0,17,7.626,17,17s-7.626,17-17,17  s-17-7.626-17-17S14.61,6,23.984,6z"/>
-                          </svg>
-                        </button>
-                                    </div> -->
                                 <div class="container" style="margin:auto;">
-                                    <img src="/static/assets/samplePosts/{{queCont0.que}}" width="350" height="300" alt="">
+                                    <img src="/static/files/samplePosts/{{queCont0.que}}" width="350" height="300" alt="">
                                 </div>
 
                             </div>
@@ -79,12 +54,12 @@
                                     <div x-show="isOpen" @click.away="isOpen = false" class="mt-3" :class="{'text-gray-600' : isOpen == true}">
                                         {% if key.inputType=="file" %}
 
-                                        <input type="{{key.inputType}}" name="ans1werImg{{loop.index}}" id="ans1werImg{{loop.index}}" accept="image/*"> {% else %}
+                                        <input class="queSet1" type="{{key.inputType}}" name="ans1werImg{{loop.index}}" id="ans1werImg{{loop.index}}" accept="image/*" required> {% else %}
 
-                                        <input type="{{key.inputType}}" name="ans1werText{{loop.index}}" id="ans1werText{{loop.index}}" accept="image/*"> {% endif %}
+                                        <input class="queSet1" type="{{key.inputType}}" name="ans1werText{{loop.index}}" id="ans1werText{{loop.index}}" accept="image/*" required> {% endif %}
                                     </div>
                                 </div>
-                                {% endfor %} {% if queCont2 %}
+                                {% endfor %} {% if queCont2==3434 %}
                                 <h1 class="or">OR<sup>*</sup></h1>
                                 {% for key in queCont2 %}
                                 <div class="item px-6 py-6" x-data="{isOpen : false}">
@@ -95,22 +70,12 @@
                     </svg>
                                     </a>
                                     <div x-show="isOpen" @click.away="isOpen = false" class="mt-3" :class="{'text-gray-600' : isOpen == true}">
-
-
                                         {% if key.inputType=="file" %}
-
-                                        <input type="{{key.inputType}}" name="ans2werImg{{loop.index}}" id="ans2werImg{{loop.index}}" accept="image/*"> {% else %}
-
-                                        <input type="{{key.inputType}}" name="ans2werText{{loop.index}}" id="ans2werText{{loop.index}}" accept="image/*"> {% endif %}
-
-
-
-
+                                        <input class="queSet2" type="{{key.inputType}}" name="ans2werImg{{loop.index}}" id="ans2werImg{{loop.index}}" accept="image/*"> {% else %}
+                                        <input class="queSet2" type="{{key.inputType}}" name="ans2werText{{loop.index}}" id="ans2werText{{loop.index}}" accept="image/*"> {% endif %}
                                     </div>
                                 </div>
                                 {% endfor %} {% endif %}
-
-
                                 <div class="container my-5 grid place-items-center">
                                     <button class="items-center bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow">
                                     Submit
@@ -132,29 +97,42 @@
     <div :style="`max-height:${height}%`" class="h-full bg-green-400"></div>
 </div>
 
-<div id="alpine-devtools" x-data="devtools()" x-show="alpines.length" x-init="start()">
-</div>
-<script>
-    function scrollHandler(element = null) {
-        return {
-            height: 0,
-            element: element,
-            calculateHeight(position) {
-                const distanceFromTop = this.element.offsetTop
-                const contentHeight = this.element.clientHeight
-                const visibleContent = contentHeight - window.innerHeight
-                const start = Math.max(0, position - distanceFromTop)
-                const percent = (start / visibleContent) * 100;
-                requestAnimationFrame(() => {
-                    this.height = percent;
+
+<!-- <script>
+    let queSet1 = document.querySelectorAll(".queSet1");
+    let queSet2 = document.querySelectorAll(".queSet2");
+    queSet1 = document.getElementsByClassName("queSet1");
+
+    queSet1.forEach((elem1) => {
+        elem1.addEventListener("change", () => {
+            if (elem1.value != "") {
+                queSet2.forEach((elem2) => {
+                    elem2.removeAttribute("required");
+                    elem2.setAttribute("disabled", "");
+
                 });
-            },
-            init() {
-                this.element = this.element || document.body;
-                this.calculateHeight(window.scrollY);
+
+            } else {
+                queSet2.forEach((elem2) => {
+                    elem2.setAttribute("required", "");
+                    elem2.removeAttribute("disabled")
+                })
             }
-        };
-    }
-</script>
+        });
+    });
+    queSet2.forEach((elem2) => {
+        if (elem2.value != "") {
+            queSet1.forEach((elem1) => {
+                elem1.removeAttribute("required");
+                elem1.setAttribute("disabled", "")
+            })
+        } else {
+            queSet1.forEach((elem1) => {
+                elem1.setAttribute("required", "");
+                elem1.removeAttribute("disabled")
+            })
+        }
+    });
+</script> -->
+
 {% endblock %}
-<!-- </body> -->

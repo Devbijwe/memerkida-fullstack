@@ -4,37 +4,43 @@
 <div class="min-h-screen p-6 bg-gray-100 flex items-center justify-center">
     <div class="container max-w-screen-lg mx-auto">
         <div>
-            <h2 class="font-semibold text-xl text-gray-600">Add a new address</h2>
+            <h2 class="font-semibold text-xl text-gray-600">Add a deliverable address</h2>
             <p class="text-gray-500 mb-6">Fill all the infromation</p>
+            <p class="text-gray-500 mb-6">answerId</p>
 
-
-            <form action="/address=confirm" method="post">
+            <form action="/{{tshirtId}}=t/{{printId}}=p/{{answerId}}=a/{{type}}/{{source}}/address" method="post">
                 <div class="lg:col-span-2">
                     <div class="grid gap-4 gap-y-2 text-sm grid-cols-1 md:grid-cols-5">
                         <div class="md:col-span-5">
                             <label for="full_name">Full Name(first and last name)</label>
-                            <input type="text" name="name" id="full_name" class="h-10 border mt-1 rounded px-4 w-full bg-gray-50" required value="{{data.username}}" placeholder="" />
+                            <input type="text" name="name" id="full_name" class="h-10 border mt-1 rounded px-4 w-full bg-gray-50" required value="{{data.name}}" placeholder="" />
                         </div>
 
-                        <div class="md:col-span-5">
+                        <div class="md:col-span-2">
                             <label for="phone">Phone number</label>
                             <input type="tel" name="mobile" autocomplete="off" id="phone" class="h-10 border mt-1 rounded px-4 w-full bg-gray-50" required value="{{data.mobile}}" placeholder="" />
                         </div>
 
                         <div class="md:col-span-3">
-                            <label for="address">Address</label> {% if data.address1 %}
-                            <input type="text" name="address1" id="address1" class="h-10 border mt-1 rounded px-4 w-full bg-gray-50" required value="{{data.address1}}" placeholder="Street address or P.O. box" /> {% else %}
-                            <input type="text" name="address1" id="address1" class="h-10 border mt-1 rounded px-4 w-full bg-gray-50" required value="" placeholder="Street address or P.O. box" /> {% endif %} {% if data.address2 %}
-                            <input type="text" name="address2" id="address2" class="h-10 border mt-1 rounded px-4 w-full bg-gray-50" value="{{data.address2}}" placeholder="Near street, area (Optional)" /> {% else %}
-                            <input type="text" name="address2" id="address2" class="h-10 border mt-1 rounded px-4 w-full bg-gray-50" value="" placeholder="Near street, area (Optional)" /> {% endif %}
-
+                            <label for="email">Email</label>
+                            <input type="email" name="email" autocomplete="off" id="email" class="h-10 border mt-1 rounded px-4 w-full bg-gray-50" required value="{{data.email}}" placeholder="" />
                         </div>
+
+                        <div class="md:col-span-3">
+                            <label for="address">Address</label>
+                            <input type="text" name="address1" id="address1" class="h-10 border mt-1 rounded px-4 w-full bg-gray-50" required value="{{data.address1}}" placeholder="Street address or P.O. box" />
+                        </div>
+
+                        <div class="md:col-span-2">
+                            <label for="address">Address 2</label>
+                            <input type="text" name="address2" id="address2" class="h-10 border mt-1 rounded px-4 w-full bg-gray-50" value="{{data.address2}}" placeholder="Near street, area (Optional)" />
+                        </div>
+
                         <div class="md:col-span-2">
                             <label for="state">State </label>
                             <div class="h-10 bg-gray-50 flex border border-gray-200 rounded items-center mt-1">
-                                {% if data.state %}
-                                <input name="state" id="state" placeholder="State" class="px-4 appearance-none outline-none text-gray-800 w-full bg-transparent" required value="{{data.state}}" /> {% else %}
-                                <input name="state" id="state" placeholder="State" class="px-4 appearance-none outline-none text-gray-800 w-full bg-transparent" required value="" />{% endif %}
+
+                                <input name="state" id="state" placeholder="State" class="px-4 appearance-none outline-none text-gray-800 w-full bg-transparent" required value="{{data.state}}" />
 
                                 <button tabindex="-1" class="cursor-pointer outline-none focus:outline-none transition-all text-gray-300 hover:text-red-600">
                 <svg class="w-4 h-4 mx-2 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
