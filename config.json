@@ -1,8 +1,8 @@
 {
     "params": {
-        "local_server": "True",
+        "local_server": "False",
         "local_url": "mysql://root:@localhost/memerkidas",
-        "prod_url": "mysql://root:Shiva@123@localhost/memerkida",
+        "prod_url": "mysql://memerkida:500-Memerkida@92.242.187.59/memerkida",
         "mainTitle": "MemerKida",
         "author": "memer-kida",
         "phone": "7666230646",
@@ -18,24 +18,26 @@
         "gmail_pswd": "lyjmgtiewkytgwyo",
         "admin_username": "Admin",
         "admin_password": "Admin@123",
-        "editImg": "\\MemerKida\\static\\editImg",
-        "editImagesUpload": "\\MemerKida\\static\\customers\\editedImages\\images",
-        "editTshirtUpload": "\\MemerKida\\static\\customers\\editedImages\\tshirts",
-        "ImgAnswers": "\\MemerKida\\static\\customers\\ImgAnswers",
-        "samplePostImgUpload": "\\MemerKida\\static\\files\\samplePosts",
-        "samplePostTshirtUpload": "\\MemerKida\\static\\files\\samplePostsTshirts",
-        "tshirtUpload": "\\MemerKida\\static\\files\\Tshirts"
-
+        "base_url": "/var/www/MemerKida/MemerKida",
+        "editImg": "/static/editImg",
+        "samplePostImgUpload": "/static/files/samplePosts",
+        "samplePostTshirtUpload": "/static/files/samplePostsTshirts",
+        "editImagesUpload": "/static/customers/editedImages/images",
+        "editTshirtUpload": "/static/customers/editedImages/tshirts",
+        "tshirtUpload": "/static/files/Tshirts",
+        "ImgAnswers": "/static/customers/ImgAnswers",
+        "invoices": "/files/invoices"
     },
     "directories": {
-        "editImg": "\\MemerKida\\static\\editImg",
-        "samplePostImgUpload": "\\MemerKida\\static\\assets\\samplePosts",
-        "samplePostTshirtUpload": "\\MemerKida\\static\\assets\\samplePostsTshirts",
-        "editImagesUpload": "\\MemerKida\\static\\assets\\editedImages\\images",
-        "editTshirtUpload": "\\MemerKida\\static\\assets\\editedImages\\tshirts",
-        "tshirtUpload": "\\MemerKida\\static\\assets\\Tshirts",
-        "ImgAnswers": "\\MemerKida\\static\\assets\\ImgAnswers",
-        "invoices": "\\MemerKida\\files\\invoices"
+        "base_url": "/var/www/MemerKida/MemerKida",
+        "editImg": "/static/editImg",
+        "samplePostImgUpload": "/static/files/samplePosts",
+        "samplePostTshirtUpload": "/static/files/samplePostsTshirts",
+        "editImagesUpload": "/static/customers/editedImages/images",
+        "editTshirtUpload": "/static/customers/editedImages/tshirts",
+        "tshirtUpload": "/static/files/Tshirts",
+        "ImgAnswers": "/static/customers/ImgAnswers",
+        "invoices": "/files/invoices"
     },
     "EcomExpress": {
         "username": "MEMERKIDA513003",
@@ -46,11 +48,7 @@
         "gateway_url": "https://ccavenue.com/",
         "merchant_id": "2136705",
         "access_code": "AVQQ43KC00CE35QQEC",
-        "working_key": "6E6916196C123ED56E2E57E28C3BA936",
-
-        "access_code2": "AVCB26KC33AF31BCFA",
-
-        "working_key2": "832F1AB2BBC5E2C88D38808D538FCE9E",
+        "working_key": "53A5C9FCDD10DD4F2AFABD4A1BBBB11D",
         "redirect_url": "https://memerkida.com/orders=view",
         "cancel_url": "https://memerkida.com",
         "base_url": "https://memerkida.com",
