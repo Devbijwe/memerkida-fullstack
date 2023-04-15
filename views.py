@@ -206,8 +206,6 @@ def login(mainstr):
     else:
         mobile=request.form.get("mobile")
         pswd=request.form.get("pswd")
-       
-        
         loggedFrom="self"
         if request.method=="POST" and mainstr=="signup":
             name=request.form.get("username")
