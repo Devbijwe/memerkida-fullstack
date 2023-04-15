@@ -128,9 +128,12 @@ def callback():
             return redirect("/google/auth") 
         except:
             flash("Some error occured please reload page")
+            return redirect("/login/auth")
    
-        
+    
     session["user"]=data.publicId
+    
+        
     # flash("Account already exists")
     return redirect("/login/auth")
     # except:
@@ -348,12 +351,12 @@ def saveImg(sortStr):
             uploads=Edituploads.query.filter_by(custId=session['user']).all()
        
             if printImg and tshirtImg:
-                app.config['UPLOAD_FOLDER']= os.path.abspath("../"+params['editImagesUpload'])
+                app.config['UPLOAD_FOLDER']= os.path.abspath(params['base_url']+params['editImagesUpload'])
                 printImg = Image.open(printImg.stream)
                 printImgName="cust"+str(data.publicId)+"No"+str(len(uploads))+"Images.png" 
                 printImg.save(os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(printImgName) ))   
                 printImg=secure_filename(printImgName) 
-                app.config['UPLOAD_FOLDER']= os.path.abspath("../"+params['editTshirtUpload'])
+                app.config['UPLOAD_FOLDER']= os.path.abspath(params['base_url']+params['editTshirtUpload'])
                 tshirtImg= Image.open(tshirtImg.stream)
                 tshirtImgName="cust"+str(data.publicId)+"No"+str(len(uploads))+"Tshirt.png"
                 tshirtImg.save(os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(tshirtImgName) )) 
@@ -1262,7 +1265,7 @@ def tshirtAdder(ty,action,id,sid,fid):
     if "admin" in session:
         publicId = uuid.uuid4().hex
         if request.method=="POST" and action=="add":
-            app.config['UPLOAD_FOLDER']= os.path.abspath("../"+params['tshirtUpload'])
+            app.config['UPLOAD_FOLDER']= os.path.abspath(params['base_url']+params['tshirtUpload'])
             tshirtId=request.form.get("tshirtId")
             sid=request.form.get("sid")
             name=request.form.get("name")
@@ -1397,7 +1400,7 @@ def tshirtAdder(ty,action,id,sid,fid):
             
             for key in tshirts:
                 imgName=key.img
-                path=os.path.join(os.path.abspath("../"+params['tshirtUpload']), secure_filename(imgName))
+                path=os.path.join(os.path.abspath(params['base_url']+params['tshirtUpload']), secure_filename(imgName))
                 try:
                     os.remove(path,dir_fd=None)
                 except:
@@ -1561,13 +1564,13 @@ def templateAdd(opt,id):
                 else:
                     carousel=carousel
                 if id =="0":
-                    app.config['UPLOAD_FOLDER']= os.path.abspath("../"+params['samplePostImgUpload'])
+                    app.config['UPLOAD_FOLDER']= os.path.abspath(params['base_url']+params['samplePostImgUpload'])
                     lightTemplateName="lightTemplate"+str(publicId)+lightTemplate.filename
                     lightTemplate.save(os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(lightTemplateName)))
                     darkTemplateName="darkTemplate"+str(publicId)+darkTemplate.filename
                     darkTemplate.save(os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(darkTemplateName)))
                     
-                    app.config['UPLOAD_FOLDER']= os.path.abspath("../"+params['samplePostTshirtUpload'])
+                    app.config['UPLOAD_FOLDER']= os.path.abspath(params['base_url']+params['samplePostTshirtUpload'])
                     lightTshirtName="lightTshirts"+str(publicId)+lightTshirt.filename
                     lightTshirt.save(os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(lightTshirtName)))
                     darkTshirtName="darkTshirts"+str(publicId)+darkTshirt.filename
@@ -1582,7 +1585,7 @@ def templateAdd(opt,id):
                 else:
                     template=Templates.query.filter_by(publicId=id).first()
                     if template:
-                        app.config['UPLOAD_FOLDER']= os.path.abspath("../"+params['samplePostImgUpload'])
+                        app.config['UPLOAD_FOLDER']= os.path.abspath(params['base_url']+params['samplePostImgUpload'])
                         if darkTemplate:
                             darkTemplateDel=os.path.join(os.path.join(app.config['UPLOAD_FOLDER']), secure_filename(template.darkTemplate))
                             try:
@@ -1606,7 +1609,7 @@ def templateAdd(opt,id):
                             lightTemplate.save(os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(lightTemplateName)))
                             template.lightTemplate=secure_filename(lightTemplateName)
                             
-                        app.config['UPLOAD_FOLDER']= os.path.abspath("../"+params['samplePostTshirtUpload'])
+                        app.config['UPLOAD_FOLDER']= os.path.abspath(params['base_url']+params['samplePostTshirtUpload'])
                         if darkTshirt:
                             darkTshirtDel=os.path.join(os.path.join(app.config['UPLOAD_FOLDER']), secure_filename(template.darkTshirt))
                             try:
@@ -1658,10 +1661,10 @@ def templateAdd(opt,id):
             templates=Templates.query.filter_by(publicId=id).all() 
             if templates:
                 for key in templates:
-                    app.config['UPLOAD_FOLDER']= os.path.abspath("../"+params['samplePostImgUpload'])
+                    app.config['UPLOAD_FOLDER']= os.path.abspath(params['base_url']+params['samplePostImgUpload'])
                     darkTemplateDel=os.path.join(os.path.join(app.config['UPLOAD_FOLDER']), secure_filename(key.darkTemplate))
                     lightTemplateDel=os.path.join(os.path.join(app.config['UPLOAD_FOLDER']), secure_filename(key.lightTemplate))
-                    app.config['UPLOAD_FOLDER']= os.path.abspath("../"+params['samplePostTshirtUpload'])
+                    app.config['UPLOAD_FOLDER']= os.path.abspath(params['base_url']+params['samplePostTshirtUpload'])
                     darkTshirtDel=os.path.join(os.path.join(app.config['UPLOAD_FOLDER']), secure_filename(key.darkTshirt))
                     lightTshirtDel=os.path.join(os.path.join(app.config['UPLOAD_FOLDER']), secure_filename(key.lightTshirt))
                     try:
