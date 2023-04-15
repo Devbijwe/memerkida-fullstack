@@ -1,5 +1,5 @@
-from flask_sqlalchemy import SQLAlchemy
-from __init__ import db
+
+from .__init__ import db
 from datetime import datetime
 from sqlalchemy import inspect
 
@@ -29,7 +29,7 @@ class Customers(db.Model):
     publicId=db.Column(db.String(50),nullable=False,unique=True)
     name=db.Column(db.String(50),nullable=False)
     mobile=db.Column(db.String(15),nullable=True,unique=True)
-    pswd=db.Column(db.String(20),nullable=False)
+    pswd=db.Column(db.String(50),nullable=False)
     email=db.Column(db.String(75),nullable=True)
     loggedFrom=db.Column(db.String(20),nullable=False)
     address1=db.Column(db.String(200),nullable=True)
