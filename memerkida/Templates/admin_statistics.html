@@ -1,0 +1,313 @@
+{% extends "admin.html" %} {% block style %}
+<style>
+    /* Loading */
+    
+    @keyframes ldio-fupypcu83g {
+        0% {
+            opacity: 1
+        }
+        100% {
+            opacity: 0
+        }
+    }
+    
+    .ldio-fupypcu83g div {
+        left: 96px;
+        top: 52px;
+        position: absolute;
+        animation: ldio-fupypcu83g linear 1s infinite;
+        background: #008fd4;
+        width: 8px;
+        height: 24px;
+        border-radius: 0px / 0px;
+        transform-origin: 4px 48px;
+    }
+    
+    .ldio-fupypcu83g div:nth-child(1) {
+        transform: rotate(0deg);
+        animation-delay: -0.9166666666666666s;
+        background: #008fd4;
+    }
+    
+    .ldio-fupypcu83g div:nth-child(2) {
+        transform: rotate(30deg);
+        animation-delay: -0.8333333333333334s;
+        background: #008fd4;
+    }
+    
+    .ldio-fupypcu83g div:nth-child(3) {
+        transform: rotate(60deg);
+        animation-delay: -0.75s;
+        background: #008fd4;
+    }
+    
+    .ldio-fupypcu83g div:nth-child(4) {
+        transform: rotate(90deg);
+        animation-delay: -0.6666666666666666s;
+        background: #008fd4;
+    }
+    
+    .ldio-fupypcu83g div:nth-child(5) {
+        transform: rotate(120deg);
+        animation-delay: -0.5833333333333334s;
+        background: #008fd4;
+    }
+    
+    .ldio-fupypcu83g div:nth-child(6) {
+        transform: rotate(150deg);
+        animation-delay: -0.5s;
+        background: #008fd4;
+    }
+    
+    .ldio-fupypcu83g div:nth-child(7) {
+        transform: rotate(180deg);
+        animation-delay: -0.4166666666666667s;
+        background: #008fd4;
+    }
+    
+    .ldio-fupypcu83g div:nth-child(8) {
+        transform: rotate(210deg);
+        animation-delay: -0.3333333333333333s;
+        background: #008fd4;
+    }
+    
+    .ldio-fupypcu83g div:nth-child(9) {
+        transform: rotate(240deg);
+        animation-delay: -0.25s;
+        background: #008fd4;
+    }
+    
+    .ldio-fupypcu83g div:nth-child(10) {
+        transform: rotate(270deg);
+        animation-delay: -0.16666666666666666s;
+        background: #008fd4;
+    }
+    
+    .ldio-fupypcu83g div:nth-child(11) {
+        transform: rotate(300deg);
+        animation-delay: -0.08333333333333333s;
+        background: #008fd4;
+    }
+    
+    .ldio-fupypcu83g div:nth-child(12) {
+        transform: rotate(330deg);
+        animation-delay: 0s;
+        background: #008fd4;
+    }
+    
+    .loadingio-spinner-spinner-dohl2uy4d4 {
+        width: 200px;
+        height: 200px;
+        display: inline-block;
+        overflow: hidden;
+        background: none;
+    }
+    
+    .ldio-fupypcu83g {
+        width: 100%;
+        height: 100%;
+        position: relative;
+        transform: translateZ(0) scale(1);
+        backface-visibility: hidden;
+        transform-origin: 0 0;
+        /* see note above */
+    }
+    
+    .ldio-fupypcu83g div {
+        box-sizing: content-box;
+    }
+    /* Loading */
+</style> {% endblock %}{% block main %}
+
+<div class="container mx-2 overflow-auto capitalize">
+    <section class="text-gray-600 body-font ">
+        <div x-ref="loading" id="loader2" class="fixed inset-0 hidden z-50 flex items-center justify-center text-2xl font-semibold text-white ">
+            <div class="loadingio-spinner-spinner-dohl2uy4d4">
+                <div class="ldio-fupypcu83g">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="container px-5 py-3 ">
+            <div class=" -m-4">
+                <div id="chart-area" class="object-cover object-center w-full h-full block"></div>
+            </div>
+        </div>
+
+    </section>
+</div>
+
+{% endblock %} {% block script %}
+<style>
+    canvas {
+        justify-content: center;
+    }
+</style>
+
+<script>
+    document.getElementById("add-product").classList.remove("hidden");
+    document.getElementById("add-product").innerHTML = `  <button class="app-content-headerButton" id="refreshData">Refresh</button>`;
+    document.getElementById("add-product").setAttribute("href", "#")
+    document.getElementById("headerTxt").innerHTML = `Statistics`;
+</script>
+
+<link rel="stylesheet" href="https://uicdn.toast.com/chart/latest/toastui-chart.min.css" />
+<script src="https://uicdn.toast.com/chart/latest/toastui-chart.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+<script>
+    document.getElementById("loader2").classList.remove("hidden");
+    async function getData(mainstr, id, type) {
+        let url = `/admin/get/${mainstr}/${id}=pid`;
+        let Arr = [];
+
+        const response = await fetch(url);
+        const data = await response.json();
+        let dates = getDates();
+        for (key1 in dates) {
+            let count = 0;
+            // console.log(dates[key1]);
+            for (key in data) {
+                logindate = new Date(data[key]["date"]).toLocaleDateString('en-IN');
+                //console.log(logindate)
+
+                if (String(logindate) == String(dates[key1])) {
+                    count++;
+                }
+            }
+            date = dates[key1];
+
+            Arr.push(count);
+
+        }
+
+        //console.log(Arr);
+
+        return Arr;
+    }
+</script>
+<script>
+    function getDates() {
+        let dates = [];
+        let currentDate = new Date();
+        let i = 0;
+
+        while (true) {
+            let lastdates = new Date(currentDate.getTime() - (i * 24 * 60 * 60 * 1000));
+            dates.push(lastdates.toLocaleDateString('en-IN'));
+            if (i == 6) {
+                break;
+            }
+            i++;
+        }
+
+        // dateStr = currentDate.toLocaleDateString('en-IN');
+        //return dateStr + "  " + timeStr;
+        return dates.reverse();
+    }
+
+
+    let newUsers, newOrders, newMessages;
+
+    function extractData() {
+
+
+        getData("customers", "0", "ok").then((result) => {
+            newUsers = result;
+
+        });
+        getData("messages", "0", "ok").then((result) => {
+            newMessages = result;
+
+        });
+        getData("orders", "0", "ok").then((result) => {
+            newOrders = result;
+
+        });
+        setTimeout(graph, 10000);
+
+
+    }
+    document.getElementById("refreshData").addEventListener("click", () => {
+        graph();
+    })
+
+    extractData();
+
+    function graph() {
+        const el = document.getElementById('chart-area');
+        const data = {
+            categories: getDates(),
+            series: [{
+                name: 'New Users',
+                data: newUsers,
+            }, {
+                name: 'New Orders',
+                data: newOrders,
+            }, {
+                name: 'New Messages',
+                data: newMessages,
+            }, ],
+        };
+        const options = {
+            chart: {
+                title: 'Weekly Statistics',
+                width: 1000,
+                height: 500
+            },
+            xAxis: {
+                title: 'Date',
+            },
+            yAxis: {
+                title: 'Numbers',
+            },
+            tooltip: {
+                formatter: (value) => `${value}`,
+            },
+            legend: {
+                align: 'bottom',
+            },
+            series: {
+                shift: true,
+            },
+        };
+
+        const chart = toastui.Chart.lineChart({
+            el,
+            data,
+            options
+        });
+        document.getElementById("loader2").classList.add("hidden");
+
+
+        /* let index = 11;
+        const intervalId = setInterval(() => {
+            const random = Math.round(Math.random() * 100);
+            const random2 = Math.round(Math.random() * 100);
+            chart.addData([random, random2], index.toString());
+            index += 1;
+            if (index === 30) {
+                clearInterval(intervalId);
+            }
+        }, 1500);
+*/
+
+
+    }
+</script>
+
+
+
+{% endblock %}

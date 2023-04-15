@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
+</head>
+
+<body>
+
+    <script type="text/javascript">
+        $(function() {
+            var jsonData;
+            var access_code = "AVCB26KC33AF31BCFA"; //Put access code here 
+            var amount = "100.00";
+            var currency = "INR";
+            $.ajax({
+                url: 'https://test.ccavenue.com/transaction/transaction.do?command=getJsonData&access _code=' + access_code + '&currency=' + currency + '&amount=' + amount,
+                dataType: 'jsonp',
+                jsonp: false,
+                jsonpCallback: 'processData',
+                success: function(data) {
+                    jsonData = data;
+                    console.log(data);
+                },
+                error: function(xhr, textStatus, errorThrown) {
+                    alert('An error occurred!' + (errorThrown ? errorThrown : xhr.status));
+                }
+            });
+            $(".payOption").click(function() {
+                $("#card_name").children().remove(); // remove old card names from old one $(.#card_name").append("<option value=">Select</option>);
+                $("#card_name").append(" <option value=''>Select</option>");
+                var paymentOption = $(this).val();
+                $("#card_type").val(paymentOption.replace("OPT", ""));
+
+                $.each(jsonData, function(index, value) {
+                    if (value.payOpt == paymentOption) {
+                        var payOptJSONArray = S.parseJSON(value[paymentOption]);
+                        $.each(payOptJSONArray, function() {
+                            $("#card name").find("option:last").after("<option class=" + this['dataAcceptedAt'] + " " + this['status'] + "value=" + this['cardName'] + ">" + this['cardName'] + "</option>");
+                        });
+                    }
+                    $("#card_name").click(function() {
+                        if ($(this).find("selected").hasClass("DOWN")) {
+                            alert("Selected option is currently unavailable. Select another payment option or try again later.");
+                        }
+                        if ($(this).find(":selected").hasClass("ccAvenue")) {
+                            $("#data_accept").val("Y");
+                        } else {
+                            $("#data_accept").val("N");
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+
+</body>
+
+</html>

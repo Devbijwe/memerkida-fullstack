@@ -1,0 +1,606 @@
+{% extends "admin.html" %} {% block main %}
+<style>
+    tr.tui-grid-row-hover {
+        background-color: black;
+    }
+</style>
+
+<style>
+    @import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700,800,900');
+    *,
+    *::before,
+    *::after {
+        box-sizing: border-box;
+    }
+    
+    bodycvvf {
+        font-family: 'Poppins', sans-serif;
+        font-weight: 400;
+        font-size: 15px;
+        line-height: 1.7;
+        color: #1f2029;
+        background-color: #fff;
+        overflow: hidden;
+        background-image: url('https://assets.codepen.io/1462889/back-page.svg');
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: 101%;
+    }
+    
+    p {
+        font-family: 'Poppins', sans-serif;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 1.7;
+        color: #1f2029;
+    }
+    
+    .section {
+        position: relative;
+        width: 100%;
+        display: block;
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+        -ms-flex-pack: center;
+        justify-content: center;
+    }
+    
+    .full-height {
+        min-height: 100vh;
+    }
+    
+    [type="checkbox"]:checked,
+    [type="checkbox"]:not(:checked) {
+        position: absolute;
+        left: -9999px;
+    }
+    
+    .modal-btn:checked+label:after,
+    .modal-btn:not(:checked)+label:after {
+        position: fixed;
+        top: 30px;
+        right: 30px;
+        z-index: 110;
+        width: 40px;
+        border-radius: 3px;
+        height: 30px;
+        text-align: center;
+        line-height: 30px;
+        font-size: 18px;
+        background-color: #ffeba7;
+        color: #102770;
+        font-family: 'unicons';
+        content: 'X';
+        box-shadow: 0 12px 25px 0 rgba(16, 39, 112, .25);
+        transition: all 200ms linear;
+        opacity: 0;
+        pointer-events: none;
+        transform: translateY(20px);
+    }
+    
+    .modal-btn:checked+label:hover:after,
+    .modal-btn:not(:checked)+label:hover:after {
+        background-color: #102770;
+        color: #ffeba7;
+    }
+    
+    .modal-btn:checked+label:after {
+        transition: opacity 300ms 300ms ease, transform 300ms 300ms ease, background-color 250ms linear, color 250ms linear;
+        opacity: 1;
+        pointer-events: auto;
+        transform: translateY(0);
+    }
+    
+    .modal {
+        position: fixed;
+        display: block;
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+        -ms-flex-pack: center;
+        justify-content: center;
+        margin: 0;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 100;
+        overflow-x: hidden;
+        background-color: rgba(31, 32, 41, .75);
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 250ms 700ms ease;
+    }
+    
+    .modal-btn:checked~.modal {
+        pointer-events: auto;
+        opacity: 1;
+        transition: all 300ms ease-in-out;
+    }
+    
+    .modal-wrap {
+        position: relative;
+        display: block;
+        width: 70%;
+        margin: 0;
+        padding: 0;
+        border-radius: 4px;
+        overflow: hidden;
+        background-color: transparent;
+        -ms-flex-item-align: center;
+        align-self: center;
+        opacity: 0;
+        transform: scale(0.6);
+        transition: opacity 250ms 250ms ease, transform 300ms 250ms ease;
+    }
+    
+    .modal-wrap img {
+        display: block;
+        width: 100%;
+        height: auto;
+    }
+    
+    .modal-wrap p {
+        padding: 20px 30px 0 30px;
+    }
+    
+    .modal-btn:checked~.modal .modal-wrap {
+        opacity: 1;
+        transform: scale(1);
+        transition: opacity 250ms 500ms ease, transform 350ms 500ms ease;
+    }
+    
+    .logo {
+        position: absolute;
+        top: 25px;
+        left: 25px;
+        display: block;
+        z-index: 1000;
+        transition: all 250ms linear;
+    }
+    
+    .logo img {
+        height: 26px;
+        width: auto;
+        display: block;
+        filter: brightness(10%);
+        transition: filter 250ms 700ms linear;
+    }
+    
+    .modal-btn:checked~.logo img {
+        filter: brightness(100%);
+        transition: all 250ms linear;
+    }
+    
+    @media screen and (max-width: 500px) {
+        .modal-wrap {
+            width: calc(100% - 40px);
+            padding-bottom: 15px;
+        }
+        .modal-wrap p {
+            padding: 15px 20px 0 20px;
+        }
+    }
+</style>
+<div id="grid" class="overflow-scroll" style="min-width: 100%;"></div>
+{% endblock %} {% block script %}
+
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.core.min.js" integrity="sha512-UhlYw//T419BPq/emC5xSZzkjjreRfN3426517rfsg/XIEC02ggQBb680V0VvP+zaDZ78zqse3rqnnI5EJ6rxA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js" integrity="sha512-XMVd28F1oH/O71fzwBnV7HucLxVwtxf26XV8P4wPk26EDxuGZ91N8bsOttmnomcCD3CS5ZMRL50H0GgOHvegtg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip-utils/0.1.0/jszip-utils.min.js" integrity="sha512-3WaCYjK/lQuL0dVIRt1thLXr84Z/4Yppka6u40yEJT1QulYm9pCxguF6r8V84ndP5K03koI9hV1+zo/bUbgMtA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.js"></script>
+<script>
+    document.getElementById("headerTxt").innerHTML = `Orders`;
+    document.getElementById("orders").classList.add("active");
+    document.getElementById("export").classList.remove("hidden");
+    document.getElementById("export").innerHTML = `  <button class="app-content-headerButton">Export</button>`;
+    document.getElementById("export").setAttribute("href", `/admin/export/excel/orders`);
+
+    var data = [];
+
+    //Api request
+    fetch("/admin/get/orders/0=pid").then(res =>
+        res.json()).then(d => {
+
+        for (key in d) {
+            data.push(d[key]);
+        }
+
+
+        let grid = new tui.Grid({
+            el: document.getElementById('grid'),
+            data: data,
+
+            draggable: true,
+            columnOptions: {
+                resizable: true
+            },
+            columns: [{
+                header: 'Id',
+                name: 'publicId',
+                sortable: true,
+                align: 'center',
+
+                filter: {
+                    type: 'text',
+                    showApplyBtn: true,
+                    showClearBtn: true
+                }
+            }, {
+                header: 'Cust Id',
+                name: 'custId',
+                sortable: true,
+                align: 'center',
+
+                filter: {
+                    type: 'text',
+                    showApplyBtn: true,
+                    showClearBtn: true
+                }
+            }, {
+                header: 'Images',
+                name: 'tshirtImg',
+                sortable: true,
+                align: 'center',
+                filter: 'select'
+            }, {
+                header: 'Colour',
+                name: 'colour',
+                align: 'center',
+                sortable: true,
+
+                filter: {
+                    type: 'text',
+                    showApplyBtn: true,
+                    showClearBtn: true
+                }
+            }, {
+                header: 'Size',
+                name: 'size',
+                align: 'center',
+                sortable: true,
+
+                filter: {
+                    type: 'text',
+                    showApplyBtn: true,
+                    showClearBtn: true
+                }
+            }, {
+                header: 'Quantity',
+                name: 'quantity',
+                align: 'center',
+                sortable: true,
+
+                filter: {
+                    type: 'text',
+                    showApplyBtn: true,
+                    showClearBtn: true
+                }
+            }, {
+                header: 'Type',
+                name: 'type',
+                sortable: true,
+                align: 'center',
+                filter: 'select'
+            }, {
+                header: 'Details',
+                name: 'details',
+                align: 'center',
+                sortable: true,
+
+                filter: {
+                    type: 'text',
+                    showApplyBtn: true,
+                    showClearBtn: true
+                }
+            }, {
+                header: 'Price',
+                name: 'price',
+                sortable: true,
+                align: 'center',
+                filter: 'number'
+            }, {
+                header: 'Payments',
+                name: 'paymentStatus',
+                sortable: true,
+                align: 'center',
+                filter: 'text'
+            }, {
+                header: 'delivered',
+                name: 'delivered',
+                sortable: true,
+                align: 'center',
+
+                filter: {
+                    type: 'text',
+                    operator: 'OR'
+                }
+            }, {
+                header: 'Date',
+                name: 'date',
+                sortable: true,
+                align: 'center',
+
+                filter: {
+                    type: 'date',
+                    options: {
+                        format: 'yyyy.MM.dd'
+                    }
+                }
+            }]
+        });
+        scrollEnabler();
+        linker();
+        custLinker();
+
+    });
+
+    const scrollEnabler = () => {
+        document.querySelectorAll(".tui-grid-body-area").forEach((elem) => {
+            elem.setAttribute("style", "height:100%;")
+        });
+    };
+    document.getElementById("add-product").classList.remove("hidden");
+    document.getElementById("add-product").innerHTML = `   <button class="app-content-headerButton">Refresh</button>`;
+    document.getElementById("add-product").addEventListener("click", () => {
+        linker();
+        custLinker();
+    });
+
+
+    const linker = () => {
+        let tshirtImg = document.querySelectorAll("td[data-column-name='tshirtImg'] div");
+        fetch("/admin/get/orders/0=pid").then(res =>
+            res.json()).then(data => {
+            tshirtImg.forEach((elem, index) => {
+                for (key in data) {
+                    if (index == key) {
+                        elem.innerHTML = `
+                <div class="section">
+                    <input class="modal-btn" type="checkbox" id="modal-img-btn-${data[key].id}" name="modal-img-btn-${data[key].id}" />
+                    <label for="modal-img-btn-${data[key].id}" class="underline cursor-pointer">View</label>
+                    <div class="modal text-left">
+                        <div class="modal-wrap overflow-y-auto">
+                            <div class="container mx-auto sm:px-4 overflow-y-auto">
+                                <article class="relative flex flex-col min-w-0 rounded break-words border bg-white border-1 border-gray-300 overflow-y-auto">
+                                    <header class="py-3 px-6 mb-0 bg-gray-200 border-b-1 border-gray-300 text-gray-900"> My Orders</header>
+                                    <div class="flex p-6 default" id="default${data[key].id}">
+                                        <div class="flex flex-col">
+                                            <h6>Tshirt</h6>
+                                            <article class="relative flex flex-col min-w-0 w-[500px] h-[500px] rounded break-words border bg-white border-1 border-gray-300">
+                                                <div class="flex-auto p-6 flex flex-wrap ">
+                                                    <img  class="downImg${data[key].id} object-cover  object-center w-full h-full block ${data[key].colour} bg-[${data[key].colour}] " src="/static/customers/editedImages/tshirts/${data[key].tshirtImg}" onerror="this.onerror=null;this.src='/static/files/Tshirts/${data[key].tshirtImg}'" alt="tshirt" >
+                                                </div>
+                                            </article>
+                                        </div>
+                              
+                                        <div class="flex flex-col ">
+                                            <h6>Image</h6>
+                                            <article class="relative flex flex-col min-w-0 w-[300px] h-[400px] rounded break-words border bg-white border-1 border-gray-300">
+                                                <div class="flex-auto p-6 flex flex-wrap ">
+                                                    <img  class="downImg${data[key].id}  object-cover object-center w-[400px] h-[400px] block   ${data[key].colour} bg-[${data[key].colour}]   " src="/static/customers/editedImages/images/${data[key].printImg}" onerror="this.onerror=null;this.src='/static/files/samplePosts/${data[key].printImg}'" alt="tshirt">
+                                                </div>
+                                            </article>
+                                        </div>     
+                                    </div> 
+                                    <div class="flex flex-col md:flex-row justify-around text-center">
+
+                                        <div class="w-full md:w-1/5 ">
+                                            <h3 class="text-lg font-bold  text-gray-800">Colour</h3>
+                                            <p class="text-gray-700 ">${data[key]["colour"]}</p>
+                                          </div>
+  
+                                          <div class="w-full md:w-1/5">
+                                            <h3 class="text-lg font-bold  text-gray-800">Theme</h3>
+                                            <p class="text-gray-700 ">${data[key]["theme"]}</p>
+                                          </div>
+                                          <div class="w-full md:w-1/5 ">
+                                            <h3 class="text-lg font-bold  text-gray-800">Size</h3>
+                                            <p class="text-gray-700">${data[key]["size"]}</p>
+                                          </div>
+  
+                                          <div class="w-full md:w-1/5">
+                                            <h3 class="text-lg font-bold  text-gray-800">Quantity</h3>
+                                            <p class="text-gray-700 ">${data[key]["quantity"]}</p>
+                                          </div>
+                                          <div class="w-full md:w-1/5">
+                                            <h3 class="text-lg font-bold text-gray-800">Price</h3>
+                                            <p class="text-gray-700 ">₹ ${data[key]["price"]}</p>
+                                          </div>
+
+                                      </div>
+                                 
+                                    <button onclick="download(${data[key].id})" class="inline-block my-3 align-middle text-center select-none border font-normal whitespace-no-wrap rounded py-1 px-3 leading-normal no-underline bg-orange-400 text-black hover:bg-orange-500" data-abc="true"> <i class="fa fa-chevron-left"></i>Download</button>
+                                </article>
+                            </div>
+
+
+
+
+                        </div>
+                    </div>
+                </div>
+                
+                `;
+
+                    }
+                }
+            });
+
+
+        });
+    }
+
+
+    const custLinker = () => {
+        let custId = document.querySelectorAll("td[data-column-name='custId'] div");
+
+
+        fetch("/admin/get/orders/0=pid")
+            .then(res => res.json()).then(d => {
+                for (k in d) {
+                    custId.forEach((elem, index) => {
+                        if (index == k) {
+
+                            fetch(`/admin/get/payments/${d[k].custId}=pid`)
+                                .then(res => res.json()).
+                            then(data => {
+
+                                console.log(data);
+
+
+                                for (key in data) {
+
+
+
+                                    elem.innerHTML = `
+                    <div class="section">
+                        <input class="modal-btn" type="checkbox" id="modal-cust-btn-${data[key].id}" name="modal-cust-btn-${data[key].id}" />
+                        <label for="modal-cust-btn-${data[key].id}" class="underline cursor-pointer">Details</label>
+                        <div class="modal text-left">
+                            <div class="modal-wrap overflow-y-auto">
+                                <div class="container mx-auto sm:px-4 overflow-y-auto">
+                                    <article class="relative flex flex-col min-w-0 rounded break-words border bg-white border-1 border-gray-300 overflow-y-auto">
+                                        <header class="py-3 px-6 mb-0 bg-gray-200 border-b-1 border-gray-300 text-gray-900"> My Orders</header>
+                                        <hr>
+                                        <div class="bg-white shadow-md rounded-lg p-6">
+                                            <h2 class="text-2xl font-bold mb-2 text-gray-800">Personal Information</h2>
+                                            <div class="flex flex-col md:flex-row">
+
+                                              <div class="w-full md:w-1/3 mb-4 md:mb-0 md:pr-4">
+                                                <h3 class="text-lg font-bold mb-2 text-gray-800">Id</h3>
+                                                <p class="text-gray-700 mb-2">${data[key]["custId"]}</p>
+                                              </div>
+
+                                              <div class="w-full md:w-1/3">
+                                                <h3 class="text-lg font-bold mb-2 text-gray-800">Name</h3>
+                                                <p class="text-gray-700 mb-2">${data[key]["name"]}</p>
+                                              </div>
+                                              <div class="w-full md:w-1/3 mb-4 md:mb-0 md:pr-4">
+                                                <h3 class="text-lg font-bold mb-2 text-gray-800">Mobile Number</h3>
+                                                <p class="text-gray-700 mb-2">${data[key]["mobile"]}</p>
+                                            </div>
+                                            </div>   
+                                            <hr>  <div class="flex flex-col md:flex-row  p-4">
+                                                <div class="w-full md:w-1/2">
+                                                    <h3 class="text-lg font-bold mb-2 text-gray-800">Transaction Id</h3>
+                                                    <p class="text-gray-700 mb-2">${data[key]["transactionId"]}</p>
+                                                  </div>
+                                                  <div class="w-full md:w-1/2">
+                                                    <h3 class="text-lg font-bold mb-2 text-gray-800">Payment Methods</h3>
+                                                    <p class="text-gray-700 mb-2">${data[key]["payMethods"]}</p>
+                                                  </div>
+                                              </div>
+                                              <hr>
+                                            <div class="flex flex-col md:flex-row  p-4">
+                                                <div class="w-full md:w-1/4">
+                                                    <h3 class="text-lg font-bold mb-2 text-gray-800">Subtotal</h3>
+                                                    <p class="text-gray-700 mb-2">${data[key]["subtotal"]}</p>
+                                                  </div>
+                                                  <div class="w-full md:w-1/4">
+                                                    <h3 class="text-lg font-bold mb-2 text-gray-800">Charges</h3>
+                                                    <p class="text-gray-700 mb-2">${data[key]["charges"]}</p>
+                                                  </div>
+                                                  <div class="w-full md:w-1/4">
+                                                    <h3 class="text-lg font-bold mb-2 text-gray-800">Total</h3>
+                                                    <p class="text-gray-700 mb-2">${data[key]["total"]}</p>
+                                                  </div>
+                                                  <div class="w-full md:w-1/4">
+                                                    <h3 class="text-lg font-bold mb-2 text-gray-800">Status</h3>
+                                                    <p class="text-gray-700 mb-2">${data[key]["status"]}</p>
+                                                  </div>
+                                              </div>
+                                              
+                                             <hr>
+                                            <div class="mt-4">
+                                              <h3 class="text-lg font-bold mb-2 text-gray-800">Address</h3>
+                                              <div class="flex flex-col md:flex-row ">
+                                              <p class="text-gray-700 mb-2">${data[key]["address1"]},</p>
+                                              <p class="text-gray-700 mb-2">${data[key]["address2"]},</p>
+                                              <p class="text-gray-700 mb-2">${data[key]["city"]},</p>
+                                              <p class="text-gray-700 mb-2">${data[key]["state"]},</p>
+                                              <p class="text-gray-700 mb-2">${data[key]["zip"]},</p>
+                                            </div>
+                                           </div>
+                                          </div>
+                                          
+                                          
+                                     
+                                           </article>
+                                </div>
+    
+    
+    
+    
+                            </div>
+                        </div>
+                    </div>
+                    
+                    `;
+
+
+                                }
+
+                            });
+
+                        }
+                    });
+                }
+
+
+
+            })
+
+
+    }
+
+
+
+
+    var links = [];
+
+    const download = (id) => {
+
+        const downImg = document.querySelectorAll(`.downImg${id}`);
+
+        downImg.forEach((elem, index) => {
+            links.push(elem.src);
+        });
+        generateZIP(id);
+    }
+
+    function generateZIP(id) {
+
+        var zip = new JSZip();
+        var count = 0;
+        var zipFilename = `OrderId${id}.zip`;
+
+        links.forEach(function(url, i) {
+            var filename = links[i];
+            filename = filename.replace(/[\/\*\|\:\<\>\?\"\\]/gi, '').replace(".", "").slice(-10);
+            // loading a file and add it in a zip file
+            JSZipUtils.getBinaryContent(url, function(err, data) {
+                if (err) {
+                    throw err; // or handle the error
+                }
+                zip.file(filename, data, {
+                    binary: true
+                });
+                count++;
+                if (count == links.length) {
+                    zip.generateAsync({
+                        type: 'blob'
+                    }).then(function(content) {
+                        saveAs(content, zipFilename);
+                        location.reload();
+                    });
+                }
+            });
+        });
+    }
+</script>
+{% endblock %}

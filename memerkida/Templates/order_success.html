@@ -1,0 +1,123 @@
+{% extends "layout.html" %}{% block style %}{% endblock %}{% block main %}
+<style>
+    body {
+        background-color: #eee;
+    }
+    
+    .card {
+        background-color: #fff;
+        border: none;
+        border-radius: 16px;
+    }
+    
+    .info {
+        line-height: 19px;
+    }
+    
+    .name {
+        color: #4c40e0;
+        font-size: 18px;
+        font-weight: 600;
+    }
+    
+    .order {
+        font-size: 14px;
+        font-weight: 400;
+        color: #b7b5b5;
+    }
+    
+    .detail {
+        line-height: 19px;
+    }
+    
+    .summery {
+        color: #d2cfcf;
+        font-weight: 400;
+        font-size: 13px;
+    }
+    
+    .text {
+        line-height: 15px;
+    }
+    
+    .new {
+        color: #000;
+        font-size: 14px;
+        font-weight: 600;
+    }
+    
+    .money {
+        font-size: 14px;
+        font-weight: 500;
+    }
+    
+    .address {
+        color: #d2cfcf;
+        font-weight: 500;
+        font-size: 14px;
+    }
+    
+    .last {
+        font-size: 10px;
+        font-weight: 500;
+    }
+    
+    .address-line {
+        color: #4C40E0;
+        font-size: 11px;
+        font-weight: 700;
+    }
+</style>
+
+
+<div class="h-screen">
+    <div class=" mt-[30%] md:mt-[15%]  d-flex align-center flex text-gray-600 justify-center">
+        <div class="card p-4 mt-3">
+            <div class="first d-flex flex justify-between justify-content-between align-center align-items-center mb-3">
+                <div class="info">
+                    <span class="d-block name text-blue-700 mb-2">Thank you, {{ordData["name"]}}</span>
+
+                </div>
+
+                <img src="/static/assets/icons/truck.png" width="40" />
+
+
+            </div>
+            <div class="detail">
+                <p class="font-semibold my-2">Order Id - {{ordData["orderId"]}}</p>
+                <span class="my-2">Your order will be dispatch soon. we are delivering you order.</span>
+            </div>
+
+            <hr class="h-[2px] bg-gray-400 my-3">
+
+            <div class="text">
+                <span class="d-block new mb-1">{{ordData["name"]}}</span>
+            </div>
+            <span class="d-block mb-3">{{ordData["address"]}}</span>
+            <div class="  money d-flex flex flex-row mt-2 align-center align-items-center">
+                <img src="/static/assets/icons/payment.png" width="20" />
+
+                <span class="ml-2">{{ordData["payMethods"]}}</span>
+
+            </div>
+            <div class="last d-flex  flex align-items-center justify-center align-center mt-3">
+                <a href="/orders=view">
+                    <span class="address-line">See my Orders</span></a>
+
+            </div>
+            <!-- <div class="last d-flex  flex align-items-center align-center mt-3">
+                <span class="address-line">CHANGE MY DELIVERY ADDRESS</span>
+
+            </div> -->
+        </div>
+    </div>
+</div>
+
+<script>
+    window.navigator.vibrate(2000);
+    setTimeout(() => {
+        window.location.assign("/orders=view");
+    }, 10000)
+</script>
+
+{% endblock %}

@@ -1,0 +1,179 @@
+{% extends "admin.html" %} {% block style %}
+<style>
+    .chat-messages::-webkit-scrollbar {
+        width: 0;
+        height: 0;
+    }
+</style> {% endblock %}{% block main %}
+<div class="container mx-2 overflow-auto capitalize">
+    <section class="text-gray-600 body-font ">
+        {% if chats %}
+        <div class="container px-5 py-24 mx-auto">
+            <div class="flex flex-wrap -m-4">
+
+                {% for key in chats %} {% set userId= key.userId %}
+                <div class="lg:w-1/3 md:w-1/2 p-4 w-full">
+
+                    <a href="#" class="block relative h-65 rounded overflow-hidden">
+
+                        <div id="chatHolder" class=" w-auto  pb-10 mx-0 overflow-y-hidden bg-gray-300 shadow-xl rounded-lg">
+                            <div class="flex justify-between items-center p-3 bg-purple-600 text-white rounded-t-lg">
+                                <h2 class="text-sm font-medium"> {{key["name"]}} <span class="userIds hidden">{{key["userId"]}}</span></h2>
+
+
+                            </div>
+                            <div id="chat-messages{{key.userId}}" class="chat-messages px-4 py-2 flex flex-col max-h-60 overflow-y-auto ">
+                                {% for chatitems in key %} {% endfor %}
+                            </div>
+                            <form id="chat-form" class="chat-form flex items-center absolute justify-center bottom-0 px-4 py-2">
+                                <input type="text" maxlength="250" autofocus placeholder="Type your message..." class=" w-10/12 border-2 border-purple-600 rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                                <button type="submit" id="{{key.userId}}" class="ml-2 px-2 py-2 rounded-lg bg-purple-600 text-white hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2">
+                                  Send
+                                </button>
+                            </form>
+                        </div>
+
+
+                    </a>
+
+
+
+
+                </div>
+                {% endfor %}
+
+            </div>
+        </div>
+        {% else %}
+        <h1 class="my-3" style="text-align:center ;font-size:xx-large;">No Chat is Available...</h1>{% endif %}
+    </section>
+</div>
+
+{% endblock %} {% block script %}
+<script>
+    const chatHolder = document.getElementById('chatHolder');
+    const chatForm = document.getElementsByClassName('chat-form');
+    const users = document.getElementsByClassName("userIds");
+    Array.from(users).forEach((elem) => {
+        loadChats(elem.innerText);
+    });
+
+    function loadChats(userId) {
+
+        url = `/admin/chats/${userId}`;
+        fetch(url).then((response) => response.json())
+            .then((data) => {
+
+                if (data.code == 200) {
+
+
+                    addmsg(data, userId);
+
+
+                } else {
+
+                }
+
+            })
+            .catch((error) => {
+
+            });
+    }
+
+    function addmsg(data, userId) {
+        const chatMessages = document.getElementById(`chat-messages${userId}`);
+
+        let messageEl = ` `;
+        for (key in data["data"]) {
+
+            messageEl += `  <div class="flex flex-col ${data["data"][key].sender=='0'?' items-end   ':'items-start'}   my-2">
+            <div class="flex flex-col max-w-3/4 rounded-lg py-2 px-4 ${data["data"][key].sender=='0'?'bg-pink-900':'bg-pink-600'} text-white">
+                <p class="text-sm  text-gray-100 ${data["data"][key].sender=='0'?' text-end  ':' text-start '}">${data["data"][key].msg}</p>
+            </div>
+            <span class="text-xs text-gray-400 mt-1">${data["data"][key].sender=='0'?'Admin':"User"} - ${getTimes(data["data"][key].date)}</span> 
+        </div>`;
+        }
+        chatMessages.innerHTML = (messageEl);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+
+    }
+
+    function getTimes(time) {
+        const dateTimeStr = time;
+
+        const date = new Date(dateTimeStr);
+
+        date.setTime(date.getTime());
+
+        const hours = date.getHours() % 12 || 12;
+
+        const minutes = date.getMinutes();
+        const amOrPm = date.getHours() < 12 ? 'AM' : 'PM';
+
+        const timeStr = `${hours}:${minutes < 10 ? '0' + minutes : minutes} ${amOrPm}`;
+        dateStr = date.toLocaleDateString('en-IN');
+        return dateStr + "  " + timeStr;
+    }
+
+
+
+    function sendMessage(e) {
+        const messageInput = e.target.elements[0];
+        const userId = e.target.elements[1].id;
+
+        const message = messageInput.value.trim();
+        if (message !== '') {
+            url = `/admin/chats/${userId}`;
+
+            var formdata = new FormData();
+
+            formdata.append("msg", message);
+
+            fetch(url, {
+                    method: 'POST',
+                    body: formdata,
+                }).then((response) => response.json())
+                .then((data) => {
+
+                    if (data.code == 200) {
+
+                        addmsg(data, userId);
+                    } else {
+
+                    }
+
+                })
+                .catch((error) => {
+                    // console.error('Error:', error);
+                });
+
+            messageInput.value = '';
+        }
+    }
+
+
+
+    Array.from(chatForm).forEach((elem) => {
+        elem.addEventListener('submit', e => {
+            e.preventDefault();
+
+            sendMessage(e);
+
+        });
+    });
+</script>
+<script>
+    document.getElementById("tshirts").classList.add("active");
+    document.getElementById("export").classList.remove("hidden");
+    document.getElementById("export").innerHTML = `  <button class="app-content-headerButton">Export</button>`;
+    document.getElementById("export").setAttribute("href", `/admin/export/excel/tshirts`);
+</script>
+
+
+<!-- <script>
+    document.getElementById("add-product").classList.remove("hidden");
+    document.getElementById("add-product").innerHTML = `  <button class="app-content-headerButton">Add Tshirt</button>`;
+    document.getElementById("add-product").setAttribute("href", `/tshirt/Sell/add/${document.getElementById("idSell").innerHTML}=id/${document.getElementById("sidSell").innerHTML}=sid/0=fid`);
+    document.getElementById("headerTxt").innerHTML = `Tshirts - Sell`;
+</script> -->
+{% endblock %}

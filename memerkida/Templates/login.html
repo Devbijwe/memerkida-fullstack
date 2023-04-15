@@ -1,0 +1,282 @@
+{% extends "layout.html" %}{% block style %}
+<style>
+    .bd {
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 10vh auto;
+        font-family: 'Jost', sans-serif;
+        background: url("https://doc-08-2c-docs.googleusercontent.com/docs/securesc/68c90smiglihng9534mvqmq1946dmis5/fo0picsp1nhiucmc0l25s29respgpr4j/1631524275000/03522360960922298374/03522360960922298374/1Sx0jhdpEpnNIydS4rnN4kHSJtU1EyWka?e=view&authuser=0&nonce=gcrocepgbb17m&user=03522360960922298374&hash=tfhgbs86ka6divo3llbvp93mg4csvb38") no-repeat center/ cover;
+    }
+    
+    .m {
+        margin: 0;
+        margin: 0 15px;
+        width: 350px;
+        height: 500px;
+        overflow: hidden;
+        background: linear-gradient(to bottom, #0f0c29, #302b63, #24243e);
+        border-radius: 10px;
+        box-shadow: 5px 20px 50px #000;
+    }
+    
+    #chk {
+        display: none;
+    }
+    
+    .signup {
+        position: relative;
+        width: 100%;
+        height: 100%;
+    }
+    
+    .label {
+        color: #fff;
+        /* font-size: 2.3em;*/
+        font-weight: bolder;
+        justify-content: center;
+        display: flex;
+        margin: 60px;
+        padding-top: 20px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: .5s ease-in-out;
+    }
+    
+    .signupLabel {
+        font-size: 16px;
+    }
+    
+    .loginLabel {
+        font-size: 16px;
+    }
+    
+    .input {
+        width: 60%;
+        height: 30px;
+        color: #0f0c29;
+        justify-content: center;
+        display: flex;
+        margin: 20px auto;
+        padding: 10px;
+        border: none;
+        outline: none;
+        border-radius: 5px;
+    }
+    
+    .button {
+        width: 60%;
+        margin: 10px auto;
+        justify-content: center;
+        display: block;
+        font-size: 1em;
+        font-weight: bold;
+        margin-top: 20px;
+        background: black;
+        outline: none;
+        border: none;
+        border-radius: 5px;
+        transition: .2s ease-in;
+        cursor: pointer;
+    }
+    
+    .btn1 {
+        color: #fff;
+        background: black;
+    }
+    
+    .btn2 {
+        background: #fff;
+        color: #573b8a;
+    }
+    
+    .btn1:hover {
+        background: #D5F5E3;
+        color: #573b8a;
+    }
+    
+    .btn2:hover {
+        background: #6d44b8;
+        color: white;
+    }
+    
+    .signup {
+        margin: 0;
+        padding: 0;
+    }
+    
+    .login {
+        height: 460px;
+        background: linear-gradient(to bottom, #0f0c29, #302b63, #24243e);
+        border-radius: 60% / 10%;
+        transform: translateY(-180px);
+        transition: .8s ease-in-out;
+    }
+    
+    .login label {
+        color: white;
+        transform: scale(.6);
+    }
+    
+    #chk:checked~.login {
+        transform: translateY(-500px);
+    }
+    
+    #chk:checked~.login label {
+        transform: scale(1);
+    }
+    
+    #chk:checked~.signup label {
+        transform: scale(.6);
+    }
+    /***********************/
+    
+    .bn30 {
+        border: 5em;
+        cursor: pointer;
+        outline: none;
+        font-size: 16px;
+        -webkit-transform: translate(0);
+        transform: translate(0);
+        background-image: linear-gradient(45deg, #4568dc, #b06ab3);
+        padding: 0.7em 2em;
+        border-radius: 65px;
+        box-shadow: 1px 1px 10px rgba(255, 255, 255, 0.438);
+        -webkit-transition: box-shadow 0.25s;
+        transition: box-shadow 0.25s;
+        color: white;
+    }
+    
+    .bn30 .text {
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-image: linear-gradient(45deg, #4568dc, #b06ab3);
+    }
+    
+    .bn30:after {
+        content: "";
+        border-radius: 18px;
+        position: absolute;
+        margin: 4px;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        z-index: -1;
+        background: #0e0e10;
+    }
+    
+    .bn30:hover {
+        background-image: linear-gradient(-45deg, #4568dc, #b06ab3);
+        box-shadow: 0 12px 24px rgba(128, 128, 128, 0.1);
+    }
+    
+    .bn30:hover .text {
+        background-image: linear-gradient(-45deg, #4568dc, #b06ab3);
+    }
+</style>
+
+{% endblock %}{% block main %}
+<div class="bd">
+    <div class="m ">
+        <input type="checkbox" id="chk" aria-hidden="true">
+        <div class="signup">
+            {% if page=="signup" %} {% if action=="queDisplay" %}
+            <form method="post" autocomplete="on" action="/signup=ty/{{srNo1}}/{{srNo}}=queDisplay" enctype="multipart/form-data">{% else %}
+                <form method="post" autocomplete="on" action="/signup=ty/{{srNo1}}/{{srNo}}={{action}}" enctype="multipart/form-data">{% endif %}
+                    <label class="label signupLabel" for="chk" aria-hidden="true">Sign up</label>
+                    <input class="input" type="text" name="username" placeholder="User name" required=""> {% elif page=="login" %} {% if action=="queDisplay" %}
+                    <form method="post" autocomplete="on" action="/login=ty/{{srNo1}}/{{srNo}}=queDisplay" enctype="multipart/form-data">{% else %}
+                        <form method="post" autocomplete="on" action="/login=ty/{{srNo1}}/{{srNo}}={{action}}" enctype="multipart/form-data">{% endif %}
+                            <label class="label loginLabel" for="chk" aria-hidden="true">Login</label> {% endif %}
+                            <input class="input" type="tel" name="mobile" placeholder="Mobile" required="">
+                            <input class="input" type="password" name="pswd" placeholder="Password" required=""> {% if page=="signup" %}
+                            <button class="button  bn30" type="submit">Sign up</button> {% elif page=="login" %}
+                            <button class="button  bn30" type="submit">Log In</button> {% endif %}
+                            <!-- <button id="whatsapp-login"></button> -->
+                        </form>
+        </div>
+
+        <div class="login">
+            {% if page!="signup" %} {% if action=="queDisplay" %}
+            <form method="post" autocomplete="on" action="/signup=ty/{{srNo1}}/{{srNo}}=queDisplay" enctype="multipart/form-data">
+                {% else %}
+                <form method="post" autocomplete="on" action="/signup=ty/{{srNo1}}/{{srNo}}={{action}}" enctype="multipart/form-data">{% endif %}
+                    <label class="label signupLabel" for="chk" aria-hidden="true">Sign up</label>
+                    <!-- <label class="label" for="chk" aria-hidden="true" writeit-loop-reverse writeit-replace-next='Hello, World!' writeit-animate>Hello</label> -->
+                    <input class="input" type="text" name="username" placeholder="User name" required=""> {% elif page!="login" %} {% if action=="queDisplay" %}
+                    <form method="post" autocomplete="on" action="/login=ty/{{srNo1}}/{{srNo}}=queDisplay" enctype="multipart/form-data">{% else %}
+                        <form method="post" autocomplete="on" action="/login=ty/{{srNo1}}/{{srNo}}={{action}}" enctype="multipart/form-data">{% endif %}
+                            <label class="label loginLabel" for="chk" aria-hidden="true">Login</label> {% endif %}
+                            <input class="input" type="tel" name="mobile" placeholder="Mobile" required="">
+                            <input class="input" type="password" name="pswd" placeholder="Password" required=""> {% if page!="signup" %}
+                            <button class="button  bn30" type="submit">Sign up</button> {% elif page!="login" %}
+                            <button class="button  bn30" type="submit">Log In</button> {% endif %}
+                            <!-- <button id="whatsapp-login"></button> -->
+                        </form>
+        </div>
+    </div>
+</div>{% endblock %} {% block script %}
+<script>
+    document.title = "MemerKida - Login";
+</script>
+<script type='text/javascript'>
+    const label = document.querySelectorAll(".label");
+    label.forEach((elem) => {
+        elem.setAttribute("translate", "no")
+    });
+    const signupLabel = new Typewriter('.signupLabel', {
+        loop: true,
+    });
+
+    signupLabel.typeString('New to Memerkida?')
+        .pauseFor(2500)
+        .deleteAll()
+        .typeString('Create an Account...!')
+        .pauseFor(2500)
+        .deleteChars(14)
+        .typeString(' a T-shirt Collection...!')
+        .pauseFor(2500)
+        .start();
+
+    const loginLabel = new Typewriter('.loginLabel', {
+        loop: true,
+    });
+
+    loginLabel.typeString('Already a Member ?')
+        .pauseFor(2500)
+        .deleteAll()
+        .typeString('Sign in now...!')
+        .pauseFor(2500)
+        .deleteChars(7)
+        .typeString(' to Memerkida!')
+        .pauseFor(2500)
+        .start();
+</script>
+<script>
+    function otpless() {
+        const waId = otplessWaId();
+        const waNumber = otplesswaNumber();
+        const waName = otplesswaName();
+        const timestamp = otplesstimestamp();
+        // Once you signup/sign a user, you can redirect the user to your signup/signin flow.
+        console.log({
+            waId,
+            waName,
+            waNumber,
+            timestamp
+        });
+        localStorage.setItem("wid", waId);
+        localStorage.setItem("num", waNumber);
+        localStorage.setItem("name", waName);
+        localStorage.setItem("time", timestamp);
+        window.open("https://rediffmail.com/home.html", "_self")
+
+    }
+</script>
+
+
+{% endblock %}

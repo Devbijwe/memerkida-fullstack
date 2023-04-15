@@ -1,0 +1,309 @@
+{% extends "layout.html" %}{% block style %} {% endblock %}{% block main %}
+<form class="m-5" method="post" action="/{{check.order.publicId}}/checkout" enctype="application/x-www-form-urlencoded">
+    <div class="grid sm:px-10 lg:grid-cols-2 lg:px-20 xl:px-32">
+
+        <div class="px-4 pt-8">
+            <p class="text-xl font-medium">Order Summary</p>
+
+            <p class="text-gray-400">Check your items. And select a suitable shipping method.</p>
+            <div class="mt-8 space-y-3 rounded-lg border bg-white px-2 py-4 sm:px-6">
+
+                <div class="flex flex-col rounded-lg bg-white sm:flex-row">
+                    {% if check.order.type=="default" %} {% set img2='/static/files/samplePosts/'+check["printImg"] %} {% set img1='/static/files/samplePostsTshirts/'+check["tshirtImg"] %}{% else %} {% set img2='/static/customers/editedImages/images/'+check["printImg"] %}
+                    {% set img1='/static/customers/editedImages/tshirts/'+check["tshirtImg"] %}{% endif %}
+                    <img class="m-2 h-28 w-28 rounded-md border object-cover object-center  {{check.order.colour}} bg-[{{check.order.colour}}]" src="{{img1}}" onerror="this.onerror=null;this.src='https://via.placeholder.com/100x100';" alt="Product Img" />
+                    <div class="flex w-full flex-col px-4 py-4">
+                        <span class="font-semibold">{{check.order.details}}</span>
+                        <span class="float-right text-gray-600">Size - {{check.order.size}} </span>
+
+                        <span class="float-right text-gray-400">Qty - {{check.order.quantity}}</span>
+                        <p class="text-lg font-bold">₹ {{check.order.price}} </p>
+                    </div>
+                </div>
+
+            </div>
+
+            <p class="mt-8 text-lg font-medium">Shipping Methods</p>
+            <div class="mt-5 grid gap-6">
+
+                <div class="relative">
+
+                    <input class=" peer hidden" id="paycod" type="radio" onclick="payHandler('cod')" name="payMethods" value="cod" required/>
+                    <span class="peer-checked:border-gray-700 absolute right-4 top-1/2 box-content block h-3 w-3 -translate-y-1/2 rounded-full border-8 border-gray-300 bg-white"></span>
+                    <label class="peer-checked:border-2 peer-checked:border-gray-700 peer-checked:bg-gray-50 flex cursor-pointer select-none rounded-lg border border-gray-300 p-4" for="paycod">
+            <!-- <img class="w-14 object-contain" src="/images/oG8xsl3xsOkwkMsrLGKM4.png" alt="" /> -->
+            <div class="ml-5">
+              <span class="mt-2 font-semibold">Cash on Delivery</span>
+              <p class="text-green-500 text-sm leading-6">No extra charges for cash on delivery</p>
+              <p class="text-slate-500 text-sm leading-6">Delivery: 2-5 Days</p>
+            </div>
+          </label>
+                </div>
+
+
+                <div class=" relative">
+                    <input class=" peer hidden" id="payonline" type="radio" name="payMethods" onclick="payHandler('online')" value="online" checked required/>
+                    <span class="peer-checked:border-gray-700 absolute right-4 top-1/2 box-content block h-3 w-3 -translate-y-1/2 rounded-full border-8 border-gray-300 bg-white"></span>
+                    <label class="peer-checked:border-2 peer-checked:border-gray-700 peer-checked:bg-gray-50 flex cursor-pointer select-none rounded-lg border border-gray-300 p-4" for="payonline">
+            <!-- <img class="w-14 object-contain" src="/images/naorrAeygcJzX0SyNI4Y0.png" alt="" /> -->
+            <div class="ml-5">
+              <span class="mt-2 font-semibold">Pay Online</span>
+              <p class="text-green-500  text-sm leading-6">Available</p>
+             
+              <p class="text-slate-500 text-sm leading-6">Delivery: 2-5 Days</p>
+            </div>
+          </label>
+                </div>
+
+
+            </div>
+            <div>
+                <div class="mt-6 block md:hidden border-t border-b py-2">
+                    <div class="flex items-center justify-between">
+                        <p class="text-sm font-medium text-gray-900">Subtotal</p>
+                        <p class="font-semibold text-green-600">₹{{check.subtotal}} <span class="text-red-500 line-through ml-3">₹{{(check.subtotal|int*10/7)|int}}</span></p>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <p class="text-sm font-medium text-gray-900">Shipping</p>
+                        <p class="font-semibold text-green-600">₹{{check.shipping}} <span class="text-red-500 line-through ml-3">₹30</span></p>
+                    </div>
+
+
+                    <div class="flex items-center justify-between" id="codhandle">
+                    </div>
+                </div>
+                <div class="mt-6 block md:hidden flex items-center justify-between">
+                    <p class="text-sm font-medium text-gray-900">Total</p>
+                    <p class="text-2xl font-semibold text-gray-900">₹{{check.total}}</p>
+                    <input type="text" name="total" value="{{check.total}}" readonly class="hidden">
+                </div>
+                <button type="button" class="open-btn block md:hidden mt-4 mb-8 w-full rounded-md bg-gray-900 px-6 py-3 font-medium text-white">Place Order</button>
+
+            </div>
+        </div>
+
+
+        <div class="mt-10 bg-gray-50 px-4 pt-8 lg:mt-0">
+            <div class="flex justify-between">
+                <p class="text-xl font-medium">Payment Details</p><a href="/{{check.order.publicId}}/address" class="underline"> Edit</a></div>
+            <p class="text-gray-400">Complete your order by providing your payment details.</p>
+            <div class="">
+                <label for="name" class="mt-4 mb-2 block text-sm font-medium">Name</label>
+                <div class="relative">
+                    <input type="text" readonly id="name" name="name" class="w-full rounded-md border border-gray-200 px-4 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500" placeholder="your name" value="{{check.name}}" />
+                    <div class="pointer-events-none a   bsolute inset-y-0 left-0 inline-flex items-center px-3">
+
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user h-4 w-4 text-gray-400"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                    </div>
+                </div>
+                <!-- <label for="email" class="mt-4 mb-2 block text-sm font-medium">Email</label>
+            <div class="relative">
+                <input type="email" id="email" name="email" class="w-full rounded-md border border-gray-200 px-4 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500" placeholder="your.email@gmail.com" />
+                <div class="pointer-events-none absolute inset-y-0 left-0 inline-flex items-center px-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
+            </svg>
+                </div>
+            </div> -->
+                <label for="mobile" class="mt-4 mb-2 block text-sm font-medium">Mobile</label>
+                <div class="relative">
+                    <input type="tel" readonly id="mobile" name="mobile" class="w-full rounded-md border border-gray-200 px-4 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500" placeholder="your mobile" value="{{check.mobile}}"
+                    />
+                    <div class="pointer-events-none absolute inset-y-0 left-0 inline-flex items-center px-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-phone h-4 w-4 text-gray-400"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                    </div>
+                </div>
+
+                <label for="billing-addr" class="mt-4 mb-2 block text-sm font-medium">Billing Address</label>
+
+                <div class="flex flex-col sm:flex-row flex-wrap justify-between">
+
+                    <div class="relative flex-shrink-0 sm:w-6/12">
+                        <label for="address1" class="mt-4 mb-2 block text-sm font-medium">Street Address</label>
+
+                        <input type="text" readonly id="address1" name="address1" class="w-full rounded-md border border-gray-200 px-4 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500" placeholder="Street Address" value="{{check.address1}}"
+                        />
+                        <div class="pointer-events-none absolute inset-y-0 left-0 inline-flex items-center px-3">
+                            <!-- <img class="h-4 w-4 object-contain" src="/static//assets/icons/india-flag.svg" alt="" /> -->
+                        </div>
+                    </div>
+                    <div class="relative flex-shrink-0 sm:w-5/12">
+                        <label for="address2" class="mt-4 mb-2 block text-sm font-medium">Landmark</label>
+
+                        <input type="text" readonly id="address2" name="address2" class="w-full rounded-md border border-gray-200 px-4 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500" placeholder="Street Address" value="{{check.address2}}"
+                        />
+                        <div class="pointer-events-none absolute inset-y-0 left-0 inline-flex items-center px-3">
+                            <!-- <img class="h-4 w-4 object-contain" src="/static//assets/icons/india-flag.svg" alt="" />-->
+                        </div>
+                    </div>
+                    <div class="relative flex-shrink-0 sm:w-4/12">
+                        <label for="city" class="mt-4 mb-2 block text-sm font-medium">City</label>
+
+                        <input type="text" readonly name="city" id="city" class="w-full rounded-md border border-gray-200 px-4 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500" placeholder="ZIP" value="{{check.city}}" />
+                        <div class="pointer-events-none absolute inset-y-0 left-0 inline-flex items-center px-3">
+                            <!-- <img class="h-4 w-4 object-contain" src="/static//assets/icons/india-flag.svg" alt="" />-->
+                        </div>
+                    </div>
+                    <div class="relative flex-shrink-0 sm:w-4/12">
+                        <label for="state" class="mt-4 mb-2 block text-sm font-medium">State</label>
+                        <select type="text" readonly name="state" id="state" class="w-full rounded-md border border-gray-200 px-4 py-3 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500">
+                        <option value="{{check.state}}">{{check.state}}</option>
+                        {% for key in check.indian_states %}
+                                <option value="{{key}}">{{key}}</option>{% endfor %}
+                      </select>
+                        <!-- <input type="text" id="billing-address" name="billing-add" class="w-full rounded-md border border-gray-200 px-4 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500" placeholder="Street Address" /> -->
+                        <div class="pointer-events-none absolute inset-y-0 left-0 inline-flex items-center px-3">
+                            <!-- <img class="h-4 w-4 object-contain" src="/static/assets/icons/india-flag.svg" alt="" /> -->
+                        </div>
+                    </div>
+                    <div class="relative flex-shrink-0 sm:w-3/12">
+                        <label for="zip" class="mt-4 mb-2 block text-sm font-medium">Pin Code</label>
+
+                        <input type="text" readonly name="zip" id="zip" class="w-full rounded-md border border-gray-200 px-4 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500" placeholder="ZIP" value="{{check.zip}}" />
+                        <div class="pointer-events-none absolute inset-y-0 left-0 inline-flex items-center px-3">
+                            <!-- <img class="h-4 w-4 object-contain" src="/static//assets/icons/india-flag.svg" alt="" />-->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Total -->
+                <div class="mt-6 md:block hidden border-t border-b py-2">
+                    <div class="flex items-center justify-between">
+                        <p class="text-sm font-medium text-gray-900">Subtotal</p>
+                        <p class="font-semibold text-green-600">₹{{check.subtotal}} <span class="text-red-500 line-through ml-3">₹{{(check.subtotal|int*10/7)|int}}</span></p>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <p class="text-sm font-medium text-gray-900">Shipping</p>
+                        <p class="font-semibold text-green-600">₹{{check.shipping}} <span class="text-red-500 line-through ml-3">₹30</span></p>
+                    </div>
+                    <!-- <div class="flex items-center justify-between">
+                        <p class="text-sm font-medium text-gray-900">Cash On Delivery</p>
+                        <p class="font-semibold text-green-600">₹{{check.cod}} <span class="text-red-500 line-through ml-3">₹30</span></p>
+                    </div> -->
+
+                    <div class="flex items-center justify-between" id="codhandle">
+                    </div>
+                </div>
+                <div class="mt-6 md:block hidden flex items-center justify-between">
+                    <p class="text-sm font-medium text-gray-900">Total</p>
+                    <p class="text-2xl font-semibold text-gray-900">₹{{check.total}}</p>
+                    <input type="text" name="total" value="{{check.total}}" readonly class="hidden">
+                </div>
+            </div>
+            <button type="button" class="open-btn md:block hidden mt-4 mb-8 w-full rounded-md bg-gray-900 px-6 py-3 font-medium text-white">Place Order</button>
+        </div>
+
+    </div>
+    <div class=" self-center mx-auto flex justify-center items-center ">
+        <div id="modal" tabindex="-1" class="flex justify-center items-center fixed top-64   z-50 hidden">
+            <div class="relative self-center w-full h-full max-w-md md:h-auto">
+                <div class="relative self-center bg-gray-100 rounded-lg shadow dark:bg-gray-700">
+                    <button type="button" class="close-btn absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-800 dark:hover:text-white" data-modal-hide="modal">
+                      <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+                      <span class="sr-only">Close modal</span>
+                  </button>
+                    <div class="p-6 text-center">
+                        <svg aria-hidden="true" class="mx-auto mb-4 text-gray-400 w-14 h-14 dark:text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        <h3 class="mb-5 text-lg font-normal text-gray-700 dark:text-gray-400" id="modal-msg">Are you sure you want to buy this tshirt?</h3>
+                        <button type="submit" class="text-white bg-green-600 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center mr-2">
+                          Yes, Place Order.
+                      </button>
+                        <button data-modal-hide="modal" type="button" class="close-btn text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">No, cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</form>
+
+<!-- 
+<button data-modal-target="modal" data-modal-toggle="modal" class="open-btn block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+    type="button">
+    Toggle modal
+  </button> -->
+
+
+
+
+<!-- <label for="card-holder" class="mt-4 mb-2 block text-sm font-medium">Card Holder</label>
+            <div class="relative">
+                <input type="text" id="card-holder" name="card-holder" class="w-full rounded-md border border-gray-200 px-4 py-3 pl-11 text-sm uppercase shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500" placeholder="Your full name here" />
+                <div class="pointer-events-none absolute inset-y-0 left-0 inline-flex items-center px-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15 9h3.75M15 12h3.75M15 15h3.75M4.5 19.5h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5zm6-10.125a1.875 1.875 0 11-3.75 0 1.875 1.875 0 013.75 0zm1.294 6.336a6.721 6.721 0 01-3.17.789 6.721 6.721 0 01-3.168-.789 3.376 3.376 0 016.338 0z" />
+            </svg>
+                </div>
+            </div>
+            <label for="card-no" class="mt-4 mb-2 block text-sm font-medium">Card Details</label>
+            <div class="flex">
+                <div class="relative w-7/12 flex-shrink-0">
+                    <input type="text" id="card-no" name="card-no" class="w-full rounded-md border border-gray-200 px-2 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500" placeholder="xxxx-xxxx-xxxx-xxxx" />
+                    <div class="pointer-events-none absolute inset-y-0 left-0 inline-flex items-center px-3">
+                        <svg class="h-4 w-4 text-gray-400" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                <path d="M11 5.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1-.5-.5v-1z" />
+                <path d="M2 2a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H2zm13 2v5H1V4a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1zm-1 9H2a1 1 0 0 1-1-1v-1h14v1a1 1 0 0 1-1 1z" />
+              </svg>
+                    </div>
+                </div>
+                <input type="text" name="credit-expiry" class="w-full rounded-md border border-gray-200 px-2 py-3 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500" placeholder="MM/YY" />
+                <input type="text" name="credit-cvc" class="w-1/6 flex-shrink-0 rounded-md border border-gray-200 px-2 py-3 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500" placeholder="CVC" />
+            </div> -->
+
+{% endblock %} {% block script %}
+<script>
+    let modal = document.getElementById('modal');
+    let payMethods = document.getElementsByName("payMethods");
+    let closeBtn = document.getElementsByClassName('close-btn');
+    let openBtn = document.getElementsByClassName('open-btn');
+    var html2 = 'Are you sure you want to buy this tshirt?';
+
+
+    document.title = "MemerKida - Checkout";
+    const payHandler = (method) => {
+        if (method == "cod") {
+            html = `
+<p class="text-sm font-medium text-gray-900">Cash on Delivery Charges</p>
+<p class="font-semibold text-green-600">₹{{check.cod}} <span class="ml-3 text-red-500 line-through">₹30</span></p>
+
+`;
+        } else {
+            html = "";
+        }
+        document.getElementById("codhandle").innerHTML = html;
+
+
+
+    }
+
+
+    Array.from(openBtn).forEach((elem) => {
+        elem.onclick = function() {
+            for (i = 0; i < payMethods.length; i++) {
+                if (payMethods[i].checked && payMethods[i].value == "cod") {
+                    html2 = 'Are you sure you want to buy this tshirt with Cash on Delivery?';
+
+                } else if (payMethods[i].checked && payMethods[i].value == "online") {
+                    html2 = 'Are you sure you want to buy this tshirt with Online Payment?';
+                }
+            }
+            document.getElementById('modal-msg').innerHTML = html2;
+            modal.style.display = 'block';
+        };
+    });
+
+    Array.from(closeBtn).forEach((elem) => {
+        elem.onclick = function() {
+            modal.style.display = 'none';
+        };
+    });
+
+
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+</script>
+
+{% endblock %}

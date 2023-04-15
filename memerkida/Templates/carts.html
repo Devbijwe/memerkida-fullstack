@@ -1,0 +1,95 @@
+{% extends "layout.html" %}{% block style %}{% endblock %}{% block main %}
+
+<!-- Cart Component -->
+<div class="flex items-center justify-between p-6 bg-indigo-500 text-white shadow-md">
+    <div class="text-xl font-medium">Cart</div>
+    <div class="flex items-center">
+        <div class="text-xl">
+            <span class="font-medium">{{carts|length}}</span> Items
+        </div>
+        <div class="ml-3">
+            <button class="btn bg-white text-indigo-500 px-6 py-2 rounded-full shadow-lg">Checkout</button>
+        </div>
+    </div>
+</div>
+
+<!-- Cart Item Component -->
+<div class="min-h-[90vh]">
+    {% if carts %} {% for key in carts %}
+
+    <div class="flex text-sm sm:flex-row items-center p-6 text-center border-b border-gray-300">
+        <div class="w-32 h-32 sm:w-48 sm:h-48">
+            {% if key.type=="customize" %} {% set img=url_for('static',filename='customers/editedImages/images/'+key.printImg )%} {% set tshirt=url_for('static',filename='customers/editedImages/tshirts/'+key.tshirtImg) %} {% elif key.type=="default" %} {% set img=url_for('static',filename='files/samplePosts/'+key.printImg)
+            %} {% set tshirt=url_for('static',filename='files//samplePostsTshirts/'+key.tshirtImg) %}{% endif %}
+            <img class="w-full h-full {{key.colour}} bg-[{{key.colour}}]" src="{{tshirt}}" alt="Image" onmouseover="this.src='{{img}}';" onmouseout="this.src='{{tshirt}}';" onerror="this.onerror=null;this.src='https://via.placeholder.com/100x100';">
+
+        </div>
+        <div class="ml-4 sm:ml-6 md:mx-auto">
+            <!-- <div class="md:text-xl  font-medium">{{key.details}}</div> -->
+            <label for="">Price</label>
+            <div id="Price{{key.publicId}}" class="md:text-lg font-medium text-indigo-500">&#8377;{{key.price}}</div>
+            <p class="hidden" id="PriceDefine{{key.publicId}}">{{key.price}}</p>
+        </div>
+        <!-- <div class="ml-4 sm:ml-6 md:mx-auto">
+            <label for="">Colour</label>
+            <div class="md:text-xl font-medium " style="color:{{key.colour}}">{{key.colour}}</div>
+        </div> -->
+        <div class="ml-4 sm:ml-6 md:mx-auto">
+            <label for="">Size</label>
+            <div class="md:text-xl font-medium">{{key.size}}</div>
+        </div>
+        <div class="mx-auto  ">
+            <label for="" class="md:mb-5">Quantity</label>
+            <div class="flex flex-row">
+                <button id="{{key.publicId}}" onclick="qunatityUpdate(this.id,'minus')" class="btn text-red-500 px-2 py-1 rounded-full">-</button>
+                <input type="text" id="Quant{{key.publicId}}" disabled value="{{key.quantity}}" class="text-center w-12 border px-2 py-1 rounded-full">
+                <button id="{{key.publicId}}" onclick="qunatityUpdate(this.id,'plus')" class="btn text-green-500 px-2 py-1 rounded-full">+</button>
+            </div>
+        </div>
+        <div class="ml-auto">
+            <a href="/{{key.publicId}}=t/{{key.printId}}=p/{{key.type}}/cart/order">
+                <button class="btn text-green-500 px-2 py-1 rounded-full">Buy Now</button>
+            </a>
+            <a href="#" id="{{key.publicId}}" onclick="removeCart(this.id)">
+                <button class="btn text-red-500 px-2 py-1 rounded-full">Remove</button>
+            </a>
+        </div>
+    </div>
+    {% endfor %}{% else %}
+    <h1 class="my-32" style="text-align:center ;font-size:xx-large;">No Item was Added...</h1> {% endif %}</div>
+<p class="hidden" id="custId">{{data.publicId}}</p>
+
+<script>
+    function removeCart(cartId) {
+        console.log(cartId);
+        fetch(`/cart/remove/${document.getElementById("custId").innerText}/${cartId}`)
+
+        .then((response) => response.json())
+            .then((data) => {
+                //console.log(data);
+                if (data["code"] == 200) {
+                    location.reload();
+                }
+            });
+
+
+    }
+</script>
+<script>
+    const qunatityUpdate = (cartId, plusminus) => {
+        publicId = document.getElementById("custId").innerText;
+        fetch(`/cart/quantity/edit/${cartId}/${plusminus}/${publicId}`)
+            .then((response) => response.json())
+            .then((data) => {
+                if (data["code"] == 200) {
+                    let quantDisp = document.getElementById(`Quant${cartId}`);
+                    let priceDisp = document.getElementById(`Price${cartId}`);
+                    let PriceDefine = document.getElementById(`PriceDefine${cartId}`);
+                    priceDisp.innerHTML = "&#8377;" + data["price"]
+                    quantDisp.value = data["quantity"];
+                };
+            });
+    }
+</script>
+
+{% endblock %}
