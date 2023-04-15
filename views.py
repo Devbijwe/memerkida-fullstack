@@ -1,51 +1,41 @@
 
-from ast import Pass
+
 import io
-from optparse import Option
-import time
+
+
 import pandas as pd
-import pyqrcode
-import png
-import tempfile
-# from captcha.image import ImageCaptcha
+
+
 from PIL import Image
-from itertools import product
+
 import os
-from tokenize import String
+
 from werkzeug.utils import secure_filename
 import random
 import math
-import secrets
-import string
-import docx
-from io import BytesIO
-from docx2pdf import convert
+
+
+
 import json
 from sqlite3 import IntegrityError
 from sqlalchemy.exc import IntegrityError 
 from flask import Flask, make_response,render_template,abort,session,redirect,send_file, request,flash,jsonify,Response,url_for
 from jinja2 import Template
 from datetime import datetime
-from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import inspect
+
 import uuid
 from flask_mail import Mail
-import cv2
-from sqlalchemy.orm import load_only
-from PIL import ImageEnhance,Image,ImageFilter
-import base64
+
+from PIL import Image
+
 from docxtpl import DocxTemplate
 import re
-import xlwt
+
 
 import requests
 import xml.etree.ElementTree as ET
-import xmltodict
-from __init__ import app,db
 
 
-from payments.ccavutil import encrypt,decrypt
-from payments.ccavResponseHandler import res
 from string import Template
 
 # google login
@@ -55,18 +45,23 @@ from google.oauth2 import id_token
 from google_auth_oauthlib.flow import Flow
 from pip._vendor import cachecontrol
 import google.auth.transport.requests
-from models import *
-import json
-with open("config.json","r") as c:
+
+
+from .__init__ import app,db
+from .payments.ccavutil import encrypt,decrypt
+from .payments.ccavResponseHandler import res
+from .models import *
+
+with open("/var/www/MemerKida/MemerKida/config.json","r") as c:
     params=json.load(c)['params']
-with open("config.json","r") as d:
+with open("/var/www/MemerKida/MemerKida/config.json","r") as d:
     directories=json.load(d)['directories']
-with open("config.json","r") as e:
+with open("/var/www/MemerKida/MemerKida/config.json","r") as e:
     ecxp=json.load(e)['EcomExpress']
-with open("config.json","r") as p:
+with open("/var/www/MemerKida/MemerKida/config.json","r") as p:
     paygate=json.load(p)['paymentGateway']
 
-
+# ****************************************google Login*****************************************    
 os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
 
 GOOGLE_CLIENT_ID = "423572210681-ig2sv7oikb9e03b4flq4k553d5ftj9bk.apps.googleusercontent.com"
@@ -75,7 +70,7 @@ client_secrets_file = os.path.join(pathlib.Path(__file__).parent, "client_secret
 flow = Flow.from_client_secrets_file(
     client_secrets_file=client_secrets_file,
     scopes=["https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email", "openid"],
-    redirect_uri="http://127.0.0.1:2000/callback"
+    redirect_uri="http://memerkida.com/callback"
 )
 def login_is_required(function):
     def wrapper(*args, **kwargs):
@@ -83,7 +78,6 @@ def login_is_required(function):
             return abort(401)  # Authorization required
         else:
             return function()
-
     return wrapper
 
 @app.route("/login/auth/google")
@@ -956,7 +950,7 @@ def handlePayReq(orderId):
         p_merchant_param3 = "9370899965"
         
         p_customer_identifier = data.publicId
-        print(p_merchant_id,accessCode,workingKey)
+        print("merchant",p_merchant_id,accessCode,workingKey)
         
 
         merchant_data='merchant_id='+p_merchant_id+'&'+'order_id='+p_order_id + '&' + "currency=" + p_currency + '&' + 'amount=' + p_amount+'&'+'redirect_url='+p_redirect_url+'&'+'cancel_url='+p_cancel_url+'&'+'language='+p_language+'&'+'billing_name='+p_billing_name+'&'+'billing_address='+p_billing_address+'&'+'billing_city='+p_billing_city+'&'+'billing_state='+p_billing_state+'&'+'billing_zip='+p_billing_zip+'&'+'billing_country='+p_billing_country+'&'+'billing_tel='+p_billing_tel+'&'+'billing_email'+P_billing_email+'&'+'merchant_param1='+p_merchant_param1+'&'+'merchant_param2='+p_merchant_param2+'&'+'merchant_param3='+p_merchant_param3+'&'+'customer_identifier='+p_customer_identifier+'&'
