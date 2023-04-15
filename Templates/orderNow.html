@@ -551,24 +551,27 @@
                     html += `
             <div class="group relative md:py-16">
                
-                <div class="relative h-full w-full overflow-hidden rounded-lg bg-white group-hover:opacity-75 sm:aspect-w-2 sm:aspect-h-1  lg:aspect-w-1 lg:aspect-h-1">
-                    <a href="/customize/default=ty/${data["response"][key]["publicId"]}=car" > <img src="/static/files/samplePostsTshirts/${data["response"][key]["lightTshirt"]}" onmouseover="this.src='/static/files/samplePosts/${data["response"][key]["lightTemplate"]}';" onmouseout="this.src='/static/files/samplePostsTshirts/${data["response"][key]["lightTshirt"]}';" onerror="this.onerror=null;this.src='https://via.placeholder.com/100x100';" alt="Desk with leather desk pad, walnut desk organizer, wireless keyboard and mouse, and porcelain mug." class="h-full w-full object-cover object-center ${data["response"][key]["lightBG"]} bg-[${data["response"][key]["lightBG"]}]">
+                <div class="relative h-full w-full overflow-hidden rounded-lg bg-white group-hover:opacity-75 sm:aspect-w-2 sm:aspect-h-1  lg:aspect-w-1 lg:aspect-h-1 ">
+                    <a href="/customize/default=ty/${data["response"][key]["publicId"]}=car" > <img src="/static/files/samplePostsTshirts/${data["response"][key]["lightTshirt"]}" 
+                   
+                        onerror="this.onerror=null;this.src='https://via.placeholder.com/100x100';" 
+                        alt="Similar Templates" class="h-full w-full object-cover object-center ${data["response"][key]["lightBG"]} bg-[${data["response"][key]["lightBG"]}]">
                     </a> </div>
                 <div class="flex justify-around">  
                     <div>
                         <h3 class="mt-6 text-sm text-gray-500 >
                   
-                        <a href="#">
-                            <span class="absolute inset-0"></span>Price
-                        </a>
+                            <a href='/customize/default=ty/${data["response"][key]["publicId"]}=car' >
+                                <span class="absolute inset-0"></span></a>Price
+                      
                         </h3>
                         <p class="text-base font-semibold text-green-600">  ₹ ${data["response"][key]["price"]}</p>
                     </div>
                 <div>
                     <h3 class="mt-6 text-sm text-gray-500 >
-                    <a href="#">
-                        <span class="absolute inset-0"></span> Category 
-                    </a>
+                  <a href='/customize/default=ty/${data["response"][key]["publicId"]}=car' >
+                        <span class="absolute inset-0"></span></a> Category 
+                    
                     </h3>
                     <p class="text-base font-semibold text-gray-900">   ${data["response"][key]["category"]}</p>
                 </div>
@@ -577,6 +580,8 @@
 
             
             `;
+                    /* onmouseover="this.src='/static/files/samplePosts/${data["response"][key]["lightTemplate"]}';" 
+                               onmouseout="this.src='/static/files/samplePostsTshirts/${data["response"][key]["lightTshirt"]}';"  */
                 }
             };
             html += `   </div>`;
