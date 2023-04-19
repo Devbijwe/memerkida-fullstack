@@ -27,5 +27,5 @@ with app.app_context():
     
 from .views import *
 
-# if __name__=='__main__':
-#     app.run(debug=True,port=2000)
+if __name__=='__main__':
+    app.run(debug=True,port=5000)

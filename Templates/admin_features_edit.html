@@ -1,0 +1,104 @@
+{% extends "admin.html" %} {% block main %}
+
+
+<script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+<script src="https://cdn.rawgit.com/jackmoore/colorbox/master/jquery.colorbox-min.js"></script>
+
+
+
+<div class="container overflow-y-scroll bg-gray-100">
+    <div class="container my-5" style="width: 70%;">
+        <form class="row g-3" id="formid" method="post" action="/admin/features/edit/{{id}}" enctype="multipart/form-data">
+            <div class="mb-2">
+                <label for="feature_name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Feature</label>
+                <input type="text" value="{{ feature.feature_name if feature.feature_name  else '' }}" id="feature_name" name="feature_name" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
+                    placeholder="Feature Name" required>
+            </div>
+            <div class="mb-2">
+                <label for="type" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Type</label>
+                <select id="type" name="type" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <option value="text" selected>text</option>
+                    <option value="file" >file</option>
+</select>
+            </div>
+            <div class="mb-2">
+                <label for="value" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Value</label>
+                <input type="text" id="value" value="{{ feature.value if feature.value  else '' }}" accept="image/*" name="value" placeholder="You can add upto 300 words" maxlength="300" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light">
+            </div>
+            <div class="mb-2" id="previewHolder">
+                <label for="preview" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Preview</label>
+
+                <img id="preview" class="mx-auto" width="200" height="200" alt="your image" />
+            </div>
+
+
+
+            <div class="mb-2">
+                <label for="status" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Status</label>
+                <select id="status" name="status" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    required>
+                    {%  if feature.status  %}
+                    <option value="{{feature.status}}">{{feature.status}}</option> {% endif %}
+
+                    <option value="True">True</option>
+                    <option value="False">False</option>
+</select>
+            </div>
+
+            <div class="flex items-start mb-2">
+                <div class="flex items-center h-5">
+                    <input id="terms" type="checkbox" value="" class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800"
+                        required>
+                </div>
+                <label for="terms" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Check this out</label>
+                <!-- <label for="terms" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">I agree with the <a href="#" class="text-blue-600 hover:underline dark:text-blue-500">terms and conditions</a></label> -->
+            </div>
+            <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Submit</button>
+            <!-- </form> -->
+
+
+        </form>
+
+    </div>
+
+
+
+</div>
+
+<script>
+    $(document).ready(function() {
+        $('#previewHolder').hide();
+        $('#type').change(function() {
+            if ($(this).val() == 'file') {
+                $('#value').attr('type', 'file');
+                $('#value').change(function() {
+                    $('#previewHolder').show();
+                    var file = $('#value')[0].files[0];
+                    var reader = new FileReader();
+                    reader.onload = function(e) {
+                        $('#preview').attr('src', e.target.result);
+                    }
+                    reader.readAsDataURL(file);
+                });
+            } else {
+                $('#previewHolder').hide();
+                $('#value').attr('type', 'text');
+            }
+        });
+    });
+
+    document.getElementById("add-product").classList.remove("hidden");
+    document.getElementById("add-product").innerHTML = `  <button class="app-content-headerButton">Reload</button>`;
+    document.getElementById("add-product").setAttribute("href", ``)
+</script>
+
+
+
+
+
+
+{% endblock %}{% block script %}
+<script>
+    document.getElementById("features").classList.add("active");
+    document.getElementById("headerTxt").innerHTML = `Features`;
+</script>{% endblock %}

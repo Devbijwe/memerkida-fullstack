@@ -9,6 +9,7 @@ import pandas as pd
 from PIL import Image
 
 import os
+from sqlalchemy import func, text
 
 from werkzeug.utils import secure_filename
 import random
@@ -1242,21 +1243,26 @@ def chatsByAdmin(userId):
         
     
 # admin shows inbox  
-@app.route("/admin/inbox",methods=['GET','POST'])   
+@app.route("/admin/inbox", methods=['GET'])
 def admin_inbox():
-    Arr=[]
-    custId=Chats.query.group_by(Chats.custId).all()
-    for item in custId:
-        chats = Chats.query.filter_by(custId=item.custId).order_by(Chats.date.desc()).all()
-        user=Customers.query.filter_by(publicId=item.custId).first()
-        Arr.append({
-            "chats":chats,
-            "name":user.name,
-            "userId":user.publicId})
-        # print(chats.msg)
-    # for key in chats:
-    #     print(key.msg)
-    return render_template("admin_inbox.html",chats=Arr)
+    chats = db.session.query(
+    Chats,
+    func.max(Chats.date).label('max_date')
+    ).group_by(Chats.custId).join(Customers).order_by(text('max_date DESC')).all()
+
+    chat_dict = {}
+    for chat, max_date in chats:
+        if chat.custId in chat_dict:
+            chat_dict[chat.custId]['chats'].append(chat)
+        else:
+            chat_dict[chat.custId] = {
+                'chats': [chat],
+                'name': chat.customer.name,
+                'userId': chat.custId
+            }
+
+    chat_list = sorted(chat_dict.values(), key=lambda x: x['chats'][0].date, reverse=True)
+    return render_template("admin_inbox.html", chats=chat_list)
 
 
 # admin tshirt modifier
@@ -1476,7 +1482,55 @@ def admin_orders():
     return render_template("admin_orders.html")
 
 
+# admin shows features  
+@app.route("/admin/features")   
+def admin_features():
+    if "admin" in session:
+        features=Customize.query.all()
+        return render_template("admin_features.html",features=features
+                               )
+# admin edits features  
+@app.route("/admin/features/edit/<string:id>",methods=['GET','POST'])   
+def admin_features_edit(id):
+    if "admin" in session:
+        if request.method=="POST":
+            feature_name=request.form.get("feature_name")
+            status=request.form.get("status")
+            publicId = uuid.uuid4().hex 
+            try:
+                value=request.files["value"]
+                app.config['UPLOAD_FOLDER']= os.path.abspath("../"+params['customizeUpload'])
+                if id==0:
+                    imgName=feature_name+str(publicId)+value.filename
+                else:
+                    imgName=feature_name+str(id)+value.filename
+                    
+                value.save(os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(imgName)))
+                value=secure_filename(imgName)
+            except:
+                value=request.form.get("value")
+                
+                
+                   
+            if id=="0":
+                
+                cred=Customize(publicId=publicId,feature_name=feature_name,value=value,status=status)
+                db.session.add(cred)
+            else:
+                feature=Customize.query.filter_by(publicId=id).first()
+                feature.feature_name=feature_name
+                feature.value=value
+                feature.status=status
+            db.session.commit()
+        if id=="0":
+            feature =None
+        else:
+            feature=Customize.query.filter_by(publicId=id).first()
+              
+        return render_template("admin_features_edit.html",
+                               feature=feature,id=id)
     
+     
         
     
 
@@ -1856,9 +1910,24 @@ def downInvoice(publicId,orderId):
             
         genInvoice(publicId,orderId)
         return redirect("/download/invoice/%s/%s"%(publicId,orderId))
-
 @app.context_processor
 def inject_user():
+    data=None
+    orderFlag=False
+    customize=Customize.query.all()
+    if 'user' in session:
+        data=Customers.query.filter_by(publicId=session['user']).first()
+        order=Orders.query.filter_by(custId=session['user']).all()
+        
+        for key in order:
+            if key.paymentId==None:
+                orderFlag=True
+                break
+            
+        # print(orderFlag)
+    elif 'admin' in session:
+        data=Admin.query.filter_by(email=session['admin']).first()
+    return dict(params=params,data=data,orderFlag=orderFlag,customize=customize)  
     data=None
     orderFlag=False
     if 'user' in session:
