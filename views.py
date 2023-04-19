@@ -969,7 +969,7 @@ def handlePayReq(orderId):
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
     </head>
     <body>
-    <form id="nonseamless" method="post" name="redirect" action="https://test.ccavenue.com/transaction/transaction.do?command=initiateTransaction" > 
+    <form id="nonseamless" method="post" name="redirect" action="https://secure.ccavenue.com/transaction/transaction.do?command=initiateTransaction" > 
             <input type="hidden" id="encRequest" name="encRequest" value=$encReq>
             <input type="hidden" name="access_code" id="access_code" value=$xscode>
             <script language='javascript'>document.redirect.submit();</script>
@@ -1245,24 +1245,37 @@ def chatsByAdmin(userId):
 # admin shows inbox  
 @app.route("/admin/inbox", methods=['GET'])
 def admin_inbox():
-    chats = db.session.query(
-    Chats,
-    func.max(Chats.date).label('max_date')
-    ).group_by(Chats.custId).join(Customers).order_by(text('max_date DESC')).all()
+    if "admin" in session:
+        chats = db.session.query(
+            Chats.id.label('chats_id'),
+            Chats.custId.label('chats_custId'),
+            Chats.sender.label('chats_sender'),
+            Chats.receiver.label('chats_receiver'),
+            Chats.msg.label('chats_msg'),
+            Chats.date.label('chats_date'),
+            func.max(Chats.date).label('max_date')
+        ).group_by(
+            Chats.id,
+            Chats.custId,
+            Chats.sender,
+            Chats.receiver,
+            Chats.msg,
+            Chats.date
+        ).join(Customers).order_by(text('max_date DESC')).all()
 
-    chat_dict = {}
-    for chat, max_date in chats:
-        if chat.custId in chat_dict:
-            chat_dict[chat.custId]['chats'].append(chat)
-        else:
-            chat_dict[chat.custId] = {
-                'chats': [chat],
-                'name': chat.customer.name,
-                'userId': chat.custId
-            }
+        chat_dict = {}
+        for chat, max_date in chats:
+            if chat.custId in chat_dict:
+                chat_dict[chat.custId]['chats'].append(chat)
+            else:
+                chat_dict[chat.custId] = {
+                    'chats': [chat],
+                    'name': chat.customer.name,
+                    'userId': chat.custId
+                }
 
-    chat_list = sorted(chat_dict.values(), key=lambda x: x['chats'][0].date, reverse=True)
-    return render_template("admin_inbox.html", chats=chat_list)
+        chat_list = sorted(chat_dict.values(), key=lambda x: x['chats'][0].date, reverse=True)
+        return render_template("admin_inbox.html", chats=chat_list)
 
 
 # admin tshirt modifier
@@ -1928,17 +1941,4 @@ def inject_user():
     elif 'admin' in session:
         data=Admin.query.filter_by(email=session['admin']).first()
     return dict(params=params,data=data,orderFlag=orderFlag,customize=customize)  
-    data=None
-    orderFlag=False
-    if 'user' in session:
-        data=Customers.query.filter_by(publicId=session['user']).first()
-        order=Orders.query.filter_by(custId=session['user']).all()
-        for key in order:
-            if key.paymentId==None:
-                orderFlag=True
-                break
-            
-        # print(orderFlag)
-    elif 'admin' in session:
-        data=Admin.query.filter_by(email=session['admin']).first()
-    return dict(params=params,data=data,orderFlag=orderFlag)  
+    
