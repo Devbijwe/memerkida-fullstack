@@ -1,51 +1,41 @@
 
-from ast import Pass
+
 import io
-from optparse import Option
-import time
+
+
 import pandas as pd
-import pyqrcode
-import png
-import tempfile
-# from captcha.image import ImageCaptcha
+
+
 from PIL import Image
-from itertools import product
+
 import os
-from tokenize import String
+
 from werkzeug.utils import secure_filename
 import random
 import math
-import secrets
-import string
-import docx
-from io import BytesIO
-from docx2pdf import convert
+
+
+
 import json
 from sqlite3 import IntegrityError
 from sqlalchemy.exc import IntegrityError 
 from flask import Flask, make_response,render_template,abort,session,redirect,send_file, request,flash,jsonify,Response,url_for
 from jinja2 import Template
 from datetime import datetime
-from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import inspect
+
 import uuid
 from flask_mail import Mail
-import cv2
-from sqlalchemy.orm import load_only
-from PIL import ImageEnhance,Image,ImageFilter
-import base64
+
+from PIL import Image
+
 from docxtpl import DocxTemplate
 import re
-import xlwt
+
 
 import requests
 import xml.etree.ElementTree as ET
-import xmltodict
-from __init__ import app,db
 
 
-from payments.ccavutil import encrypt,decrypt
-from payments.ccavResponseHandler import res
 from string import Template
 
 # google login
@@ -55,18 +45,23 @@ from google.oauth2 import id_token
 from google_auth_oauthlib.flow import Flow
 from pip._vendor import cachecontrol
 import google.auth.transport.requests
-from models import *
-import json
-with open("config.json","r") as c:
+
+
+from .__init__ import app,db
+from .payments.ccavutil import encrypt,decrypt
+from .payments.ccavResponseHandler import res
+from .models import *
+
+with open("/var/www/MemerKida/MemerKida/config.json","r") as c:
     params=json.load(c)['params']
-with open("config.json","r") as d:
+with open("/var/www/MemerKida/MemerKida/config.json","r") as d:
     directories=json.load(d)['directories']
-with open("config.json","r") as e:
+with open("/var/www/MemerKida/MemerKida/config.json","r") as e:
     ecxp=json.load(e)['EcomExpress']
-with open("config.json","r") as p:
+with open("/var/www/MemerKida/MemerKida/config.json","r") as p:
     paygate=json.load(p)['paymentGateway']
 
-
+# ****************************************google Login*****************************************    
 os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
 
 GOOGLE_CLIENT_ID = "423572210681-ig2sv7oikb9e03b4flq4k553d5ftj9bk.apps.googleusercontent.com"
@@ -75,7 +70,7 @@ client_secrets_file = os.path.join(pathlib.Path(__file__).parent, "client_secret
 flow = Flow.from_client_secrets_file(
     client_secrets_file=client_secrets_file,
     scopes=["https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email", "openid"],
-    redirect_uri="http://127.0.0.1:2000/callback"
+    redirect_uri="http://memerkida.com/callback"
 )
 def login_is_required(function):
     def wrapper(*args, **kwargs):
@@ -83,7 +78,6 @@ def login_is_required(function):
             return abort(401)  # Authorization required
         else:
             return function()
-
     return wrapper
 
 @app.route("/login/auth/google")
@@ -134,9 +128,12 @@ def callback():
             return redirect("/google/auth") 
         except:
             flash("Some error occured please reload page")
+            return redirect("/login/auth")
    
-        
+    
     session["user"]=data.publicId
+    
+        
     # flash("Account already exists")
     return redirect("/login/auth")
     # except:
@@ -170,6 +167,7 @@ def login(mainstr):
         name=request.form.get("name")
         user=Customers.query.filter_by(mobile=mobile).first()
         loggedFrom="whatsapp"
+        print("whatsapp")
         if user:
             session['user']=user.publicId
             return {
@@ -265,7 +263,6 @@ def logout():
 #home page
 @app.route("/",methods=['GET'])   
 def home():
-    session.permanent = True 
     # for key in directories:
     #     print(directories.get(key))
     carousel=Templates.query.filter_by(carousel=True).all()
@@ -355,12 +352,12 @@ def saveImg(sortStr):
             uploads=Edituploads.query.filter_by(custId=session['user']).all()
        
             if printImg and tshirtImg:
-                app.config['UPLOAD_FOLDER']= os.path.abspath("../"+params['editImagesUpload'])
+                app.config['UPLOAD_FOLDER']= os.path.abspath(params['base_url']+params['editImagesUpload'])
                 printImg = Image.open(printImg.stream)
                 printImgName="cust"+str(data.publicId)+"No"+str(len(uploads))+"Images.png" 
                 printImg.save(os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(printImgName) ))   
                 printImg=secure_filename(printImgName) 
-                app.config['UPLOAD_FOLDER']= os.path.abspath("../"+params['editTshirtUpload'])
+                app.config['UPLOAD_FOLDER']= os.path.abspath(params['base_url']+params['editTshirtUpload'])
                 tshirtImg= Image.open(tshirtImg.stream)
                 tshirtImgName="cust"+str(data.publicId)+"No"+str(len(uploads))+"Tshirt.png"
                 tshirtImg.save(os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(tshirtImgName) )) 
@@ -788,7 +785,6 @@ def order_success(orderId):
             #     db.session.add(cred)
             #     db.session.commit()
             return plainText
-            
     
         if user:
             ord=Orders.query.filter_by(custId=user.publicId,publicId=orderId).first()
@@ -958,11 +954,11 @@ def handlePayReq(orderId):
         p_merchant_param3 = "9370899965"
         
         p_customer_identifier = data.publicId
-        print(p_merchant_id,accessCode,workingKey)
+        # print("merchant",p_merchant_id,accessCode,workingKey)
         
 
         merchant_data='merchant_id='+p_merchant_id+'&'+'order_id='+p_order_id + '&' + "currency=" + p_currency + '&' + 'amount=' + p_amount+'&'+'redirect_url='+p_redirect_url+'&'+'cancel_url='+p_cancel_url+'&'+'language='+p_language+'&'+'billing_name='+p_billing_name+'&'+'billing_address='+p_billing_address+'&'+'billing_city='+p_billing_city+'&'+'billing_state='+p_billing_state+'&'+'billing_zip='+p_billing_zip+'&'+'billing_country='+p_billing_country+'&'+'billing_tel='+p_billing_tel+'&'+'billing_email'+P_billing_email+'&'+'merchant_param1='+p_merchant_param1+'&'+'merchant_param2='+p_merchant_param2+'&'+'merchant_param3='+p_merchant_param3+'&'+'customer_identifier='+p_customer_identifier+'&'
-        
+        print(merchant_data)
              
         encryption = encrypt(merchant_data,workingKey)
 
@@ -973,7 +969,7 @@ def handlePayReq(orderId):
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
     </head>
     <body>
-    <form id="nonseamless" method="post" name="redirect" action="https://test.ccavenue.com/transaction/transaction.do?command=initiateTransaction" > 
+    <form id="nonseamless" method="post" name="redirect" action="https://secure.ccavenue.com/transaction/transaction.do?command=initiateTransaction" > 
             <input type="hidden" id="encRequest" name="encRequest" value=$encReq>
             <input type="hidden" name="access_code" id="access_code" value=$xscode>
             <script language='javascript'>document.redirect.submit();</script>
@@ -1270,7 +1266,7 @@ def tshirtAdder(ty,action,id,sid,fid):
     if "admin" in session:
         publicId = uuid.uuid4().hex
         if request.method=="POST" and action=="add":
-            app.config['UPLOAD_FOLDER']= os.path.abspath("../"+params['tshirtUpload'])
+            app.config['UPLOAD_FOLDER']= os.path.abspath(params['base_url']+params['tshirtUpload'])
             tshirtId=request.form.get("tshirtId")
             sid=request.form.get("sid")
             name=request.form.get("name")
@@ -1405,7 +1401,7 @@ def tshirtAdder(ty,action,id,sid,fid):
             
             for key in tshirts:
                 imgName=key.img
-                path=os.path.join(os.path.abspath("../"+params['tshirtUpload']), secure_filename(imgName))
+                path=os.path.join(os.path.abspath(params['base_url']+params['tshirtUpload']), secure_filename(imgName))
                 try:
                     os.remove(path,dir_fd=None)
                 except:
@@ -1569,13 +1565,13 @@ def templateAdd(opt,id):
                 else:
                     carousel=carousel
                 if id =="0":
-                    app.config['UPLOAD_FOLDER']= os.path.abspath("../"+params['samplePostImgUpload'])
+                    app.config['UPLOAD_FOLDER']= os.path.abspath(params['base_url']+params['samplePostImgUpload'])
                     lightTemplateName="lightTemplate"+str(publicId)+lightTemplate.filename
                     lightTemplate.save(os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(lightTemplateName)))
                     darkTemplateName="darkTemplate"+str(publicId)+darkTemplate.filename
                     darkTemplate.save(os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(darkTemplateName)))
                     
-                    app.config['UPLOAD_FOLDER']= os.path.abspath("../"+params['samplePostTshirtUpload'])
+                    app.config['UPLOAD_FOLDER']= os.path.abspath(params['base_url']+params['samplePostTshirtUpload'])
                     lightTshirtName="lightTshirts"+str(publicId)+lightTshirt.filename
                     lightTshirt.save(os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(lightTshirtName)))
                     darkTshirtName="darkTshirts"+str(publicId)+darkTshirt.filename
@@ -1590,7 +1586,7 @@ def templateAdd(opt,id):
                 else:
                     template=Templates.query.filter_by(publicId=id).first()
                     if template:
-                        app.config['UPLOAD_FOLDER']= os.path.abspath("../"+params['samplePostImgUpload'])
+                        app.config['UPLOAD_FOLDER']= os.path.abspath(params['base_url']+params['samplePostImgUpload'])
                         if darkTemplate:
                             darkTemplateDel=os.path.join(os.path.join(app.config['UPLOAD_FOLDER']), secure_filename(template.darkTemplate))
                             try:
@@ -1614,7 +1610,7 @@ def templateAdd(opt,id):
                             lightTemplate.save(os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(lightTemplateName)))
                             template.lightTemplate=secure_filename(lightTemplateName)
                             
-                        app.config['UPLOAD_FOLDER']= os.path.abspath("../"+params['samplePostTshirtUpload'])
+                        app.config['UPLOAD_FOLDER']= os.path.abspath(params['base_url']+params['samplePostTshirtUpload'])
                         if darkTshirt:
                             darkTshirtDel=os.path.join(os.path.join(app.config['UPLOAD_FOLDER']), secure_filename(template.darkTshirt))
                             try:
@@ -1666,10 +1662,10 @@ def templateAdd(opt,id):
             templates=Templates.query.filter_by(publicId=id).all() 
             if templates:
                 for key in templates:
-                    app.config['UPLOAD_FOLDER']= os.path.abspath("../"+params['samplePostImgUpload'])
+                    app.config['UPLOAD_FOLDER']= os.path.abspath(params['base_url']+params['samplePostImgUpload'])
                     darkTemplateDel=os.path.join(os.path.join(app.config['UPLOAD_FOLDER']), secure_filename(key.darkTemplate))
                     lightTemplateDel=os.path.join(os.path.join(app.config['UPLOAD_FOLDER']), secure_filename(key.lightTemplate))
-                    app.config['UPLOAD_FOLDER']= os.path.abspath("../"+params['samplePostTshirtUpload'])
+                    app.config['UPLOAD_FOLDER']= os.path.abspath(params['base_url']+params['samplePostTshirtUpload'])
                     darkTshirtDel=os.path.join(os.path.join(app.config['UPLOAD_FOLDER']), secure_filename(key.darkTshirt))
                     lightTshirtDel=os.path.join(os.path.join(app.config['UPLOAD_FOLDER']), secure_filename(key.lightTshirt))
                     try:
