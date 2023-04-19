@@ -7,7 +7,7 @@ class Customize(db.Model):
     __tablename__ = 'customize'
     id=db.Column(db.Integer,primary_key=True)
     publicId=db.Column(db.String(50),nullable=False)
-    feature_name=db.Column(db.String(100),nullable=False)
+    feature_name=db.Column(db.String(100),nullable=False,unique=True)
     value=db.Column(db.String(200),nullable=True)
     status=db.Column(db.String(20),nullable=True)
     date=db.Column(db.DateTime, default=datetime.now(),nullable=True)

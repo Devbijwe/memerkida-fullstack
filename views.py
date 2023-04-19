@@ -1561,35 +1561,45 @@ def admin_features():
 @app.route("/admin/features/<string:operation>/<string:id>",methods=['GET','POST'])   
 def admin_features_edit(operation,id):
     if "admin" in session:
+        app.config['UPLOAD_FOLDER']= os.path.abspath("../"+params['customizeUpload'])
         if request.method=="POST" and operation=="edit":
             feature_name=request.form.get("feature_name")
             status=request.form.get("status")
             publicId = uuid.uuid4().hex 
-            # try:
-            value=request.files["value"]
-            app.config['UPLOAD_FOLDER']= os.path.abspath("../"+params['customizeUpload'])
-            if id==0:
-                imgName=feature_name+str(publicId)+value.filename
-            else:
-                imgName=feature_name+str(id)+value.filename
-                print("file")
-            value.save(os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(imgName)))
-            value=secure_filename(imgName)
-            # except:
-            #     value=request.form.get("value")
-            #     print("text")
+            try:
+                value=request.files["value"]
+               
+                if id==0:
+                    imgName=feature_name+str(publicId)+value.filename
+                else:
+                    imgName=feature_name+str(id)+value.filename
+                    print("file")
+                value.save(os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(imgName)))
+                value=secure_filename(imgName)
+            except:
+                value=request.form.get("value")
+               
                 
                    
             if id=="0":
-                
-                cred=Customize(publicId=publicId,feature_name=feature_name,value=value,status=status)
-                db.session.add(cred)
+                try:
+                    cred=Customize(publicId=publicId,feature_name=feature_name,value=value,status=status)
+                    db.session.add(cred)
+                    db.session.commit()
+                except:
+                    flash("Feature with this name already exists")
+                    
             else:
-                feature=Customize.query.filter_by(publicId=id).first()
-                feature.feature_name=feature_name
-                feature.value=value
-                feature.status=status
-            db.session.commit()
+                try:
+                    feature=Customize.query.filter_by(publicId=id).first()
+                    feature.feature_name=feature_name
+                    feature.value=value
+                    feature.status=status
+                    db.session.commit()
+                except:
+                    flash("Feature with this name already exists")
+                    
+            
             return redirect("/admin/features")
         
             
@@ -1599,8 +1609,17 @@ def admin_features_edit(operation,id):
             feature=Customize.query.filter_by(publicId=id).first()
             if operation=="delete":
                 try:
+                    
+                    try:
+                        deleteImg=os.path.join(os.path.join(app.config['UPLOAD_FOLDER']), secure_filename(feature.value))
+                        os.remove(deleteImg,dir_fd=None)
+                        
+                       
+                    except:
+                        pass
                     db.session.delete(feature)
                     db.session.commit()
+                    flash("Feature deleted successfully")
                     return redirect("/admin/features")
                 except:
                     flash("Unauthorized")
