@@ -1558,77 +1558,52 @@ def admin_features():
         return render_template("admin_features.html",features=features
                                )
 # admin edits features  
-@app.route("/admin/features/<string:operation>/<string:id>",methods=['GET','POST'])   
-def admin_features_edit(operation,id):
+@app.route("/admin/features/<string:operation>/<string:id>", methods=['GET', 'POST'])   
+def admin_features_edit(operation, id):
     if "admin" in session:
-        app.config['UPLOAD_FOLDER']= os.path.abspath("../"+params['customizeUpload'])
-        if request.method=="POST" and operation=="edit":
-            feature_name=request.form.get("feature_name")
-            status=request.form.get("status")
-            publicId = uuid.uuid4().hex 
-            try:
-                value=request.files["value"]
-               
-                if id==0:
-                    imgName=feature_name+str(publicId)+value.filename
-                else:
-                    imgName=feature_name+str(id)+value.filename
-                    print("file")
-                value.save(os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(imgName)))
-                value=secure_filename(imgName)
-            except:
-                value=request.form.get("value")
-               
-                
-                   
-            if id=="0":
-                try:
-                    cred=Customize(publicId=publicId,feature_name=feature_name,value=value,status=status)
-                    db.session.add(cred)
-                    db.session.commit()
-                except:
-                    flash("Feature with this name already exists")
-                    
+        app.config['UPLOAD_FOLDER'] = os.path.abspath("../" + params['customizeUpload'])
+        if request.method == "POST" and operation == "edit":
+            feature_name = request.form.get("feature_name")
+            status = request.form.get("status")
+            public_id = uuid.uuid4().hex
+            value = request.files.get("value")
+            
+            if value:
+                img_name = feature_name + str(public_id) + value.filename
+                value.save(os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(img_name)))
+                value = secure_filename(img_name)
             else:
-                try:
-                    feature=Customize.query.filter_by(publicId=id).first()
-                    feature.feature_name=feature_name
-                    feature.value=value
-                    feature.status=status
-                    db.session.commit()
-                except:
-                    flash("Feature with this name already exists")
-                    
-            
-            return redirect("/admin/features")
+                value = request.form.get("value")
+                
+            try:
+                if id == "0":
+                    cred = Customize(publicId=public_id, feature_name=feature_name, value=value, status=status)
+                    db.session.add(cred)
+                else:
+                    feature = Customize.query.filter_by(publicId=id).first()
+                    feature.feature_name = feature_name
+                    feature.status = status
+                    if value:
+                        delete_img = os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(feature.value))
+                        os.remove(delete_img, dir_fd=None)
+                        feature.value = value
+                db.session.commit()
+                return redirect("/admin/features")
+            except:
+                flash("Feature with this name already exists")
         
-            
-        if id=="0":
-            feature =None
-        else:
-            feature=Customize.query.filter_by(publicId=id).first()
-            if operation=="delete":
-                try:
-                    
-                    try:
-                        deleteImg=os.path.join(os.path.join(app.config['UPLOAD_FOLDER']), secure_filename(feature.value))
-                        os.remove(deleteImg,dir_fd=None)
-                        
-                       
-                    except:
-                        pass
-                    db.session.delete(feature)
-                    db.session.commit()
-                    flash("Feature deleted successfully")
-                    return redirect("/admin/features")
-                except:
-                    flash("Unauthorized")
-              
-        return render_template("admin_features_edit.html",
-                               feature=feature,id=id)
-    
-        
-    
+        feature = None if id == "0" else Customize.query.filter_by(publicId=id).first()
+        if feature and operation == "delete":
+            try:
+                if feature.value:
+                    delete_img = os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(feature.value))
+                    os.remove(delete_img, dir_fd=None)
+                db.session.delete(feature)
+                db.session.commit()
+                flash("Feature deleted successfully")
+            except:
+                flash("Unauthorized")
+        return render_template("admin_features_edit.html", feature=feature, id=id)
 
 # admin shows customers   
 @app.route("/admin/customers",methods=['GET','POST'])   
