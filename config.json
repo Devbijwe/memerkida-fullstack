@@ -26,7 +26,8 @@
         "editTshirtUpload": "/static/customers/editedImages/tshirts",
         "tshirtUpload": "/static/files/Tshirts",
         "ImgAnswers": "/static/customers/ImgAnswers",
-        "invoices": "/files/invoices"
+        "invoices": "/files/invoices",
+        "customizeUpload": "/assets/customize"
     },
     "directories": {
         "base_url": "/var/www/MemerKida/MemerKida",
@@ -37,7 +38,8 @@
         "editTshirtUpload": "/static/customers/editedImages/tshirts",
         "tshirtUpload": "/static/files/Tshirts",
         "ImgAnswers": "/static/customers/ImgAnswers",
-        "invoices": "/files/invoices"
+        "invoices": "/files/invoices",
+        "customizeUpload": "/assets/customize"
     },
     "EcomExpress": {
         "username": "MEMERKIDA513003",
