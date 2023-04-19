@@ -9,7 +9,6 @@ import pandas as pd
 from PIL import Image
 
 import os
-from sqlalchemy import func, text
 
 from werkzeug.utils import secure_filename
 import random
@@ -23,7 +22,7 @@ from sqlalchemy.exc import IntegrityError
 from flask import Flask, make_response,render_template,abort,session,redirect,send_file, request,flash,jsonify,Response,url_for
 from jinja2 import Template
 from datetime import datetime
-
+from sqlalchemy import func, text
 import uuid
 from flask_mail import Mail
 
@@ -168,6 +167,7 @@ def login(mainstr):
         name=request.form.get("name")
         user=Customers.query.filter_by(mobile=mobile).first()
         loggedFrom="whatsapp"
+        print("whatsapp")
         if user:
             session['user']=user.publicId
             return {
@@ -265,6 +265,7 @@ def logout():
 def home():
     # for key in directories:
     #     print(directories.get(key))
+    session.permanent = True 
     carousel=Templates.query.filter_by(carousel=True).all()
     if 'admin' in session:
         return render_template("admin_home.html")
@@ -761,32 +762,35 @@ def checkout(orderId):
 
 @app.route('/order/<string:orderId>/success',methods=['GET','POST'])
 def order_success(orderId):
-    if 'user' in session:
-        user=Customers.query.filter_by(publicId=session['user']).first()
-        if request.method=="POST":
-            accessCode = paygate['access_code']
-            workingKey = paygate['working_key']
-            plainText = res(request.form['encResp'],workingKey)
-            # order_id=plainText["order_id"]
-            # name=plainText["billing_ name"]
-            # tracking_id=plainText["tracking_id"]
-            # bank_ref_no=plainText["bank_ref_no"]
-            # order_status=plainText["order_status"]
-            # failure_message=plainText["failure_message"]
-            # payment_mode=plainText["payment_mode"]
-            # order_id=plainText["order_id"]
-            # amount=plainText["amount"]
-            # currency=plainText["currency"]
-            # custId=session["user"]
-            # publicId = uuid.uuid4().hex
-            # trans=Transaction.query.filter_by(custId=session["user"],orderId=order_id).first()
-            # if trans is None or  (trans.order_status).lower() is not "success":
-            #     cred=Transaction(publicId=publicId,custId=custId,orderId=order_id,name=name,tracking_id=tracking_id,bank_ref_no=bank_ref_no,amount=amount,order_status=order_status,currency=currency,payment_mode=payment_mode,failure_message=failure_message,date=datetime.now())
-            #     db.session.add(cred)
-            #     db.session.commit()
-            return plainText
     
-        if user:
+    data=None
+    try:
+        if 'user' in session:
+            user=Customers.query.filter_by(publicId=session['user']).first()
+
+            if request.method=="POST":
+                # accessCode = paygate['access_code']
+                # workingKey = paygate['working_key']
+                # plainText = res(request.form['encResp'],workingKey)
+                # order_id=plainText["order_id"]
+                # name=plainText["billing_ name"]
+                # tracking_id=plainText["tracking_id"]
+                # bank_ref_no=plainText["bank_ref_no"]
+                # order_status=plainText["order_status"]
+                # failure_message=plainText["failure_message"]
+                # payment_mode=plainText["payment_mode"]
+                # order_id=plainText["order_id"]
+                # amount=plainText["amount"]
+                # currency=plainText["currency"]
+                # custId=session["user"]
+                # publicId = uuid.uuid4().hex
+                # trans=Transaction.query.filter_by(custId=session["user"],orderId=order_id).first()
+                # if trans is None or  (trans.order_status).lower() is not "success":
+                #     cred=Transaction(publicId=publicId,custId=custId,orderId=order_id,name=name,tracking_id=tracking_id,bank_ref_no=bank_ref_no,amount=amount,order_status=order_status,currency=currency,payment_mode=payment_mode,failure_message=failure_message,date=datetime.now())
+                #     db.session.add(cred)
+                #     db.session.commit()
+                # return plainText
+                pass
             ord=Orders.query.filter_by(custId=user.publicId,publicId=orderId).first()
             if ord:
                 pay=Payments.query.filter_by(orderId=ord.publicId).first()
@@ -802,8 +806,22 @@ def order_success(orderId):
                         "address":pay.address1+", "+pay.address2+ ", "+pay.city+ ", "+pay.state+ ", "+str(pay.zip)+".",
                         "payMethods":payMethods
                     }
-                return render_template("order_success.html" ,ordData=data)
-    return redirect("/error")
+        else: 
+            data={
+                    "name" :"",
+                    "orderId":"",
+                    "address":"",
+                    "payMethods":""
+                }
+    except:
+        data={
+                "name" :"",
+                "orderId":"",
+                "address":"",
+                "payMethods":""
+            }
+    return render_template("order_success.html" ,ordData=data)
+    
         
 
 
@@ -954,11 +972,11 @@ def handlePayReq(orderId):
         p_merchant_param3 = "9370899965"
         
         p_customer_identifier = data.publicId
-        print("merchant",p_merchant_id,accessCode,workingKey)
+        # print("merchant",p_merchant_id,accessCode,workingKey)
         
 
         merchant_data='merchant_id='+p_merchant_id+'&'+'order_id='+p_order_id + '&' + "currency=" + p_currency + '&' + 'amount=' + p_amount+'&'+'redirect_url='+p_redirect_url+'&'+'cancel_url='+p_cancel_url+'&'+'language='+p_language+'&'+'billing_name='+p_billing_name+'&'+'billing_address='+p_billing_address+'&'+'billing_city='+p_billing_city+'&'+'billing_state='+p_billing_state+'&'+'billing_zip='+p_billing_zip+'&'+'billing_country='+p_billing_country+'&'+'billing_tel='+p_billing_tel+'&'+'billing_email'+P_billing_email+'&'+'merchant_param1='+p_merchant_param1+'&'+'merchant_param2='+p_merchant_param2+'&'+'merchant_param3='+p_merchant_param3+'&'+'customer_identifier='+p_customer_identifier+'&'
-        
+        print(merchant_data)
              
         encryption = encrypt(merchant_data,workingKey)
 
@@ -1243,38 +1261,72 @@ def chatsByAdmin(userId):
         
     
 # admin shows inbox  
+# @app.route("/admin/inbox", methods=['GET'])
+# def admin_inbox():
+#     if "admin" in session:
+#         chats = db.session.query(
+#         Chats,
+#         func.max(Chats.date).label('max_date')
+#         ).group_by(Chats.custId).join(Customers).order_by(text('max_date DESC')).all()
+
+#         chat_dict = {}
+#         for chat, max_date in chats:
+#             if chat.custId in chat_dict:
+#                 chat_dict[chat.custId]['chats'].append(chat)
+#             else:
+#                 chat_dict[chat.custId] = {
+#                     'chats': [chat],
+#                     'name': chat.customer.name,
+#                     'userId': chat.custId
+#                 }
+
+#         chat_list = sorted(chat_dict.values(), key=lambda x: x['chats'][0].date, reverse=True)
+#         return render_template("admin_inbox.html", chats=chat_list)
+
+
 @app.route("/admin/inbox", methods=['GET'])
 def admin_inbox():
     if "admin" in session:
+        # chats = db.session.query(
+        #     Chats.id.label('chats_id'),
+        #     Chats.custId.label('chats_custId'),
+        #     Chats.sender.label('chats_sender'),
+        #     Chats.receiver.label('chats_receiver'),
+        #     Chats.msg.label('chats_msg'),
+        #     Chats.date.label('chats_date'),
+        #     func.max(Chats.date).label('max_date')
+        # ).group_by(Chats.custId).order_by(text('max_date DESC')).all()
         chats = db.session.query(
-            Chats.id.label('chats_id'),
-            Chats.custId.label('chats_custId'),
-            Chats.sender.label('chats_sender'),
-            Chats.receiver.label('chats_receiver'),
-            Chats.msg.label('chats_msg'),
-            Chats.date.label('chats_date'),
-            func.max(Chats.date).label('max_date')
-        ).group_by(
-            Chats.id,
-            Chats.custId,
-            Chats.sender,
-            Chats.receiver,
-            Chats.msg,
-            Chats.date
-        ).join(Customers).order_by(text('max_date DESC')).all()
+        Chats.id.label('chats_id'),
+        Chats.custId.label('chats_custId'),
+        Chats.sender.label('chats_sender'),
+        Chats.receiver.label('chats_receiver'),
+        Chats.msg.label('chats_msg'),
+        Chats.date.label('chats_date'),
+        func.max(Chats.date).label('max_date')
+    ).group_by(
+        Chats.id,
+        Chats.custId,
+        Chats.sender,
+        Chats.receiver,
+        Chats.msg,
+        Chats.date
+    ).join(Customers).order_by(text('max_date DESC')).all()
 
         chat_dict = {}
-        for chat, max_date in chats:
-            if chat.custId in chat_dict:
-                chat_dict[chat.custId]['chats'].append(chat)
-            else:
-                chat_dict[chat.custId] = {
-                    'chats': [chat],
-                    'name': chat.customer.name,
-                    'userId': chat.custId
-                }
+        for chat in chats:
+            customer = Customers.query.filter_by(publicId=chat.chats_custId).first()
+            if customer:
+                if chat.chats_custId in chat_dict:
+                    chat_dict[chat.chats_custId]['chats'].append(chat)
+                else:
+                    chat_dict[chat.chats_custId] = {
+                        'chats': [chat],
+                        'name': customer.name,
+                        'userId': chat.chats_custId
+                    }
 
-        chat_list = sorted(chat_dict.values(), key=lambda x: x['chats'][0].date, reverse=True)
+        chat_list = sorted(chat_dict.values(), key=lambda x: x['chats'][0].chats_date, reverse=True)
         return render_template("admin_inbox.html", chats=chat_list)
 
 
@@ -1495,19 +1547,20 @@ def admin_orders():
     return render_template("admin_orders.html")
 
 
-# admin shows features  
+    
+ # admin shows features  
 @app.route("/admin/features")   
 def admin_features():
     if "admin" in session:
         features=Customize.query.all()
-        return render_template("admin_features.html",features=features)
+        return render_template("admin_features.html",features=features
+                               )
         
- 
 # admin edits features  
 @app.route("/admin/features/<string:operation>/<string:id>",methods=['GET','POST'])   
 def admin_features_edit(operation,id):
     if "admin" in session:
-        app.config['UPLOAD_FOLDER']= os.path.abspath("../"+params['customizeUpload'])
+        app.config['UPLOAD_FOLDER']= os.path.abspath(params['base_url']+params['customizeUpload'])
         if request.method=="POST" and operation=="edit":
             feature_name=request.form.get("feature_name")
             status=request.form.get("status")
@@ -1574,8 +1627,9 @@ def admin_features_edit(operation,id):
                                feature=feature,id=id)
     
         
-      
-        
+    
+    
+               
     
 
 # admin shows customers   
@@ -1954,6 +2008,7 @@ def downInvoice(publicId,orderId):
             
         genInvoice(publicId,orderId)
         return redirect("/download/invoice/%s/%s"%(publicId,orderId))
+
 @app.context_processor
 def inject_user():
     data=None
@@ -1972,4 +2027,3 @@ def inject_user():
     elif 'admin' in session:
         data=Admin.query.filter_by(email=session['admin']).first()
     return dict(params=params,data=data,orderFlag=orderFlag,customize=customize)  
-    
