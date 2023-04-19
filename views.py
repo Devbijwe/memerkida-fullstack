@@ -1511,19 +1511,19 @@ def admin_features_edit(operation,id):
             feature_name=request.form.get("feature_name")
             status=request.form.get("status")
             publicId = uuid.uuid4().hex 
-            # try:
-            value=request.files["value"]
-            app.config['UPLOAD_FOLDER']= os.path.abspath("../"+params['customizeUpload'])
-            if id==0:
-                imgName=feature_name+str(publicId)+value.filename
-            else:
-                imgName=feature_name+str(id)+value.filename
-                print("file")
-            value.save(os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(imgName)))
-            value=secure_filename(imgName)
-            # except:
-            #     value=request.form.get("value")
-            #     print("text")
+            try:
+                value=request.files["value"]
+                app.config['UPLOAD_FOLDER']= os.path.abspath("../"+params['customizeUpload'])
+                if id==0:
+                    imgName=feature_name+str(publicId)+value.filename
+                else:
+                    imgName=feature_name+str(id)+value.filename
+                    
+                value.save(os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(imgName)))
+                value=secure_filename(imgName)
+            except:
+                value=request.form.get("value")
+                
                 
                    
             if id=="0":
