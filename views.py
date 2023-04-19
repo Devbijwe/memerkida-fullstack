@@ -1502,27 +1502,28 @@ def admin_features():
         features=Customize.query.all()
         return render_template("admin_features.html",features=features
                                )
+ 
 # admin edits features  
-@app.route("/admin/features/edit/<string:id>",methods=['GET','POST'])   
-def admin_features_edit(id):
+@app.route("/admin/features/<string:operation>/<string:id>",methods=['GET','POST'])   
+def admin_features_edit(operation,id):
     if "admin" in session:
-        if request.method=="POST":
+        if request.method=="POST" and operation=="edit":
             feature_name=request.form.get("feature_name")
             status=request.form.get("status")
             publicId = uuid.uuid4().hex 
-            try:
-                value=request.files["value"]
-                app.config['UPLOAD_FOLDER']= os.path.abspath("../"+params['customizeUpload'])
-                if id==0:
-                    imgName=feature_name+str(publicId)+value.filename
-                else:
-                    imgName=feature_name+str(id)+value.filename
-                    
-                value.save(os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(imgName)))
-                value=secure_filename(imgName)
-            except:
-                value=request.form.get("value")
-                
+            # try:
+            value=request.files["value"]
+            app.config['UPLOAD_FOLDER']= os.path.abspath("../"+params['customizeUpload'])
+            if id==0:
+                imgName=feature_name+str(publicId)+value.filename
+            else:
+                imgName=feature_name+str(id)+value.filename
+                print("file")
+            value.save(os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(imgName)))
+            value=secure_filename(imgName)
+            # except:
+            #     value=request.form.get("value")
+            #     print("text")
                 
                    
             if id=="0":
@@ -1535,15 +1536,25 @@ def admin_features_edit(id):
                 feature.value=value
                 feature.status=status
             db.session.commit()
+            return redirect("/admin/features")
+        
+            
         if id=="0":
             feature =None
         else:
             feature=Customize.query.filter_by(publicId=id).first()
+            if operation=="delete":
+                try:
+                    db.session.delete(feature)
+                    db.session.commit()
+                    return redirect("/admin/features")
+                except:
+                    flash("Unauthorized")
               
         return render_template("admin_features_edit.html",
                                feature=feature,id=id)
     
-     
+          
         
     
 

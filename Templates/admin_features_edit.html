@@ -61,7 +61,7 @@
 
     </div>
 
-
+    <p class="hidden" id="publicId">{{id}}</p>
 
 </div>
 
@@ -88,8 +88,8 @@
     });
 
     document.getElementById("add-product").classList.remove("hidden");
-    document.getElementById("add-product").innerHTML = `  <button class="app-content-headerButton">Reload</button>`;
-    document.getElementById("add-product").setAttribute("href", ``)
+    document.getElementById("add-product").innerHTML = `  <button class="app-content-headerButton">Delete Feature</button>`;
+    document.getElementById("add-product").setAttribute("href", `/admin/features/delete/${document.getElementById("publicId").innerText}`)
 </script>
 
 
