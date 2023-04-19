@@ -1249,7 +1249,6 @@ def chatsByAdmin(userId):
         }
         
     
-# admin shows inbox  
 # @app.route("/admin/inbox",methods=['GET','POST'])   
 # def admin_inbox():
     # Arr=[]
@@ -1267,28 +1266,72 @@ def chatsByAdmin(userId):
     # return render_template("admin_inbox.html",chats=Arr)
 
 
+# admin shows inbox  
+# @app.route("/admin/inbox", methods=['GET'])
+# def admin_inbox():
+#     if "admin" in session:
+#         chats = db.session.query(
+#         Chats,
+#         func.max(Chats.date).label('max_date')
+#         ).group_by(Chats.custId).join(Customers).order_by(text('max_date DESC')).all()
 
+#         chat_dict = {}
+#         for chat, max_date in chats:
+#             if chat.custId in chat_dict:
+#                 chat_dict[chat.custId]['chats'].append(chat)
+#             else:
+#                 chat_dict[chat.custId] = {
+#                     'chats': [chat],
+#                     'name': chat.customer.name,
+#                     'userId': chat.custId
+#                 }
 
+#         chat_list = sorted(chat_dict.values(), key=lambda x: x['chats'][0].date, reverse=True)
+#         return render_template("admin_inbox.html", chats=chat_list)
 @app.route("/admin/inbox", methods=['GET'])
 def admin_inbox():
-    chats = db.session.query(
-    Chats,
-    func.max(Chats.date).label('max_date')
-    ).group_by(Chats.custId).join(Customers).order_by(text('max_date DESC')).all()
+    if "admin" in session:
+        # chats = db.session.query(
+        #     Chats.id.label('chats_id'),
+        #     Chats.custId.label('chats_custId'),
+        #     Chats.sender.label('chats_sender'),
+        #     Chats.receiver.label('chats_receiver'),
+        #     Chats.msg.label('chats_msg'),
+        #     Chats.date.label('chats_date'),
+        #     func.max(Chats.date).label('max_date')
+        # ).group_by(Chats.custId).order_by(text('max_date DESC')).all()
+        chats = db.session.query(
+        Chats.id.label('chats_id'),
+        Chats.custId.label('chats_custId'),
+        Chats.sender.label('chats_sender'),
+        Chats.receiver.label('chats_receiver'),
+        Chats.msg.label('chats_msg'),
+        Chats.date.label('chats_date'),
+        func.max(Chats.date).label('max_date')
+    ).group_by(
+        Chats.id,
+        Chats.custId,
+        Chats.sender,
+        Chats.receiver,
+        Chats.msg,
+        Chats.date
+    ).join(Customers).order_by(text('max_date DESC')).all()
 
-    chat_dict = {}
-    for chat, max_date in chats:
-        if chat.custId in chat_dict:
-            chat_dict[chat.custId]['chats'].append(chat)
-        else:
-            chat_dict[chat.custId] = {
-                'chats': [chat],
-                'name': chat.customer.name,
-                'userId': chat.custId
-            }
+        chat_dict = {}
+        for chat in chats:
+            customer = Customers.query.filter_by(publicId=chat.chats_custId).first()
+            if customer:
+                if chat.chats_custId in chat_dict:
+                    chat_dict[chat.chats_custId]['chats'].append(chat)
+                else:
+                    chat_dict[chat.chats_custId] = {
+                        'chats': [chat],
+                        'name': customer.name,
+                        'userId': chat.chats_custId
+                    }
 
-    chat_list = sorted(chat_dict.values(), key=lambda x: x['chats'][0].date, reverse=True)
-    return render_template("admin_inbox.html", chats=chat_list)
+        chat_list = sorted(chat_dict.values(), key=lambda x: x['chats'][0].chats_date, reverse=True)
+        return render_template("admin_inbox.html", chats=chat_list)
 
 
 # admin tshirt modifier
@@ -1514,11 +1557,11 @@ def admin_features():
         features=Customize.query.all()
         return render_template("admin_features.html",features=features
                                )
-# admin shows features  
-@app.route("/admin/features/edit/<string:id>",methods=['GET','POST'])   
-def admin_features_edit(id):
+# admin edits features  
+@app.route("/admin/features/<string:operation>/<string:id>",methods=['GET','POST'])   
+def admin_features_edit(operation,id):
     if "admin" in session:
-        if request.method=="POST":
+        if request.method=="POST" and operation=="edit":
             feature_name=request.form.get("feature_name")
             status=request.form.get("status")
             publicId = uuid.uuid4().hex 
@@ -1547,10 +1590,20 @@ def admin_features_edit(id):
                 feature.value=value
                 feature.status=status
             db.session.commit()
+            return redirect("/admin/features")
+        
+            
         if id=="0":
             feature =None
         else:
             feature=Customize.query.filter_by(publicId=id).first()
+            if operation=="delete":
+                try:
+                    db.session.delete(feature)
+                    db.session.commit()
+                    return redirect("/admin/features")
+                except:
+                    flash("Unauthorized")
               
         return render_template("admin_features_edit.html",
                                feature=feature,id=id)

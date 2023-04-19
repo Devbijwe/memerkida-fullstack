@@ -1,4 +1,4 @@
-from flask_sqlalchemy import SQLAlchemy
+
 from __init__ import db
 from datetime import datetime
 from sqlalchemy import inspect
