@@ -27,7 +27,7 @@ from flask import Flask, make_response,render_template,abort,session,redirect,se
 from jinja2 import Template
 from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import inspect
+from sqlalchemy import inspect,text,func
 import uuid
 from flask_mail import Mail
 import cv2
@@ -266,6 +266,7 @@ def logout():
 @app.route("/",methods=['GET'])   
 def home():
     session.permanent = True 
+    carousel=Customize.query.all()
     # for key in directories:
     #     print(directories.get(key))
     carousel=Templates.query.filter_by(carousel=True).all()
@@ -1221,6 +1222,7 @@ def shares(shareId):
 def chatsByAdmin(userId):
     if 'admin' in session:
         data=Customers.query.filter_by(publicId=userId).first()
+        
         if request.method=="POST":
             msg=request.form.get("msg")
             receiver= data.publicId
@@ -1229,8 +1231,9 @@ def chatsByAdmin(userId):
             cred=Chats(sender=sender,msg=msg,receiver=receiver,custId=custId,date=datetime.utcnow())
             db.session.add(cred)
             db.session.commit()
-        
+            print(msg)
         chats=Chats.query.filter_by(custId=data.publicId).all()
+        
         Arr=[]
         for key in chats:
             Arr.append(key.toDict())
@@ -1247,21 +1250,45 @@ def chatsByAdmin(userId):
         
     
 # admin shows inbox  
-@app.route("/admin/inbox",methods=['GET','POST'])   
+# @app.route("/admin/inbox",methods=['GET','POST'])   
+# def admin_inbox():
+    # Arr=[]
+    # custId=Chats.query.group_by(Chats.custId).all()
+    # for item in custId:
+    #     chats = Chats.query.filter_by(custId=item.custId).order_by(Chats.date.desc()).all()
+    #     user=Customers.query.filter_by(publicId=item.custId).first()
+    #     Arr.append({
+    #         "chats":chats,
+    #         "name":user.name,
+    #         "userId":user.publicId})
+    #     # print(chats.msg)
+    # # for key in chats:
+    # #     print(key.msg)
+    # return render_template("admin_inbox.html",chats=Arr)
+
+
+
+
+@app.route("/admin/inbox", methods=['GET'])
 def admin_inbox():
-    Arr=[]
-    custId=Chats.query.group_by(Chats.custId).all()
-    for item in custId:
-        chats = Chats.query.filter_by(custId=item.custId).order_by(Chats.date.desc()).all()
-        user=Customers.query.filter_by(publicId=item.custId).first()
-        Arr.append({
-            "chats":chats,
-            "name":user.name,
-            "userId":user.publicId})
-        # print(chats.msg)
-    # for key in chats:
-    #     print(key.msg)
-    return render_template("admin_inbox.html",chats=Arr)
+    chats = db.session.query(
+    Chats,
+    func.max(Chats.date).label('max_date')
+    ).group_by(Chats.custId).join(Customers).order_by(text('max_date DESC')).all()
+
+    chat_dict = {}
+    for chat, max_date in chats:
+        if chat.custId in chat_dict:
+            chat_dict[chat.custId]['chats'].append(chat)
+        else:
+            chat_dict[chat.custId] = {
+                'chats': [chat],
+                'name': chat.customer.name,
+                'userId': chat.custId
+            }
+
+    chat_list = sorted(chat_dict.values(), key=lambda x: x['chats'][0].date, reverse=True)
+    return render_template("admin_inbox.html", chats=chat_list)
 
 
 # admin tshirt modifier
@@ -1480,7 +1507,53 @@ def admin_stats():
 def admin_orders():
     return render_template("admin_orders.html")
 
-
+# admin shows features  
+@app.route("/admin/features")   
+def admin_features():
+    if "admin" in session:
+        features=Customize.query.all()
+        return render_template("admin_features.html",features=features
+                               )
+# admin shows features  
+@app.route("/admin/features/edit/<string:id>",methods=['GET','POST'])   
+def admin_features_edit(id):
+    if "admin" in session:
+        if request.method=="POST":
+            feature_name=request.form.get("feature_name")
+            status=request.form.get("status")
+            publicId = uuid.uuid4().hex 
+            # try:
+            value=request.files["value"]
+            app.config['UPLOAD_FOLDER']= os.path.abspath("../"+params['customizeUpload'])
+            if id==0:
+                imgName=feature_name+str(publicId)+value.filename
+            else:
+                imgName=feature_name+str(id)+value.filename
+                print("file")
+            value.save(os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(imgName)))
+            value=secure_filename(imgName)
+            # except:
+            #     value=request.form.get("value")
+            #     print("text")
+                
+                   
+            if id=="0":
+                
+                cred=Customize(publicId=publicId,feature_name=feature_name,value=value,status=status)
+                db.session.add(cred)
+            else:
+                feature=Customize.query.filter_by(publicId=id).first()
+                feature.feature_name=feature_name
+                feature.value=value
+                feature.status=status
+            db.session.commit()
+        if id=="0":
+            feature =None
+        else:
+            feature=Customize.query.filter_by(publicId=id).first()
+              
+        return render_template("admin_features_edit.html",
+                               feature=feature,id=id)
     
         
     
@@ -1866,9 +1939,11 @@ def downInvoice(publicId,orderId):
 def inject_user():
     data=None
     orderFlag=False
+    customize=Customize.query.all()
     if 'user' in session:
         data=Customers.query.filter_by(publicId=session['user']).first()
         order=Orders.query.filter_by(custId=session['user']).all()
+        
         for key in order:
             if key.paymentId==None:
                 orderFlag=True
@@ -1877,4 +1952,4 @@ def inject_user():
         # print(orderFlag)
     elif 'admin' in session:
         data=Admin.query.filter_by(email=session['admin']).first()
-    return dict(params=params,data=data,orderFlag=orderFlag)  
+    return dict(params=params,data=data,orderFlag=orderFlag,customize=customize)  

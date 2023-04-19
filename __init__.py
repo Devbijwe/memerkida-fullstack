@@ -2,7 +2,6 @@
 from datetime import timedelta
 from flask import Flask,session
 from flask_sqlalchemy import SQLAlchemy
-
 app=Flask(__name__,template_folder="Templates")
 app.secret_key='sdx2323@3343zbhcfew3rr3343@@###$2ffr454'
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=30)

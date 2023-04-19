@@ -24,7 +24,8 @@
         "ImgAnswers": "\\MemerKida\\static\\customers\\ImgAnswers",
         "samplePostImgUpload": "\\MemerKida\\static\\files\\samplePosts",
         "samplePostTshirtUpload": "\\MemerKida\\static\\files\\samplePostsTshirts",
-        "tshirtUpload": "\\MemerKida\\static\\files\\Tshirts"
+        "tshirtUpload": "\\MemerKida\\static\\files\\Tshirts",
+        "customizeUpload": "\\MemerKida\\static\\assets\\customize"
 
     },
     "directories": {
@@ -35,7 +36,8 @@
         "editTshirtUpload": "\\MemerKida\\static\\assets\\editedImages\\tshirts",
         "tshirtUpload": "\\MemerKida\\static\\assets\\Tshirts",
         "ImgAnswers": "\\MemerKida\\static\\assets\\ImgAnswers",
-        "invoices": "\\MemerKida\\files\\invoices"
+        "invoices": "\\MemerKida\\files\\invoices",
+        "customizeUpload": "\\MemerKida\\static\\assets\\customize"
     },
     "EcomExpress": {
         "username": "MEMERKIDA513003",

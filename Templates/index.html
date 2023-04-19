@@ -155,17 +155,18 @@
     </section>
 
 </div>
-<hr class="my-5">
+<hr class="my-5"> {% for key in customize if key.feature_name=="poster" %}
 <section class="px-4 py-4 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8 ">
     <div class="container overflow-hidden">
         <h2 class="title text-center text-4xl font-extrabold py-6 "></h2>
         <div class="gallery_container  justify-evenly">
+            {% set img='assets/customize/'+key.value %}
             <a href="/customize/default=ty/All=cat" class="img-gallery w-full hover:transition-all hover:duration-300 hover:ease-in-out hover:transform hover:scale-110">
-                <img src="/static/assets/category/All.png" alt="" class="w-full" onerror="this.src='https://via.placeholder.com/1640x924';" />
+                <img src="{{url_for('static',filename=img)}}" alt="" class="w-full" onerror="this.src='https://via.placeholder.com/1640x924';" />
             </a>
         </div>
     </div>
-</section>
+</section>{% endfor %}
 
 <section class="px-4 py-4 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8 ">
     <div class="container overflow-hidden">

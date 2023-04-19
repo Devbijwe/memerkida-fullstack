@@ -1,0 +1,49 @@
+{% extends "admin.html" %} {% block style %} {% endblock %}{% block main %}
+<div class="container mx-2 overflow-auto ">
+    <section class="text-gray-600 body-font ">
+        <!-- <h1 class="my-3" style="text-align:center ;font-size:xx-large;">Select a T-shirt</h1> -->
+        {% if features %}
+        <div class="container px-5 py-24 mx-auto">
+            <div class="flex flex-wrap -m-4">
+
+                {% for key in features %}
+                <div class="lg:w-1/3 md:w-1/2 p-4 w-full">
+                    <a href="#" class="block relative h-65 rounded overflow-hidden">
+                        <div class="flex flex-col bg-gray-100">
+                            <div alt="Poster" class="object-cover rounded-lg bg-red-300 p-4">
+                                <h1 class="text-xl font-bold text-gray-800  flex justify-between  tracking-widest title-font mb-1capitalize"> <span>{{key.feature_name}}</span><a href="/admin/features/edit/{{key.publicId}}"><svg  xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-3"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg> </a>
+                                </h1>
+                                <p class="text-lg text-gray-600"> Key ~ {{key.feature_name}}</p>
+                                <p class="text-lg text-gray-600">Value ~ {{key.value}}</p>
+                                <p class="text-lg text-gray-600 capitalize">Status ~ {{key.status}}</p>
+                                <!-- <a href="#" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full mx-auto my-16">Register Now</a> -->
+
+                            </div>
+                        </div>
+
+                    </a>
+
+
+                </div>
+                {% endfor %}
+
+            </div>
+        </div>
+        {% else %}
+        <h1 class="my-3 capitalize" style="text-align:center ;font-size:xx-large;">No Feature was Added...</h1>{% endif %}
+    </section>
+</div>
+
+{% endblock %} {% block script %}
+<script>
+    document.getElementById("features").classList.add("active");
+    document.getElementById("export").classList.remove("hidden");
+    document.getElementById("export").innerHTML = `  <button class="app-content-headerButton">Export</button>`;
+    document.getElementById("export").setAttribute("href", `/admin/export/excel/tshirts`);
+
+    document.getElementById("add-product").classList.remove("hidden");
+    document.getElementById("add-product").innerHTML = `  <button class="app-content-headerButton">Add Feature</button>`;
+    document.getElementById("add-product").setAttribute("href", "/admin/features/edit/0")
+    document.getElementById("headerTxt").innerHTML = `Features`;
+</script>
+{% endblock %}

@@ -18,5 +18,5 @@ class Config(object) :
             create_database(params['prod_url'])
         SQLALCHEMY_DATABASE_URI=params['prod_url']
     
-SQLALCHEMY_TRACK_MODIFICATIONS = False
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
 

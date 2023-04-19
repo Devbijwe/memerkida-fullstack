@@ -3,6 +3,18 @@ from __init__ import db
 from datetime import datetime
 from sqlalchemy import inspect
 
+class Customize(db.Model):
+    __tablename__ = 'customize'
+    id=db.Column(db.Integer,primary_key=True)
+    publicId=db.Column(db.String(50),nullable=False)
+    feature_name=db.Column(db.String(100),nullable=False)
+    value=db.Column(db.String(200),nullable=True)
+    status=db.Column(db.String(20),nullable=True)
+    date=db.Column(db.DateTime, default=datetime.now(),nullable=True)
+    def toDict(self):
+        return { c.key: getattr(self, c.key) for c in inspect(self).mapper.column_attrs }
+    
+
 class Tshirts(db.Model):
     __tablename__ = 'tshirts'
     id=db.Column(db.Integer,primary_key=True)
@@ -175,11 +187,12 @@ class Carts(db.Model):
 class Chats(db.Model):
     __tablename__ = 'chats'
     id=db.Column(db.Integer,primary_key=True,autoincrement=True,unique=True)
-    custId=db.Column(db.String(50),nullable=False)
+    custId=db.Column(db.String(50),db.ForeignKey('customers.publicId'),nullable=False)
     sender=db.Column(db.String(50),nullable=False)
     receiver=db.Column(db.String(50),nullable=False)
     msg=db.Column(db.String(250),nullable=False)
     date=db.Column(db.DateTime, default=datetime.now(),nullable=True)
+    customer = db.relationship('Customers', backref='chats')
     def toDict(self):
         return { c.key: getattr(self, c.key) for c in inspect(self).mapper.column_attrs }
 
