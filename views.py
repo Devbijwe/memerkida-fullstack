@@ -1555,7 +1555,6 @@ def admin_features():
         features=Customize.query.all()
         return render_template("admin_features.html",features=features
                                )
-        
 # admin edits features  
 @app.route("/admin/features/<string:operation>/<string:id>", methods=['GET', 'POST'])   
 def admin_features_edit(operation, id):
@@ -1568,28 +1567,33 @@ def admin_features_edit(operation, id):
             value = request.files.get("value")
             
             if value:
+                try:
+                    feature = Customize.query.filter_by(publicId=id).first()
+                    delete_img = os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(feature.value))
+                    os.remove(delete_img, dir_fd=None)
+                except:
+                    pass
                 img_name = feature_name + str(public_id) + value.filename
                 value.save(os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(img_name)))
                 value = secure_filename(img_name)
             else:
                 value = request.form.get("value")
                 
-            try:
-                if id == "0":
-                    cred = Customize(publicId=public_id, feature_name=feature_name, value=value, status=status)
-                    db.session.add(cred)
-                else:
-                    feature = Customize.query.filter_by(publicId=id).first()
-                    feature.feature_name = feature_name
-                    feature.status = status
-                    if value:
-                        delete_img = os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(feature.value))
-                        os.remove(delete_img, dir_fd=None)
-                        feature.value = value
-                db.session.commit()
-                return redirect("/admin/features")
-            except:
-                flash("Feature with this name already exists")
+            # try:
+            if id == "0":
+                cred = Customize(publicId=public_id, feature_name=feature_name, value=value, status=status)
+                db.session.add(cred)
+            else:
+                feature = Customize.query.filter_by(publicId=id).first()
+                feature.feature_name = feature_name
+                feature.status = status
+                if value:
+                    
+                    feature.value = value
+            db.session.commit()
+            return redirect("/admin/features")
+            # except:
+            #     flash("Feature with this name already exists")
         
         feature = None if id == "0" else Customize.query.filter_by(publicId=id).first()
         if feature and operation == "delete":
@@ -1600,12 +1604,12 @@ def admin_features_edit(operation, id):
                 db.session.delete(feature)
                 db.session.commit()
                 flash("Feature deleted successfully")
+                
             except:
                 flash("Unauthorized")
+            return redirect("/admin/features")
         return render_template("admin_features_edit.html", feature=feature, id=id)
- 
-    
-    
+
                
     
 
